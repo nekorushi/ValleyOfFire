@@ -1,6 +1,7 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
+[Serializable]
 public enum AttackPatternField
 {
     Player,
@@ -9,20 +10,23 @@ public enum AttackPatternField
 }
 
 
-public class AttackPattern : MonoBehaviour {
-    public Dictionary<int, Dictionary<int, AttackPatternField>> fields
-        = new Dictionary<int, Dictionary<int, AttackPatternField>>() { { 0, new Dictionary<int, AttackPatternField>() { { 0, AttackPatternField.Player } } } };
+[Serializable]
+public class AttackPattern : MonoBehaviour
+{
     public int surroundingAreaWidth = 0;
+    public SerializableDictionary<Vector2Int, AttackPatternField> fields =
+        new SerializableDictionary<Vector2Int, AttackPatternField>() {
+            { Vector2Int.zero, AttackPatternField.Player } 
+        };
 
-    public void ToggleField(int row, int column)
+    public void ToggleField(Vector2Int cellPos)
     {
-        if (Mathf.Abs(row) <= surroundingAreaWidth && Mathf.Abs(column) <= surroundingAreaWidth)
+        if (Mathf.Abs(cellPos.x) <= surroundingAreaWidth && Mathf.Abs(cellPos.y) <= surroundingAreaWidth)
         {
-            if (!fields.ContainsKey(row)) fields.Add(row, new Dictionary<int, AttackPatternField>());
-            if (!fields[row].ContainsKey(column)) fields[row].Add(column, AttackPatternField.On);
+            if (!fields.ContainsKey(cellPos)) fields.Add(cellPos, AttackPatternField.On);
             else
             {
-                fields[row][column] = fields[row][column] == AttackPatternField.Off ? AttackPatternField.On : AttackPatternField.Off;
+                fields[cellPos] = fields[cellPos] == AttackPatternField.Off ? AttackPatternField.On : AttackPatternField.Off;
             }
         }
     }
@@ -36,8 +40,8 @@ public class AttackPattern : MonoBehaviour {
             {
                 if (Mathf.Abs(row) == surroundingAreaWidth || Mathf.Abs(column) == surroundingAreaWidth)
                 {
-                    if (!fields.ContainsKey(row)) fields.Add(row, new Dictionary<int, AttackPatternField>());
-                    fields[row].Add(column, AttackPatternField.Off);
+                    Vector2Int cellPos = new Vector2Int(row, column);
+                    fields.Add(cellPos, AttackPatternField.Off);
                 }
             }
         }
@@ -53,10 +57,10 @@ public class AttackPattern : MonoBehaviour {
                 {
                     if (Mathf.Abs(row) == surroundingAreaWidth || Mathf.Abs(column) == surroundingAreaWidth)
                     {
-                        fields[row].Remove(column);
+                        Vector2Int cellPos = new Vector2Int(row, column);
+                        fields.Remove(cellPos);
                     }
                 }
-                if (fields[row].Count == 0) fields.Remove(row);
             }
             surroundingAreaWidth -= 1;
         }

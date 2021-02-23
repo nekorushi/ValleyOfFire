@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private string _playerName;
+
+    [SerializeField]
+    private Color playerColor;
+
     public string PlayerName { get { return _playerName; } }
 
     [SerializeField]
@@ -40,6 +44,19 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
+        ColorizeUnits();
+    }
+
+    private void ColorizeUnits()
+    {
+        units.ForEach(unit =>
+        {
+            if (unit != null)
+            {
+                SpriteRenderer unitSprite = unit.gameObject.GetComponentInChildren<SpriteRenderer>();
+                if (unitSprite) unitSprite.color = playerColor;
+            }
+        });
     }
 
     public IEnumerator PerformTurn()
