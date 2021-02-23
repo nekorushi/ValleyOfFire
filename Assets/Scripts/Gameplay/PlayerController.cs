@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -68,6 +69,9 @@ public class PlayerController : MonoBehaviour
         SelectUnit(null);
     }
 
+    public bool HasAliveUnits { get { return units.Where(unit => unit.Health > 0).ToList().Count > 0; } }
+    
+
     private void ColorizeUnits()
     {
         units.ForEach(unit =>
@@ -118,7 +122,7 @@ public class PlayerController : MonoBehaviour
             } else
             {
                 Vector3Int clickedCellPos = TilemapNavigator.Instance.WorldToCellPos(clickedWorldPos);
-                if (currentUnit) yield return StartCoroutine(PerformUnitAction(clickedCellPos));
+                if (currentUnit) yield return StartCoroutine(PerformUnitAction(clickedCellPos, clickedUnit));
             }
         }
     }
@@ -128,7 +132,7 @@ public class PlayerController : MonoBehaviour
         currentUnit = unit;
     }
 
-    private IEnumerator PerformUnitAction(Vector3Int clickedPos)
+    private IEnumerator PerformUnitAction(Vector3Int clickedPos, Unit clickedUnit)
     {
         if (ControlMode == ControlModes.Movement)
         {
@@ -142,6 +146,17 @@ public class PlayerController : MonoBehaviour
             }
 
             currentActionPoints -= 1;
+        } else if (ControlMode == ControlModes.Attack)
+        {
+            Vector3Int clickRelativePos = clickedPos - currentUnit.CellPosition;
+            Vector2Int clickRelativePos2D = new Vector2Int(clickRelativePos.x, clickRelativePos.y);
+            SerializableDictionary<Vector2Int, AttackPatternField> fields = currentUnit.attackPattern.fields;
+            bool isAttackClicked = fields.ContainsKey(clickRelativePos2D) && fields[clickRelativePos2D] == AttackPatternField.On;
+            if (isAttackClicked && clickedUnit != null)
+            {
+                clickedUnit.ApplyDamage(currentUnit.AttackDmg);
+                currentActionPoints -= 1;
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
+using System.Linq;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,21 +11,31 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameplayUI gameplayUI;
 
+    [SerializeField]
+    private RectTransform summaryPanel;
+
+    [SerializeField]
+    private Text summaryWinner;
+
     private void Start()
     {
+        summaryPanel.gameObject.SetActive(false);
         StartCoroutine(BeginRound());
     }
 
     private IEnumerator BeginRound()
     {
         int currentPlayerIdx = 0;
-        while (CheckWinningConditions())
+        while (!CheckWinningConditions())
         {
             PlayerController currentPlayer = players[currentPlayerIdx];
             yield return PerformPlayerTurn(currentPlayer);
             currentPlayerIdx = GetNextPlayer(currentPlayerIdx);
             yield return null;
         }
+
+        summaryWinner.text = players.FirstOrDefault(player => player.HasAliveUnits).name;
+        summaryPanel.gameObject.SetActive(true);
     }
 
     private int GetNextPlayer(int currentPlayerIdx)
@@ -40,7 +52,7 @@ public class GameManager : MonoBehaviour
 
     private bool CheckWinningConditions()
     {
-        Debug.Log("Checking winning conditions");
-        return true;
+        int alivePlayers = players.Where(player => player.HasAliveUnits).ToList().Count;
+        return alivePlayers <= 1;
     }
 }

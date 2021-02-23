@@ -16,6 +16,15 @@ public class Unit : MonoBehaviour
     public List<Vector3Int> availableMoves { get; private set; }
     public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
 
+    [Header("Unit settings")]
+    [SerializeField]
+    private int _health = 5;
+    public int Health { get { return _health; } private set { _health = value; } }
+
+    [SerializeField]
+    private int _attackDmg = 5;
+    public int AttackDmg { get { return _attackDmg; } private set { _attackDmg = value; } }
+
     [Header("Movement settings")]
     [SerializeField]
     private MovementType movementType;
@@ -31,7 +40,6 @@ public class Unit : MonoBehaviour
     [SerializeField]
     private bool canPassObstacles;
 
-    [Header("Attack settings")]
     private AttackPattern _attackPattern;
     public AttackPattern attackPattern { get { return _attackPattern; } }
 
@@ -49,6 +57,16 @@ public class Unit : MonoBehaviour
     public void Blur()
     {
         availableMoves = null;
+    }
+
+    public void ApplyDamage(int amount)
+    {
+        Health = Mathf.Clamp(Health - amount, 0, Health);
+
+        if (Health == 0)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     public IEnumerator Move(Vector3Int cellTargetPos)
