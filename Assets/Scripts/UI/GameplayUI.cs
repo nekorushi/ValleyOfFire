@@ -17,9 +17,6 @@ public class GameplayUI : MonoBehaviour
     private Grid grid;
 
     [SerializeField]
-    private Text currentPlayerText;
-
-    [SerializeField]
     private Sprite availableMovesSprite;
     private List<GameObject> availableMoves = new List<GameObject>();
 
@@ -32,7 +29,6 @@ public class GameplayUI : MonoBehaviour
             _activePlayer = value;
             ConnectPlayer();
             ActivePlayerChanged.Invoke();
-            Debug.Log("Active player changed");
         }
     }
 
@@ -51,12 +47,6 @@ public class GameplayUI : MonoBehaviour
     void ConnectPlayer()
     {
         activePlayer?.UnitSelectionChanged.AddListener(UpdateUnitSelection);
-        UpdatePlayerText();
-    }
-
-    void UpdatePlayerText()
-    {
-        if (activePlayer) currentPlayerText.text = activePlayer.PlayerName;
     }
 
     void UpdateUnitSelection()

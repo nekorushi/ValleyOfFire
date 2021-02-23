@@ -30,8 +30,12 @@ public class Unit : MonoBehaviour
     [SerializeField]
     private bool canPassObstacles;
 
+    [Header("Attack settings")]
+    private AttackPattern attackPattern;
+
     private void Start()
     {
+        attackPattern = GetComponent<AttackPattern>();
         AlignToGrid();
     }
 
