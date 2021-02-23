@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class GameplayUI : MonoBehaviour
 {
+    public UnityEvent ActivePlayerChanged;
+
     private Camera mainCamera;
     private RectTransform canvasRect;
 
@@ -28,6 +31,8 @@ public class GameplayUI : MonoBehaviour
             DisconnectPlayer();
             _activePlayer = value;
             ConnectPlayer();
+            ActivePlayerChanged.Invoke();
+            Debug.Log("Active player changed");
         }
     }
 

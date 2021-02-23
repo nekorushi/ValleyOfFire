@@ -93,7 +93,6 @@ GameObject:
   - component: {fileID: 8907512749714802914}
   - component: {fileID: 8705547084144101445}
   - component: {fileID: 6860315079294312894}
-  - component: {fileID: 4853726934364544434}
   m_Layer: 6
   m_Name: Unit
   m_TagString: Untagged
@@ -159,20 +158,3 @@ MonoBehaviour:
   diagonalMovementRange: 0
   canPassUnits: 0
   canPassObstacles: 0
-  attackPattern:
-    pattern:
-    - columns: 
-    surroundingAreaWidth: 0
---- !u!114 &4853726934364544434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3726289083473766081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbee7328038004b78b919c8279b61c17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  surroundingAreaWidth: 0

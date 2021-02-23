@@ -1,20 +1,20 @@
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(AttackPattern))]
+[CustomEditor(typeof(AreaPattern), true)]
 public class AttackPatternEditor : Editor
 {
-    private AttackPattern pattern = null;
+    private AreaPattern pattern = null;
 
     void OnEnable()
     {
-        pattern = (AttackPattern)target;
+        pattern = (AreaPattern)target;
     }
 
     public override void OnInspectorGUI()
     {
+        DrawDefaultInspector();
         serializedObject.Update();
 
         Rect headerRect = EditorGUILayout.BeginHorizontal();
@@ -29,36 +29,6 @@ public class AttackPatternEditor : Editor
             EditorUtility.SetDirty(target);
         }
         EditorGUILayout.EndHorizontal();
-
-
-        //EditorGUILayout.EnumFlagsField(pattern.test[0]);
-
-        //EditorGUILayout.BeginHorizontal();
-        //for (int row = -pattern.surroundingAreaWidth; row <= pattern.surroundingAreaWidth; row++)
-        //{
-
-        //    EditorGUILayout.BeginVertical();
-        //    for (int column = -pattern.surroundingAreaWidth; column <= pattern.surroundingAreaWidth; column++)
-        //    {
-        //        Vector2Int cellPos = new Vector2Int(row, column);
-
-        //        GUI.color = Color.grey;
-        //        AttackPatternField field = pattern.fields[cellPos];
-        //        if (field == AttackPatternField.Player) GUILayout.Label("Player");
-        //        else
-        //        {
-        //            EditorGUILayout.EnumFlagsField(pattern.fields[cellPos]);
-        //            if (field == AttackPatternField.On) GUI.color = Color.green;
-        //            if (GUILayout.Button(""))
-        //            {
-        //                pattern.ToggleField(row, column);
-        //                EditorUtility.SetDirty(target);
-        //            };
-        //        }
-        //    }
-        //    EditorGUILayout.EndVertical();
-        //}
-        //EditorGUILayout.EndHorizontal();
 
         int cellWidth = 20;
         int cellHeight = 20;

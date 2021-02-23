@@ -10,6 +10,7 @@ enum MovementType
     Both
 }
 
+[RequireComponent(typeof(AttackPattern))]
 public class Unit : MonoBehaviour
 {
     public List<Vector3Int> availableMoves { get; private set; }
