@@ -5096,6 +5096,7 @@ MonoBehaviour:
   unitTarget: {fileID: 527942228}
   grid: {fileID: 1995181675}
   availableMovesSprite: {fileID: 21300000, guid: b8cafeaaf136d824da1ca4dce7f9a155, type: 3}
+  availableAttacksSprite: {fileID: 21300000, guid: 85d1911a34906424aa06d3178d7a2242, type: 3}
 --- !u!114 &1081348068
 MonoBehaviour:
   m_ObjectHideFlags: 0

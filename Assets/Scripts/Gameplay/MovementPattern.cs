@@ -1,3 +1,0 @@
-﻿class MovementPattern : AreaPattern
-{
-}

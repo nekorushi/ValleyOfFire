@@ -20,6 +20,10 @@ public class GameplayUI : MonoBehaviour
     private Sprite availableMovesSprite;
     private List<GameObject> availableMoves = new List<GameObject>();
 
+    [SerializeField]
+    private Sprite availableAttacksSprite;
+    private List<GameObject> availableAttacks = new List<GameObject>();
+
     private PlayerController _activePlayer;
     public PlayerController activePlayer {
         get { return _activePlayer; }
@@ -39,20 +43,35 @@ public class GameplayUI : MonoBehaviour
         unitTarget.enabled = false;
     }
 
-    void DisconnectPlayer()
-    {
-        activePlayer?.UnitSelectionChanged.RemoveListener(UpdateUnitSelection);
-    }
-
     void ConnectPlayer()
     {
         activePlayer?.UnitSelectionChanged.AddListener(UpdateUnitSelection);
+        activePlayer?.ControlModeChanged.AddListener(UpdateAvailableActions);
+    }
+
+    void DisconnectPlayer()
+    {
+        activePlayer?.UnitSelectionChanged.RemoveListener(UpdateUnitSelection);
+        activePlayer?.ControlModeChanged.RemoveListener(UpdateAvailableActions);
     }
 
     void UpdateUnitSelection()
     {
         UpdateUnitTarget();
-        UpdateAvailableMoves();
+        UpdateAvailableActions();
+    }
+
+    void UpdateAvailableActions()
+    {
+        ClearAvailableMoves();
+
+        if (activePlayer.ControlMode == ControlModes.Movement)
+        {
+            RenderAvailableMoves();
+        } else
+        {
+            RenderAvailableAttacks();
+        }
     }
 
     void UpdateUnitTarget()
@@ -69,29 +88,68 @@ public class GameplayUI : MonoBehaviour
         }
     }
 
-    void UpdateAvailableMoves()
+    void ClearAvailableMoves()
     {
         availableMoves.ForEach(image => Destroy(image));
         availableMoves.Clear();
+    }
+
+    void RenderAvailableMoves()
+    {
+        ClearAvailableMoves();
 
         List<Vector3Int> moves = activePlayer.currentUnit?.availableMoves;
-        if (moves != null) 
+        if (moves != null)
         {
             moves.ForEach(position =>
             {
-                Vector3 worldPos = TilemapNavigator.Instance.CellToWorldPos(position);
-                Vector2 canvasPos = WorldToCanvasPos(worldPos);
-
-                GameObject marker = new GameObject("MovementMarker");
-                Image markerSprite = marker.AddComponent<Image>();
-                markerSprite.sprite = availableMovesSprite;
-                RectTransform markerRect = marker.GetComponent<RectTransform>();
-                markerRect.SetParent(canvasRect);
-                markerRect.anchoredPosition = canvasPos;
-                markerRect.sizeDelta = Vector2.one;
+                GameObject marker = CreateMarker(position, "MovementMarker", availableMovesSprite);
                 availableMoves.Add(marker);
             });
         }
+    }
+
+    void ClearAvailableAttacks()
+    {
+        availableAttacks.ForEach(image => Destroy(image));
+        availableAttacks.Clear();
+    }
+
+    void RenderAvailableAttacks()
+    {
+        ClearAvailableAttacks();
+
+        SerializableDictionary<Vector2Int, AttackPatternField> pattern
+            = activePlayer.currentUnit?.attackPattern.fields;
+
+        if (pattern != null)
+        {
+            foreach (KeyValuePair<Vector2Int, AttackPatternField> field in pattern)
+            {
+                Vector3Int position = activePlayer.currentUnit.CellPosition + new Vector3Int(field.Key.x, field.Key.y, 0);
+
+                if (field.Value == AttackPatternField.On && TilemapNavigator.Instance.HasTile(position))
+                {
+                    GameObject marker = CreateMarker(position, "AttackMarker", availableAttacksSprite);
+                    availableMoves.Add(marker);
+                }
+            }
+        }
+    }
+
+    private GameObject CreateMarker(Vector3Int position, string name, Sprite sprite)
+    {
+        Vector3 worldPos = TilemapNavigator.Instance.CellToWorldPos(position);
+        Vector2 canvasPos = WorldToCanvasPos(worldPos);
+
+        GameObject marker = new GameObject(name);
+        Image markerSprite = marker.AddComponent<Image>();
+        markerSprite.sprite = sprite;
+        RectTransform markerRect = marker.GetComponent<RectTransform>();
+        markerRect.SetParent(canvasRect);
+        markerRect.anchoredPosition = canvasPos;
+        markerRect.sizeDelta = Vector2.one;
+        return marker;
     }
 
     private Vector2 WorldToCanvasPos(Vector3 worldPos)

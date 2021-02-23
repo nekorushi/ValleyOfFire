@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(AreaPattern), true)]
+[CustomEditor(typeof(AttackPattern), true)]
 public class AttackPatternEditor : Editor
 {
-    private AreaPattern pattern = null;
+    private AttackPattern pattern = null;
 
     void OnEnable()
     {
-        pattern = (AreaPattern)target;
+        pattern = (AttackPattern)target;
     }
 
     public override void OnInspectorGUI()
@@ -47,13 +47,29 @@ public class AttackPatternEditor : Editor
             if (item.Key.y > maxCellY) maxCellY = item.Key.y;
         }
 
-        Vector2Int patternBeginning = new Vector2Int((int)headerRect.x - minCellX * cellWidth, (int)headerRect.y + (int)headerRect.height - minCellY * cellHeight + 10);
-        GUILayoutUtility.GetRect((maxCellX - minCellX) * cellWidth, (maxCellY - minCellY) * cellHeight + 30);
+        Vector2Int patternBeginning = new Vector2Int(
+            (int)headerRect.x - minCellX * cellWidth,
+            (int)headerRect.y + (int)headerRect.height - minCellY * cellHeight + 10
+        );
+
+        int boardWidth = maxCellX - minCellX;
+        int boardHeight = maxCellY - minCellY;
+
+        GUILayoutUtility.GetRect(
+            boardWidth * cellWidth,
+            boardHeight * cellHeight + 30
+        );
 
         foreach (KeyValuePair<Vector2Int, AttackPatternField> cell in pattern.fields)
         {
             Vector2Int cellPos = cell.Key;
-            Rect cellRect = new Rect(patternBeginning.x + cellPos.x * cellWidth, patternBeginning.y + cellPos.y * cellHeight, cellWidth, cellHeight);
+
+            Rect cellRect = new Rect(
+                patternBeginning.x + cellPos.x * cellWidth,
+                patternBeginning.y - cellPos.y * cellHeight,
+                cellWidth,
+                cellHeight
+            );
             GUI.color = Color.gray;
 
             if (cell.Value == AttackPatternField.Player)

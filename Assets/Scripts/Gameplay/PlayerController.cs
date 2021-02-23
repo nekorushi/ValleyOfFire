@@ -130,15 +130,18 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator PerformUnitAction(Vector3Int clickedPos)
     {
-        bool isMovementClicked = currentUnit.availableMoves.Contains(clickedPos);
-        if (isMovementClicked)
+        if (ControlMode == ControlModes.Movement)
         {
-            Unit actingUnit = currentUnit;
-            SelectUnit(null);
-            yield return StartCoroutine(actingUnit.Move(clickedPos));
-            SelectUnit(actingUnit);
-        }
+            bool isMovementClicked = currentUnit.availableMoves.Contains(clickedPos);
+            if (isMovementClicked)
+            {
+                Unit actingUnit = currentUnit;
+                SelectUnit(null);
+                yield return StartCoroutine(actingUnit.Move(clickedPos));
+                SelectUnit(actingUnit);
+            }
 
-        currentActionPoints -= 1;
+            currentActionPoints -= 1;
+        }
     }
 }

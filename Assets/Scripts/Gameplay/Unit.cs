@@ -14,6 +14,7 @@ enum MovementType
 public class Unit : MonoBehaviour
 {
     public List<Vector3Int> availableMoves { get; private set; }
+    public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
 
     [Header("Movement settings")]
     [SerializeField]
@@ -31,11 +32,12 @@ public class Unit : MonoBehaviour
     private bool canPassObstacles;
 
     [Header("Attack settings")]
-    private AttackPattern attackPattern;
+    private AttackPattern _attackPattern;
+    public AttackPattern attackPattern { get { return _attackPattern; } }
 
     private void Start()
     {
-        attackPattern = GetComponent<AttackPattern>();
+        _attackPattern = GetComponent<AttackPattern>();
         AlignToGrid();
     }
 
@@ -111,14 +113,12 @@ public class Unit : MonoBehaviour
 
     List<Vector3Int> CheckMovementLine(Vector3Int direction, int range)
     {
-        TilemapNavigator navigator = TilemapNavigator.Instance;
-        Vector3Int unitCellPos = navigator.WorldToCellPos(transform.position);
-
         List<Vector3Int> availableMoves = new List<Vector3Int>();
 
         for (int i = 1; i <= range; i++)
         {
-            Vector3Int nextPosition = unitCellPos + direction * i;
+            TilemapNavigator navigator = TilemapNavigator.Instance;
+            Vector3Int nextPosition = CellPosition + direction * i;
 
             bool tileExists = navigator.HasTile(nextPosition);
             if (!tileExists) break;

@@ -93,6 +93,8 @@ GameObject:
   - component: {fileID: 8907512749714802914}
   - component: {fileID: 8705547084144101445}
   - component: {fileID: 6860315079294312894}
+  - component: {fileID: 2721458286887158308}
+  - component: {fileID: 2479592627951131170}
   m_Layer: 6
   m_Name: Unit
   m_TagString: Untagged
@@ -158,3 +160,55 @@ MonoBehaviour:
   diagonalMovementRange: 0
   canPassUnits: 0
   canPassObstacles: 0
+--- !u!114 &2721458286887158308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3726289083473766081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ad2e057606e9843962df9215cbd520, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surroundingAreaWidth: 0
+  fields:
+    _Buckets: 00000000ffffffffffffffff
+    _HashCodes: 000000000000000000000000
+    _Next: ffffffff0000000000000000
+    _Count: 1
+    _Version: 1
+    _FreeList: -1
+    _FreeCount: 0
+    _Keys:
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    _Values: 000000000000000000000000
+--- !u!114 &2479592627951131170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3726289083473766081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbee7328038004b78b919c8279b61c17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surroundingAreaWidth: 0
+  fields:
+    _Buckets: 00000000ffffffffffffffff
+    _HashCodes: 000000000000000000000000
+    _Next: ffffffff0000000000000000
+    _Count: 1
+    _Version: 1
+    _FreeList: -1
+    _FreeCount: 0
+    _Keys:
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    _Values: 000000000000000000000000
