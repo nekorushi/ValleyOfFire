@@ -19,7 +19,7 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     private Text controlModeLabel;
 
-    private void Start()
+    private void OnEnable()
     {
         gameplayUI.ActivePlayerChanged.AddListener(OnPlayerChange);
         player.ControlModeChanged.AddListener(UpdateControlMode);
