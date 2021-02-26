@@ -13,6 +13,7 @@ enum MovementType
 [RequireComponent(typeof(AttackPattern))]
 public class Unit : MonoBehaviour
 {
+    private readonly float UNIT_Z_POSITION = -0.5f;
     public List<Vector3Int> availableMoves { get; private set; }
     public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
 
@@ -72,7 +73,8 @@ public class Unit : MonoBehaviour
     public IEnumerator Move(Vector3Int cellTargetPos)
     {
         Vector3 startingPos = transform.position;
-        Vector3 targetPos = TilemapNavigator.Instance.CellToWorldPos(cellTargetPos);
+        Vector3 targetWorldPos = TilemapNavigator.Instance.CellToWorldPos(cellTargetPos);
+        Vector3 targetPos = new Vector3(targetWorldPos.x, targetWorldPos.y, UNIT_Z_POSITION);
 
         float movementSpeed = 5;
         float distance = Vector3.Distance(transform.position, targetPos);
@@ -95,7 +97,7 @@ public class Unit : MonoBehaviour
         transform.position = new Vector3(
             Mathf.RoundToInt(transform.position.x),
             Mathf.RoundToInt(transform.position.y),
-            Mathf.RoundToInt(transform.position.z)
+            UNIT_Z_POSITION
         );
     }
 
