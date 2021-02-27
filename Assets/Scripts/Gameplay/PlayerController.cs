@@ -114,11 +114,11 @@ public class PlayerController : MonoBehaviour
     private IEnumerator HandleMouseClick()
     {
         Vector3 clickedWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(clickedWorldPos, Vector2.zero, Mathf.Infinity, layerMask);
+        GameObject clickedObject = GetObjectAtWorldPos(clickedWorldPos);
 
-        if (hit.collider != null)
+        if (clickedObject != null)
         {
-            Unit clickedUnit = hit.collider.gameObject.GetComponent<Unit>();
+            Unit clickedUnit = clickedObject.GetComponent<Unit>();
             bool clickedOwnUnit = units.Contains(clickedUnit);
 
             if (clickedOwnUnit)
@@ -169,29 +169,86 @@ public class PlayerController : MonoBehaviour
         currentUnit = unit;
     }
 
+    private GameObject GetObjectAtWorldPos(Vector3 worldPos)
+    {
+        worldPos.z = 10;
+        RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero, Mathf.Infinity, layerMask);
+
+        if (hit.collider != null)
+        {
+            return hit.collider.gameObject;
+        } else
+        {
+            return null;
+        }
+    }
+
     private IEnumerator PerformUnitAction(Vector3Int clickedPos, Unit clickedUnit)
     {
         if (ControlMode == ControlModes.Movement)
         {
-            bool isMovementClicked = currentUnit.availableMoves.Contains(clickedPos);
-            if (isMovementClicked)
-            {
-                Unit actingUnit = currentUnit;
-                SelectUnit(null);
-                yield return StartCoroutine(actingUnit.Move(clickedPos));
-                SelectUnit(actingUnit);
-                currentActionPoints -= 1;
-            }
+            yield return StartCoroutine(PerformMovementAction(clickedPos));
         } else if (ControlMode == ControlModes.Attack)
         {
-            Vector3Int clickRelativePos = clickedPos - currentUnit.CellPosition;
-            Vector2Int clickRelativePos2D = new Vector2Int(clickRelativePos.x, clickRelativePos.y);
-            SerializableDictionary<Vector2Int, AttackPatternField> fields = currentUnit.AttackPattern.sourcePattern;
-            bool isAttackClicked = fields.ContainsKey(clickRelativePos2D) && fields[clickRelativePos2D] == AttackPatternField.On;
-            if (isAttackClicked && clickedUnit != null)
+            PerformAttackAction(clickedPos, clickedUnit);
+
+        }
+    }
+
+    private IEnumerator PerformMovementAction(Vector3Int clickedPos)
+    {
+        bool isMovementClicked = currentUnit.availableMoves.Contains(clickedPos);
+        if (isMovementClicked)
+        {
+            Unit actingUnit = currentUnit;
+            SelectUnit(null);
+            yield return StartCoroutine(actingUnit.Move(clickedPos));
+            SelectUnit(actingUnit);
+            currentActionPoints -= 1;
+        }
+    }
+
+    private void PerformAttackAction(Vector3Int clickedPos, Unit clickedUnit)
+    {
+        Vector3Int clickRelativePos = clickedPos - currentUnit.CellPosition;
+        Vector2Int clickRelativePos2D = new Vector2Int(clickRelativePos.x, clickRelativePos.y);
+        SerializableDictionary<Vector2Int, AttackPatternField> fields = currentUnit.AttackPattern.Pattern;
+        bool isAttackClicked = fields.ContainsKey(clickRelativePos2D) && fields[clickRelativePos2D] == AttackPatternField.On;
+        if (isAttackClicked)
+        {
+            switch (currentUnit.AttackPattern.attackType)
             {
-                clickedUnit.ApplyDamage(currentUnit.AttackDmg);
-                currentActionPoints -= 1;
+                case AttackType.Targeted:
+                    if (clickedUnit != null)
+                    {
+                        clickedUnit.ApplyDamage(currentUnit.AttackDmg);
+                        currentActionPoints -= 1;
+                    }
+                    break;
+                case AttackType.Area:
+                    PerformAreaAttack();
+                    currentActionPoints -= 1;
+                    break;
+            }
+        }
+    }
+
+    private void PerformAreaAttack()
+    {
+        SerializableDictionary<Vector2Int, AttackPatternField> fields = currentUnit.AttackPattern.Pattern;
+
+        foreach (KeyValuePair<Vector2Int, AttackPatternField> field in fields)
+        {
+            if (field.Value == AttackPatternField.On)
+            {
+                Vector3 fieldWorldPos = TilemapNavigator.Instance.CellToWorldPos(currentUnit.CellPosition + new Vector3Int(field.Key.x, field.Key.y, 0));
+                GameObject clickedObject = GetObjectAtWorldPos(fieldWorldPos);
+                Debug.Log(clickedObject);
+                Debug.DrawLine(fieldWorldPos, fieldWorldPos + Vector3.zero);
+
+                Unit reachedUnit = clickedObject?.GetComponent<Unit>();
+
+                if (reachedUnit && !units.Contains(reachedUnit)) reachedUnit.ApplyDamage(currentUnit.AttackDmg);
             }
         }
     }

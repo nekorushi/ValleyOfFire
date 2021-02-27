@@ -35,6 +35,7 @@ public class AttackPattern : MonoBehaviour
     [HideInInspector]
     public AttackType attackType = AttackType.Targeted;
 
+    [HideInInspector]
     public AttackDirection direction = AttackDirection.Up;
 
     [HideInInspector]
