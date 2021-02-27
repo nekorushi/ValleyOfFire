@@ -47,12 +47,14 @@ public class GameplayUI : MonoBehaviour
     {
         activePlayer?.UnitSelectionChanged.AddListener(UpdateUnitSelection);
         activePlayer?.ControlModeChanged.AddListener(UpdateAvailableActions);
+        activePlayer?.AvailableActionsChanged.AddListener(UpdateAvailableActions);
     }
 
     void DisconnectPlayer()
     {
         activePlayer?.UnitSelectionChanged.RemoveListener(UpdateUnitSelection);
         activePlayer?.ControlModeChanged.RemoveListener(UpdateAvailableActions);
+        activePlayer?.AvailableActionsChanged.RemoveListener(UpdateAvailableActions);
     }
 
     void UpdateUnitSelection()
@@ -117,10 +119,11 @@ public class GameplayUI : MonoBehaviour
 
     void RenderAvailableAttacks()
     {
+
         ClearAvailableAttacks();
 
         SerializableDictionary<Vector2Int, AttackPatternField> pattern
-            = activePlayer.currentUnit?.attackPattern.fields;
+            = activePlayer.currentUnit?.AttackPattern.Pattern;
 
         if (pattern != null)
         {

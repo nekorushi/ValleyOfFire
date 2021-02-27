@@ -42,11 +42,11 @@ public class Unit : MonoBehaviour
     private bool canPassObstacles;
 
     private AttackPattern _attackPattern;
-    public AttackPattern attackPattern { get { return _attackPattern; } }
+    public AttackPattern AttackPattern { get; private set; }
 
     private void Start()
     {
-        _attackPattern = GetComponent<AttackPattern>();
+        AttackPattern = GetComponent<AttackPattern>();
         AlignToGrid();
     }
 

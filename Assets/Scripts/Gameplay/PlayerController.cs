@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
 {
     public UnityEvent UnitSelectionChanged;
     public UnityEvent ControlModeChanged;
+    public UnityEvent AvailableActionsChanged;
 
     [Header("Component configuration")]
     [SerializeField]
@@ -95,6 +96,11 @@ public class PlayerController : MonoBehaviour
 
         while(currentActionPoints > 0)
         {
+            if (currentUnit && currentUnit.AttackPattern.attackType == AttackType.Area)
+            {
+                UpdateAttackArea();
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
                 yield return StartCoroutine(HandleMouseClick());
@@ -127,6 +133,37 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void UpdateAttackArea()
+    {
+        Vector3 cursorWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 unitWorldPos = currentUnit.transform.position;
+
+        cursorWorldPos.z = 0;
+        unitWorldPos.z = 0;
+
+        float angle = Vector3.Angle(Vector3.up, cursorWorldPos - unitWorldPos);
+        AttackDirection direction;
+
+        if (angle <= 45)
+        {
+            direction = AttackDirection.Up;
+        } else if (angle <= 135)
+        {
+            direction = Vector3.Cross(Vector3.up, cursorWorldPos - unitWorldPos).z < 0
+                ? AttackDirection.Left
+                : AttackDirection.Right;
+        } else
+        {
+            direction = AttackDirection.Down;
+        }
+
+        if (currentUnit.AttackPattern.direction != direction)
+        {
+            currentUnit.AttackPattern.direction = direction;
+            AvailableActionsChanged.Invoke();
+        }
+    }
+
     private void SelectUnit(Unit unit)
     {
         currentUnit = unit;
@@ -143,14 +180,13 @@ public class PlayerController : MonoBehaviour
                 SelectUnit(null);
                 yield return StartCoroutine(actingUnit.Move(clickedPos));
                 SelectUnit(actingUnit);
+                currentActionPoints -= 1;
             }
-
-            currentActionPoints -= 1;
         } else if (ControlMode == ControlModes.Attack)
         {
             Vector3Int clickRelativePos = clickedPos - currentUnit.CellPosition;
             Vector2Int clickRelativePos2D = new Vector2Int(clickRelativePos.x, clickRelativePos.y);
-            SerializableDictionary<Vector2Int, AttackPatternField> fields = currentUnit.attackPattern.fields;
+            SerializableDictionary<Vector2Int, AttackPatternField> fields = currentUnit.AttackPattern.sourcePattern;
             bool isAttackClicked = fields.ContainsKey(clickRelativePos2D) && fields[clickRelativePos2D] == AttackPatternField.On;
             if (isAttackClicked && clickedUnit != null)
             {

@@ -7,9 +7,13 @@ public class AttackPatternEditor : Editor
 {
     private AttackPattern pattern = null;
 
+    SerializedProperty attackType;
+
     void OnEnable()
     {
         pattern = (AttackPattern)target;
+
+        attackType = serializedObject.FindProperty("attackType");
     }
 
     public override void OnInspectorGUI()
@@ -17,9 +21,12 @@ public class AttackPatternEditor : Editor
         DrawDefaultInspector();
         serializedObject.Update();
 
-        Rect headerRect = EditorGUILayout.BeginHorizontal();
+        Rect headerRect = EditorGUILayout.BeginVertical();
+
+        EditorGUILayout.BeginHorizontal();
         GUILayout.Label(string.Format("Size: {0}", pattern.surroundingAreaWidth));
-        if (GUILayout.Button("Expand")) {
+        if (GUILayout.Button("Expand"))
+        {
             pattern.expandArea();
             EditorUtility.SetDirty(target);
         };
@@ -30,6 +37,10 @@ public class AttackPatternEditor : Editor
         }
         EditorGUILayout.EndHorizontal();
 
+        EditorGUILayout.PropertyField(attackType, new GUIContent("Attack type"));
+
+        EditorGUILayout.EndVertical();
+
         int cellWidth = 20;
         int cellHeight = 20;
         int minCellX = 0;
@@ -39,7 +50,7 @@ public class AttackPatternEditor : Editor
 
         bool changeMade = false;
 
-        foreach (KeyValuePair<Vector2Int, AttackPatternField> item in pattern.fields)
+        foreach (KeyValuePair<Vector2Int, AttackPatternField> item in pattern.sourcePattern)
         {
             if (item.Key.x < minCellX) minCellX = item.Key.x;
             if (item.Key.y < minCellY) minCellY = item.Key.y;
@@ -60,7 +71,7 @@ public class AttackPatternEditor : Editor
             boardHeight * cellHeight + 30
         );
 
-        foreach (KeyValuePair<Vector2Int, AttackPatternField> cell in pattern.fields)
+        foreach (KeyValuePair<Vector2Int, AttackPatternField> cell in pattern.sourcePattern)
         {
             Vector2Int cellPos = cell.Key;
 
