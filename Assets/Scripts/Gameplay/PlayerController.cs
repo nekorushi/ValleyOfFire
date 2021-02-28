@@ -178,7 +178,8 @@ public class PlayerController : MonoBehaviour
             yield return StartCoroutine(PerformMovementAction(clickedPos));
         } else if (ControlMode == ControlModes.Attack)
         {
-            CurrentUnit.Attack(clickedPos, clickedUnit);
+            bool actionWasPerformed = CurrentUnit.Attack(clickedPos, clickedUnit);
+            if (actionWasPerformed) currentActionPoints -= 1;
         }
     }
 
