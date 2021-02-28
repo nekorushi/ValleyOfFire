@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using TMPro;
 
 enum MovementType
 {
@@ -14,6 +15,10 @@ enum MovementType
 public class Unit : MonoBehaviour
 {
     private PlayerController owner;
+    [SerializeField]
+    private TMP_Text healthText;
+    [SerializeField]
+    private TMP_Text damageText;
 
     private readonly float UNIT_Z_POSITION = -0.5f;
     public List<Vector3Int> availableMoves { get; private set; }
@@ -21,12 +26,12 @@ public class Unit : MonoBehaviour
 
     [Header("Unit settings")]
     [SerializeField]
-    private int _health = 5;
-    public int Health { get { return _health; } private set { _health = value; } }
+    private float _health = 5f;
+    public float Health { get { return _health; } private set { _health = value; } }
 
     [SerializeField]
-    private int _attackDmg = 5;
-    public int AttackDmg { get { return _attackDmg; } private set { _attackDmg = value; } }
+    private float _attackDmg = 1.1f;
+    public float AttackDmg { get { return _attackDmg; } private set { _attackDmg = value; } }
 
     [Header("Movement settings")]
     [SerializeField]
@@ -58,6 +63,7 @@ public class Unit : MonoBehaviour
     {
         AttackPattern = GetComponent<AttackPattern>();
         AlignToGrid();
+        UpdateHealthText();
     }
 
     public void Focus()
@@ -70,14 +76,35 @@ public class Unit : MonoBehaviour
         availableMoves = null;
     }
 
-    public void ApplyDamage(int amount)
+    public void ApplyDamage(float amount)
     {
         Health = Mathf.Clamp(Health - amount, 0, Health);
+        UpdateHealthText();
+        StartCoroutine(AnimateDamage(amount));
 
         if (Health == 0)
         {
             gameObject.SetActive(false);
         }
+    }
+
+    private void UpdateHealthText()
+    {
+        healthText.text = Health.ToString("N1");
+    }
+
+    private IEnumerator AnimateDamage(float amount)
+    {
+        damageText.text = amount.ToString();
+        damageText.gameObject.SetActive(true);
+
+        for (float current = 0; current < 1; current += 0.1f)
+        {
+            damageText.rectTransform.anchoredPosition = new Vector2(damageText.rectTransform.anchoredPosition.x, current);
+            yield return null;
+        }
+
+        damageText.gameObject.SetActive(false);
     }
 
     public IEnumerator Move(Vector3Int cellTargetPos)
