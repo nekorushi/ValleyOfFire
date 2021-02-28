@@ -13,6 +13,8 @@ enum MovementType
 [RequireComponent(typeof(AttackPattern))]
 public class Unit : MonoBehaviour
 {
+    private PlayerController owner;
+
     private readonly float UNIT_Z_POSITION = -0.5f;
     public List<Vector3Int> availableMoves { get; private set; }
     public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
@@ -43,6 +45,14 @@ public class Unit : MonoBehaviour
 
     private AttackPattern _attackPattern;
     public AttackPattern AttackPattern { get; private set; }
+
+    public void SetOwner(PlayerController player)
+    {
+        owner = player;
+
+        SpriteRenderer unitSprite = GetComponentInChildren<SpriteRenderer>();
+        if (unitSprite) unitSprite.color = player.PlayerColor;
+    }
 
     private void Start()
     {
@@ -90,6 +100,46 @@ public class Unit : MonoBehaviour
         }
 
         transform.position = targetPos;
+    }
+
+    public bool Attack(Vector3Int clickedPos, Unit clickedUnit)
+    {
+        Vector3Int clickRelativePos = clickedPos - CellPosition;
+        Vector2Int clickRelativePos2D = new Vector2Int(clickRelativePos.x, clickRelativePos.y);
+        SerializableDictionary<Vector2Int, AttackPatternField> fields = AttackPattern.Pattern;
+        bool isAttackClicked = fields.ContainsKey(clickRelativePos2D) && fields[clickRelativePos2D] == AttackPatternField.On;
+        if (isAttackClicked)
+        {
+            switch (AttackPattern.attackType)
+            {
+                case AttackType.Targeted:
+                    if (clickedUnit != null)
+                    {
+                        clickedUnit.ApplyDamage(AttackDmg);
+                        return true;
+                    }
+                    break;
+                case AttackType.Area:
+                    PerformAreaAttack();
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void PerformAreaAttack()
+    {
+        SerializableDictionary<Vector2Int, AttackPatternField> fields = AttackPattern.Pattern;
+
+        foreach (KeyValuePair<Vector2Int, AttackPatternField> field in fields)
+        {
+            if (field.Value == AttackPatternField.On)
+            {
+                Unit reachedUnit = TilemapNavigator.Instance.GetUnit(CellPosition + new Vector3Int(field.Key.x, field.Key.y, 0));
+                if (reachedUnit && !owner.Units.Contains(reachedUnit)) reachedUnit.ApplyDamage(AttackDmg);
+            }
+        }
     }
 
     private void AlignToGrid()

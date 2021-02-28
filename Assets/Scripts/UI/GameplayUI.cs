@@ -78,9 +78,9 @@ public class GameplayUI : MonoBehaviour
 
     void UpdateUnitTarget()
     {
-        if (activePlayer.currentUnit)
+        if (activePlayer.CurrentUnit)
         {
-            Vector2 canvasPos = WorldToCanvasPos(activePlayer.currentUnit.transform.position);
+            Vector2 canvasPos = WorldToCanvasPos(activePlayer.CurrentUnit.transform.position);
 
             unitTarget.rectTransform.anchoredPosition = canvasPos;
             unitTarget.enabled = true;
@@ -100,7 +100,7 @@ public class GameplayUI : MonoBehaviour
     {
         ClearAvailableMoves();
 
-        List<Vector3Int> moves = activePlayer.currentUnit?.availableMoves;
+        List<Vector3Int> moves = activePlayer.CurrentUnit?.availableMoves;
         if (moves != null)
         {
             moves.ForEach(position =>
@@ -123,13 +123,13 @@ public class GameplayUI : MonoBehaviour
         ClearAvailableAttacks();
 
         SerializableDictionary<Vector2Int, AttackPatternField> pattern
-            = activePlayer.currentUnit?.AttackPattern.Pattern;
+            = activePlayer.CurrentUnit?.AttackPattern.Pattern;
 
         if (pattern != null)
         {
             foreach (KeyValuePair<Vector2Int, AttackPatternField> field in pattern)
             {
-                Vector3Int position = activePlayer.currentUnit.CellPosition + new Vector3Int(field.Key.x, field.Key.y, 0);
+                Vector3Int position = activePlayer.CurrentUnit.CellPosition + new Vector3Int(field.Key.x, field.Key.y, 0);
 
                 if (field.Value == AttackPatternField.On && TilemapNavigator.Instance.HasTile(position))
                 {
