@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
         SelectUnit(null);
     }
 
-    public bool HasAliveUnits { get { return Units.Where(unit => unit.Health > 0).ToList().Count > 0; } }
+    public bool HasAliveUnits {get {return Units.Where(unit => unit.Health > 0).ToList().Count > 0; } }
 
     private void AssignOwnedUnits()
     {

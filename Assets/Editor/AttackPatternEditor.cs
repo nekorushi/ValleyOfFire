@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(AttackPattern), true)]
+[CustomEditor(typeof(AttackPattern))]
 public class AttackPatternEditor : Editor
 {
     private AttackPattern pattern = null;

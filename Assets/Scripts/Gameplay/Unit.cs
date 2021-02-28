@@ -26,12 +26,10 @@ public class Unit : MonoBehaviour
 
     [Header("Unit settings")]
     [SerializeField]
+    private UnitTypes unitType;
+    [SerializeField]
     private float _health = 5f;
     public float Health { get { return _health; } private set { _health = value; } }
-
-    [SerializeField]
-    private float _attackDmg = 1.1f;
-    public float AttackDmg { get { return _attackDmg; } private set { _attackDmg = value; } }
 
     [Header("Movement settings")]
     [SerializeField]
@@ -142,7 +140,8 @@ public class Unit : MonoBehaviour
                 case AttackType.Targeted:
                     if (clickedUnit != null)
                     {
-                        clickedUnit.ApplyDamage(AttackDmg);
+                        UnitTypes defenderType = clickedUnit.unitType;
+                        clickedUnit.ApplyDamage(UnitsConfig.Instance.GetDamageValue(unitType, defenderType));
                         return true;
                     }
                     break;
@@ -164,7 +163,11 @@ public class Unit : MonoBehaviour
             if (field.Value == AttackPatternField.On)
             {
                 Unit reachedUnit = TilemapNavigator.Instance.GetUnit(CellPosition + new Vector3Int(field.Key.x, field.Key.y, 0));
-                if (reachedUnit && !owner.Units.Contains(reachedUnit)) reachedUnit.ApplyDamage(AttackDmg);
+                if (reachedUnit && !owner.Units.Contains(reachedUnit))
+                {
+                    UnitTypes defenderType = reachedUnit.unitType;
+                    reachedUnit.ApplyDamage(UnitsConfig.Instance.GetDamageValue(unitType, defenderType));
+                }
             }
         }
     }

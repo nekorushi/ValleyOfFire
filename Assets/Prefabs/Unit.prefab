@@ -392,6 +392,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthText: {fileID: 2483239743946132603}
   damageText: {fileID: 1727341705531428583}
+  unitType: 0
   _health: 5
   _attackDmg: 5
   movementType: 0
