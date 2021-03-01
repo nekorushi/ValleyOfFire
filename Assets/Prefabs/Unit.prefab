@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ed68fd28b52d61b4994bdded0d073464, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 67c3e7d14ed3520438907d05897884e8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -392,12 +392,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthText: {fileID: 2483239743946132603}
   damageText: {fileID: 1727341705531428583}
-  unitType: 0
+  unitType: 2
   _health: 5
-  _attackDmg: 5
-  movementType: 0
-  straightMovementRange: 0
-  diagonalMovementRange: 0
+  movementType: 1
+  straightMovementRange: 2
+  diagonalMovementRange: 2
   canPassUnits: 0
   canPassObstacles: 0
 --- !u!114 &2479592627951131170
@@ -412,22 +411,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbee7328038004b78b919c8279b61c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  surroundingAreaWidth: 0
+  surroundingAreaWidth: 2
   attackType: 0
   direction: 0
   sourcePattern:
-    _Buckets: 00000000ffffffffffffffff
-    _HashCodes: 000000000000000000000000
-    _Next: ffffffff0000000000000000
-    _Count: 1
-    _Version: 1
+    _Buckets: 000000000700000016000000010000000500000008000000170000000e000000110000001300000018000000ffffffff0d0000000f0000001000000012000000140000000300000004000000060000001500000002000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+    _HashCodes: 0000000003000000ffffff7ffbffff7ffcffff7f04000000fdffff7f01000000050000000600000002000000feffff7ffaffff7ff6ffff7f07000000f7ffff7ff8ffff7f08000000f9ffff7f09000000faffff7ffeffff7f02000000060000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    _Next: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0c0000000b0000000a00000009000000ffffffff000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    _Count: 25
+    _Version: 29
     _FreeList: -1
     _FreeCount: 0
     _Keys:
     - {x: 0, y: 0}
+    - {x: -1, y: -1}
+    - {x: -1, y: 0}
+    - {x: -1, y: 1}
+    - {x: 0, y: -1}
+    - {x: 0, y: 1}
+    - {x: 1, y: -1}
+    - {x: 1, y: 0}
+    - {x: 1, y: 1}
+    - {x: -2, y: -2}
+    - {x: -2, y: -1}
+    - {x: -2, y: 0}
+    - {x: -2, y: 1}
+    - {x: -2, y: 2}
+    - {x: -1, y: -2}
+    - {x: -1, y: 2}
+    - {x: 0, y: -2}
+    - {x: 0, y: 2}
+    - {x: 1, y: -2}
+    - {x: 1, y: 2}
+    - {x: 2, y: -2}
+    - {x: 2, y: -1}
+    - {x: 2, y: 0}
+    - {x: 2, y: 1}
+    - {x: 2, y: 2}
     - {x: 0, y: 0}
     - {x: 0, y: 0}
-    _Values: 000000000000000000000000
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    _Values: 00000000020000000200000002000000020000000200000002000000020000000200000001000000020000000200000002000000010000000200000002000000020000000200000002000000020000000100000002000000020000000200000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 --- !u!1 &7789478425397149849
 GameObject:
   m_ObjectHideFlags: 0
