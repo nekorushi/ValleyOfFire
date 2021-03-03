@@ -56,6 +56,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: _unitType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: canPassUnits
       value: 1
       objectReference: {fileID: 0}

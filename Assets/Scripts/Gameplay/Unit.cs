@@ -14,7 +14,7 @@ enum MovementType
 [RequireComponent(typeof(AttackPattern))]
 public class Unit : MonoBehaviour
 {
-    private PlayerController owner;
+    public PlayerController Owner { get; private set; }
     [SerializeField]
     private TMP_Text healthText;
     [SerializeField]
@@ -26,10 +26,15 @@ public class Unit : MonoBehaviour
 
     [Header("Unit settings")]
     [SerializeField]
-    private UnitTypes unitType;
+    private UnitTypes _unitType;
+    public UnitTypes UnitType { get { return _unitType; } private set { _unitType = value; } }
     [SerializeField]
     private float _health = 5f;
     public float Health { get { return _health; } private set { _health = value; } }
+
+    [SerializeField]
+    private float _baseDmg = 2f;
+    public float BaseDmg { get { return _baseDmg; } private set { _baseDmg = value; } }
 
     [Header("Movement settings")]
     [SerializeField]
@@ -46,12 +51,11 @@ public class Unit : MonoBehaviour
     [SerializeField]
     private bool canPassObstacles;
 
-    private AttackPattern _attackPattern;
     public AttackPattern AttackPattern { get; private set; }
 
     public void SetOwner(PlayerController player)
     {
-        owner = player;
+        Owner = player;
 
         SpriteRenderer unitSprite = GetComponentInChildren<SpriteRenderer>();
         if (unitSprite) unitSprite.color = player.PlayerColor;
@@ -96,10 +100,10 @@ public class Unit : MonoBehaviour
         damageText.text = amount.ToString();
         damageText.gameObject.SetActive(true);
 
-        for (float current = 0; current < 1; current += 0.1f)
+        for (float current = 0; current < 1f; current += 0.1f)
         {
             damageText.rectTransform.anchoredPosition = new Vector2(damageText.rectTransform.anchoredPosition.x, current);
-            yield return null;
+            yield return new WaitForSeconds(.03f);
         }
 
         damageText.gameObject.SetActive(false);
@@ -140,8 +144,9 @@ public class Unit : MonoBehaviour
                 case AttackType.Targeted:
                     if (clickedUnit != null)
                     {
-                        UnitTypes defenderType = clickedUnit.unitType;
-                        clickedUnit.ApplyDamage(UnitsConfig.Instance.GetDamageValue(unitType, defenderType));
+                        UnitTypes defenderType = clickedUnit.UnitType;
+                        DamageValue damageInflicted = UnitsConfig.Instance.GetDamageValue(BaseDmg, UnitType, defenderType);
+                        clickedUnit.ApplyDamage(damageInflicted.totalDamage);
                         return true;
                     }
                     break;
@@ -163,10 +168,11 @@ public class Unit : MonoBehaviour
             if (field.Value == AttackPatternField.On)
             {
                 Unit reachedUnit = TilemapNavigator.Instance.GetUnit(CellPosition + new Vector3Int(field.Key.x, field.Key.y, 0));
-                if (reachedUnit && !owner.Units.Contains(reachedUnit))
+                if (reachedUnit && !Owner.Units.Contains(reachedUnit))
                 {
-                    UnitTypes defenderType = reachedUnit.unitType;
-                    reachedUnit.ApplyDamage(UnitsConfig.Instance.GetDamageValue(unitType, defenderType));
+                    UnitTypes defenderType = reachedUnit.UnitType;
+                    DamageValue damageInflicted = UnitsConfig.Instance.GetDamageValue(BaseDmg, UnitType, defenderType);
+                    reachedUnit.ApplyDamage(damageInflicted.totalDamage);
                 }
             }
         }

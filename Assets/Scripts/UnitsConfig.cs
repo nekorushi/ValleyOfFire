@@ -2,6 +2,20 @@
 using System;
 using System.Collections.Generic;
 
+public struct DamageValue
+{
+    public DamageValue(float baseDmg, float multiplier)
+    {
+        baseDamage = baseDmg;
+        totalDamage = baseDmg * multiplier;
+        bonusDamage = totalDamage - baseDmg;
+    }
+
+    public readonly float baseDamage;
+    public readonly float bonusDamage;
+    public readonly float totalDamage;
+}
+
 [Serializable]
 public class UnitsConfig : MonoBehaviour
 {
@@ -9,7 +23,7 @@ public class UnitsConfig : MonoBehaviour
 
     public List<string> unitTypes;
     [HideInInspector]
-    public SerializableDictionary<UnitTypes, SerializableDictionary<UnitTypes, float>> damageValues =
+    public SerializableDictionary<UnitTypes, SerializableDictionary<UnitTypes, float>> damageMultipliers =
         new SerializableDictionary<UnitTypes, SerializableDictionary<UnitTypes, float>>();
 
     private void Start()
@@ -17,23 +31,37 @@ public class UnitsConfig : MonoBehaviour
         Instance = this;
     }
 
-    public float GetDamageValue(UnitTypes attacker, UnitTypes defender)
+    public DamageValue GetDamageValue(float baseDmg, UnitTypes attacker, UnitTypes defender)
     {
-        if (damageValues.ContainsKey(attacker))
+        if (damageMultipliers.ContainsKey(attacker))
         {
-            if (damageValues[attacker].ContainsKey(defender))
+            if (damageMultipliers[attacker].ContainsKey(defender))
             {
-                return damageValues[attacker][defender];
+                float multplier = damageMultipliers[attacker][defender];
+                return new DamageValue(baseDmg, multplier);
+            }
+        }
+
+        return new DamageValue(baseDmg, 1f);
+    }
+
+    public float GetDamageMultiplier(UnitTypes attacker, UnitTypes defender)
+    {
+        if (damageMultipliers.ContainsKey(attacker))
+        {
+            if (damageMultipliers[attacker].ContainsKey(defender))
+            {
+                return damageMultipliers[attacker][defender];
             }
         }
 
         return 1;
     }
 
-    public void SetDamageValue(UnitTypes attacker, UnitTypes defender, float value)
+    public void SetDamageMultiplier(UnitTypes attacker, UnitTypes defender, float value)
     {
-        if (!damageValues.ContainsKey(attacker)) damageValues.Add(attacker, new SerializableDictionary<UnitTypes, float>());
+        if (!damageMultipliers.ContainsKey(attacker)) damageMultipliers.Add(attacker, new SerializableDictionary<UnitTypes, float>());
 
-        damageValues[attacker][defender] = value;
+        damageMultipliers[attacker][defender] = value;
     }
 }

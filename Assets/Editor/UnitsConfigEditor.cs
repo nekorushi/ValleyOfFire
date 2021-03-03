@@ -13,8 +13,8 @@ public class UnitsConfigEditor : Editor
     readonly int minMatrixWidth = 100;
     readonly int minMatrixHeight = 100;
 
-    readonly int targetCellWidth = 20;
-    readonly int targetCellHeight = 20;
+    readonly int targetCellWidth = 30;
+    readonly int targetCellHeight = 30;
 
     readonly int axisLabelHeight = 20;
     readonly int unitLabelHeight = 60;
@@ -136,10 +136,10 @@ public class UnitsConfigEditor : Editor
 
                 GUI.color = row == column ? new Color(.8f, .8f, .8f) : new Color(1f, 1f, 1f);
                 EditorGUI.BeginChangeCheck();
-                float cellValue = EditorGUI.FloatField(cellRect, unitsConfig.GetDamageValue(attackerType, defenderType));
+                float cellValue = EditorGUI.FloatField(cellRect, unitsConfig.GetDamageMultiplier(attackerType, defenderType));
                 if (EditorGUI.EndChangeCheck())
                 {
-                    unitsConfig.SetDamageValue(attackerType, defenderType, cellValue);
+                    unitsConfig.SetDamageMultiplier(attackerType, defenderType, cellValue);
                     EditorUtility.SetDirty(target);
                 }
             }

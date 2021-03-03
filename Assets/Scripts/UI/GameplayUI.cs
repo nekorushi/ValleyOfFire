@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameplayUI : MonoBehaviour
 {
@@ -24,6 +25,13 @@ public class GameplayUI : MonoBehaviour
     private Sprite availableAttacksSprite;
     private List<GameObject> availableAttacks = new List<GameObject>();
 
+    [SerializeField]
+    private GameObject dmgFormulaPrefab;
+    private List<GameObject> dmgFormulas = new List<GameObject>();
+
+    [SerializeField]
+    private List<PlayerController> allPlayers;
+
     private PlayerController _activePlayer;
     public PlayerController activePlayer {
         get { return _activePlayer; }
@@ -45,16 +53,22 @@ public class GameplayUI : MonoBehaviour
 
     void ConnectPlayer()
     {
-        activePlayer?.UnitSelectionChanged.AddListener(UpdateUnitSelection);
-        activePlayer?.ControlModeChanged.AddListener(UpdateAvailableActions);
-        activePlayer?.AvailableActionsChanged.AddListener(UpdateAvailableActions);
+        if (activePlayer != null)
+        {
+            activePlayer.UnitSelectionChanged.AddListener(UpdateUnitSelection);
+            activePlayer.ControlModeChanged.AddListener(UpdateAvailableActions);
+            activePlayer.AvailableActionsChanged.AddListener(UpdateAvailableActions);
+        }
     }
 
     void DisconnectPlayer()
     {
-        activePlayer?.UnitSelectionChanged.RemoveListener(UpdateUnitSelection);
-        activePlayer?.ControlModeChanged.RemoveListener(UpdateAvailableActions);
-        activePlayer?.AvailableActionsChanged.RemoveListener(UpdateAvailableActions);
+        if (activePlayer != null)
+        {
+            activePlayer.UnitSelectionChanged.RemoveListener(UpdateUnitSelection);
+            activePlayer.ControlModeChanged.RemoveListener(UpdateAvailableActions);
+            activePlayer.AvailableActionsChanged.RemoveListener(UpdateAvailableActions);
+        }
     }
 
     void UpdateUnitSelection()
@@ -66,6 +80,8 @@ public class GameplayUI : MonoBehaviour
     void UpdateAvailableActions()
     {
         ClearAvailableMoves();
+        ClearAvailableAttacks();
+        ClearDamageFormulas();
 
         if (activePlayer.ControlMode == ControlModes.Movement)
         {
@@ -73,6 +89,7 @@ public class GameplayUI : MonoBehaviour
         } else
         {
             RenderAvailableAttacks();
+            RenderDmgFormulas();
         }
     }
 
@@ -98,8 +115,6 @@ public class GameplayUI : MonoBehaviour
 
     void RenderAvailableMoves()
     {
-        ClearAvailableMoves();
-
         List<Vector3Int> moves = activePlayer.CurrentUnit?.availableMoves;
         if (moves != null)
         {
@@ -117,11 +132,14 @@ public class GameplayUI : MonoBehaviour
         availableAttacks.Clear();
     }
 
+    void ClearDamageFormulas()
+    {
+        dmgFormulas.ForEach(image => Destroy(image));
+        dmgFormulas.Clear();
+    }
+
     void RenderAvailableAttacks()
     {
-
-        ClearAvailableAttacks();
-
         SerializableDictionary<Vector2Int, AttackPatternField> pattern
             = activePlayer.CurrentUnit?.AttackPattern.Pattern;
 
@@ -140,6 +158,26 @@ public class GameplayUI : MonoBehaviour
         }
     }
 
+    void RenderDmgFormulas()
+    {
+        foreach(PlayerController player in allPlayers)
+        {
+            if (player != activePlayer)
+            {
+                foreach(Unit defender in player.Units)
+                {
+                    Unit attacker = activePlayer.CurrentUnit;
+                    if (defender != null && defender.Owner != activePlayer)
+                    {
+                        DamageValue damage = UnitsConfig.Instance.GetDamageValue(attacker.BaseDmg, attacker.UnitType, defender.UnitType);
+                        GameObject formula = CreateDmgFormula(defender.CellPosition, damage, defender.UnitType);
+                        dmgFormulas.Add(formula);
+                    }
+                }
+            }
+        }
+    }
+
     private GameObject CreateMarker(Vector3Int position, string name, Sprite sprite)
     {
         Vector3 worldPos = TilemapNavigator.Instance.CellToWorldPos(position);
@@ -153,6 +191,27 @@ public class GameplayUI : MonoBehaviour
         markerRect.anchoredPosition = canvasPos;
         markerRect.sizeDelta = Vector2.one;
         return marker;
+    }
+
+    private GameObject CreateDmgFormula(Vector3Int position, DamageValue damage, UnitTypes defenderClass)
+    {
+        Vector3 worldPos = TilemapNavigator.Instance.CellToWorldPos(position);
+        Vector2 canvasPos = WorldToCanvasPos(worldPos);
+
+        GameObject formula = Instantiate(dmgFormulaPrefab);
+        TMP_Text value = formula.GetComponentInChildren<TMP_Text>();
+
+        string messageFormat = damage.bonusDamage == 0f
+            ? "{0}"
+            : damage.bonusDamage > 0 ? "{0}\n(+{1})" : "{0}\n({1})";
+
+        value.text = string.Format(messageFormat,  damage.baseDamage, damage.bonusDamage, defenderClass);
+
+        RectTransform markerRect = formula.GetComponent<RectTransform>();
+        markerRect.SetParent(canvasRect);
+        markerRect.anchoredPosition = canvasPos;
+
+        return formula;
     }
 
     private Vector2 WorldToCanvasPos(Vector3 worldPos)

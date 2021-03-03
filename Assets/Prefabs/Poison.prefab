@@ -13,7 +13,11 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: e4a03b5d9b3241e4ca016383566274e7, type: 3}
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
-      value: Poison Variant
+      value: Poison
+      objectReference: {fileID: 0}
+    - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: _unitType
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8907512749714802914, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_RootOrder
