@@ -140,8 +140,10 @@ public class GameplayUI : MonoBehaviour
 
     void RenderAvailableAttacks()
     {
-        SerializableDictionary<Vector2Int, AttackPatternField> pattern
-            = activePlayer.CurrentUnit?.AttackPattern.Pattern;
+        if (activePlayer.CurrentUnit == null) return;
+
+        AttackPattern attackPattern = activePlayer.CurrentUnit.GetAttackPattern(activePlayer.AttackMode);
+        SerializableDictionary<Vector2Int, AttackPatternField> pattern = attackPattern.Pattern;
 
         if (pattern != null)
         {
@@ -160,6 +162,8 @@ public class GameplayUI : MonoBehaviour
 
     void RenderDmgFormulas()
     {
+        if (activePlayer.CurrentUnit == null) return;
+
         foreach(PlayerController player in allPlayers)
         {
             if (player != activePlayer)
@@ -167,9 +171,10 @@ public class GameplayUI : MonoBehaviour
                 foreach(Unit defender in player.Units)
                 {
                     Unit attacker = activePlayer.CurrentUnit;
-                    if (defender != null && defender.Owner != activePlayer)
+                    if (defender != null && defender.Owner != activePlayer && defender.Health > 0)
                     {
-                        DamageValue damage = UnitsConfig.Instance.GetDamageValue(attacker.BaseDmg, attacker.UnitType, defender.UnitType);
+                        AttackPattern attackPattern = activePlayer.CurrentUnit.GetAttackPattern(activePlayer.AttackMode);
+                        DamageValue damage = UnitsConfig.Instance.GetDamageValue(attackPattern.Damage, attacker.UnitType, defender.UnitType);
                         GameObject formula = CreateDmgFormula(defender.CellPosition, damage, defender.UnitType);
                         dmgFormulas.Add(formula);
                     }

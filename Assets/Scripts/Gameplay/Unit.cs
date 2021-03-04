@@ -32,10 +32,6 @@ public class Unit : MonoBehaviour
     private float _health = 5f;
     public float Health { get { return _health; } private set { _health = value; } }
 
-    [SerializeField]
-    private float _baseDmg = 2f;
-    public float BaseDmg { get { return _baseDmg; } private set { _baseDmg = value; } }
-
     [Header("Movement settings")]
     [SerializeField]
     private MovementType movementType;
@@ -51,7 +47,8 @@ public class Unit : MonoBehaviour
     [SerializeField]
     private bool canPassObstacles;
 
-    public AttackPattern AttackPattern { get; private set; }
+    public AttackPattern PrimaryAttack { get; private set; }
+    public AttackPattern SecondaryAttack { get; private set; }
 
     public void SetOwner(PlayerController player)
     {
@@ -63,7 +60,11 @@ public class Unit : MonoBehaviour
 
     private void Start()
     {
-        AttackPattern = GetComponent<AttackPattern>();
+        AttackPattern[] attackPatterns = GetComponents<AttackPattern>();
+
+        PrimaryAttack = attackPatterns[0];
+        SecondaryAttack = attackPatterns[1];
+
         AlignToGrid();
         UpdateHealthText();
     }
@@ -76,6 +77,12 @@ public class Unit : MonoBehaviour
     public void Blur()
     {
         availableMoves = null;
+    }
+
+    public AttackPattern GetAttackPattern(AttackModes mode)
+    {
+        if (mode == AttackModes.Primary) return PrimaryAttack;
+        return SecondaryAttack;
     }
 
     public void ApplyDamage(float amount)
@@ -135,17 +142,19 @@ public class Unit : MonoBehaviour
     {
         Vector3Int clickRelativePos = clickedPos - CellPosition;
         Vector2Int clickRelativePos2D = new Vector2Int(clickRelativePos.x, clickRelativePos.y);
-        SerializableDictionary<Vector2Int, AttackPatternField> fields = AttackPattern.Pattern;
+        AttackPattern attackPattern = GetAttackPattern(Owner.AttackMode);
+        SerializableDictionary<Vector2Int, AttackPatternField> fields = attackPattern.Pattern;
+
         bool isAttackClicked = fields.ContainsKey(clickRelativePos2D) && fields[clickRelativePos2D] == AttackPatternField.On;
         if (isAttackClicked)
         {
-            switch (AttackPattern.attackType)
+            switch (attackPattern.attackType)
             {
                 case AttackType.Targeted:
                     if (clickedUnit != null)
                     {
                         UnitTypes defenderType = clickedUnit.UnitType;
-                        DamageValue damageInflicted = UnitsConfig.Instance.GetDamageValue(BaseDmg, UnitType, defenderType);
+                        DamageValue damageInflicted = UnitsConfig.Instance.GetDamageValue(attackPattern.Damage, UnitType, defenderType);
                         clickedUnit.ApplyDamage(damageInflicted.totalDamage);
                         return true;
                     }
@@ -161,7 +170,8 @@ public class Unit : MonoBehaviour
 
     private void PerformAreaAttack()
     {
-        SerializableDictionary<Vector2Int, AttackPatternField> fields = AttackPattern.Pattern;
+        AttackPattern attackPattern = GetAttackPattern(Owner.AttackMode);
+        SerializableDictionary<Vector2Int, AttackPatternField> fields = attackPattern.Pattern;
 
         foreach (KeyValuePair<Vector2Int, AttackPatternField> field in fields)
         {
@@ -171,7 +181,7 @@ public class Unit : MonoBehaviour
                 if (reachedUnit && !Owner.Units.Contains(reachedUnit))
                 {
                     UnitTypes defenderType = reachedUnit.UnitType;
-                    DamageValue damageInflicted = UnitsConfig.Instance.GetDamageValue(BaseDmg, UnitType, defenderType);
+                    DamageValue damageInflicted = UnitsConfig.Instance.GetDamageValue(attackPattern.Damage, UnitType, defenderType);
                     reachedUnit.ApplyDamage(damageInflicted.totalDamage);
                 }
             }

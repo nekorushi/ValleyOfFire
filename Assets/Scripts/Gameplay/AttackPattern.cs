@@ -29,6 +29,10 @@ public enum AttackDirection
 [Serializable]
 public class AttackPattern : MonoBehaviour
 {
+    [SerializeField]
+    private float _damage = 2f;
+    public float Damage { get { return _damage; } private set { _damage = value; } }
+
     [HideInInspector]
     public int surroundingAreaWidth = 0;
 

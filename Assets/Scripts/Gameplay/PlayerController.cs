@@ -9,6 +9,11 @@ public enum ControlModes
     Movement,
     Attack
 }
+public enum AttackModes
+{
+    Primary,
+    Secondary
+}
 
 public class PlayerController : MonoBehaviour
 {
@@ -37,6 +42,17 @@ public class PlayerController : MonoBehaviour
         private set
         {
             _controlMode = value;
+            ControlModeChanged.Invoke();
+        }
+    }
+
+    private AttackModes _attackMode = AttackModes.Primary;
+    public AttackModes AttackMode
+    {
+        get { return _attackMode; }
+        private set
+        {
+            _attackMode = value;
             ControlModeChanged.Invoke();
         }
     }
@@ -92,15 +108,21 @@ public class PlayerController : MonoBehaviour
         ControlMode = ControlMode == ControlModes.Attack ? ControlModes.Movement : ControlModes.Attack;
     }
 
+    public void ChangeAttackMode()
+    {
+        AttackMode = AttackMode == AttackModes.Primary ? AttackModes.Secondary : AttackModes.Primary;
+    }
+
     public IEnumerator PerformTurn()
     {
         currentActionPoints = maxActionPoints;
 
         while(currentActionPoints > 0)
         {
-            if (CurrentUnit && CurrentUnit.AttackPattern.attackType == AttackType.Area)
+            if (CurrentUnit)
             {
-                UpdateAttackArea();
+                AttackPattern attackPattern = CurrentUnit.GetAttackPattern(AttackMode);
+                if (attackPattern.attackType == AttackType.Area) UpdateAttackArea();
             }
 
             if (Input.GetMouseButtonDown(0))
@@ -159,9 +181,10 @@ public class PlayerController : MonoBehaviour
             direction = AttackDirection.Down;
         }
 
-        if (CurrentUnit.AttackPattern.direction != direction)
+        AttackPattern attackPattern = CurrentUnit.GetAttackPattern(AttackMode);
+        if (attackPattern.direction != direction)
         {
-            CurrentUnit.AttackPattern.direction = direction;
+            attackPattern.direction = direction;
             AvailableActionsChanged.Invoke();
         }
     }
@@ -179,7 +202,11 @@ public class PlayerController : MonoBehaviour
         } else if (ControlMode == ControlModes.Attack)
         {
             bool actionWasPerformed = CurrentUnit.Attack(clickedPos, clickedUnit);
-            if (actionWasPerformed) currentActionPoints -= 1;
+            if (actionWasPerformed)
+            {
+                currentActionPoints -= 1;
+                AvailableActionsChanged.Invoke();
+            }
         }
     }
 
