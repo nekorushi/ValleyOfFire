@@ -190,11 +190,10 @@ public class Unit : MonoBehaviour
 
     private void AlignToGrid()
     {
-        transform.position = new Vector3(
-            Mathf.RoundToInt(transform.position.x),
-            Mathf.RoundToInt(transform.position.y),
-            UNIT_Z_POSITION
-        );
+        TilemapNavigator navigator = TilemapNavigator.Instance;
+        Vector3 alignedPosition = navigator.CellToWorldPos(navigator.WorldToCellPos(transform.position));
+
+        transform.position = new Vector3(alignedPosition.x, alignedPosition.y, UNIT_Z_POSITION);
     }
 
     private List<Vector3Int> CalculateAvailableMoves()

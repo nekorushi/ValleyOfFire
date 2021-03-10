@@ -397,7 +397,6 @@ MonoBehaviour:
   damageText: {fileID: 1727341705531428583}
   _unitType: 0
   _health: 5
-  _baseDmg: 2
   movementType: 1
   straightMovementRange: 2
   diagonalMovementRange: 2
@@ -415,6 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbee7328038004b78b919c8279b61c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _damage: 2
   surroundingAreaWidth: 2
   attackType: 0
   direction: 0
@@ -477,6 +477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbee7328038004b78b919c8279b61c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _damage: 2
   surroundingAreaWidth: 0
   attackType: 0
   direction: 0

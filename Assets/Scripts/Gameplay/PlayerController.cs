@@ -119,6 +119,7 @@ public class PlayerController : MonoBehaviour
 
         while(currentActionPoints > 0)
         {
+
             if (CurrentUnit)
             {
                 AttackPattern attackPattern = CurrentUnit.GetAttackPattern(AttackMode);
