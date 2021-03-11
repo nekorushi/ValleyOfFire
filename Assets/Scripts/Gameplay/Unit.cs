@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using TMPro;
+using Pathfinding;
 
 enum MovementType
 {
@@ -28,24 +29,13 @@ public class Unit : MonoBehaviour
     [SerializeField]
     private UnitTypes _unitType;
     public UnitTypes UnitType { get { return _unitType; } private set { _unitType = value; } }
+
     [SerializeField]
     private float _health = 5f;
     public float Health { get { return _health; } private set { _health = value; } }
 
-    [Header("Movement settings")]
     [SerializeField]
-    private MovementType movementType;
-
-    [SerializeField]
-    private int straightMovementRange;
-    [SerializeField]
-    private int diagonalMovementRange;
-
-    [SerializeField]
-    private bool canPassUnits;
-
-    [SerializeField]
-    private bool canPassObstacles;
+    private int movementRange;
 
     public AttackPattern PrimaryAttack { get; private set; }
     public AttackPattern SecondaryAttack { get; private set; }
@@ -69,10 +59,7 @@ public class Unit : MonoBehaviour
         UpdateHealthText();
     }
 
-    public void Focus()
-    {
-        availableMoves = CalculateAvailableMoves();
-    }
+    public void Focus() {}
 
     public void Blur()
     {
@@ -196,57 +183,23 @@ public class Unit : MonoBehaviour
         transform.position = new Vector3(alignedPosition.x, alignedPosition.y, UNIT_Z_POSITION);
     }
 
-    private List<Vector3Int> CalculateAvailableMoves()
+    public IEnumerator UpdateAvailableMoves(Vector3Int targetCell)
     {
         Dictionary<Vector3Int, int> directions = new Dictionary<Vector3Int, int>();
 
-        if (movementType == MovementType.Straight || movementType == MovementType.Both)
+        Seeker pathfindingSeeker = GetComponent<Seeker>();
+        Path path = pathfindingSeeker.StartPath(transform.position, TilemapNavigator.Instance.CellToWorldPos(targetCell));
+
+        yield return StartCoroutine(path.WaitForPath());
+
+        if (!path.error && path.vectorPath.Count <= movementRange + 1)
         {
-            directions.Add(Vector3Int.up, straightMovementRange);
-            directions.Add(Vector3Int.down, straightMovementRange);
-            directions.Add(Vector3Int.left, straightMovementRange);
-            directions.Add(Vector3Int.right, straightMovementRange);
+            availableMoves = path.vectorPath
+                .Skip(1).ToList()
+                .ConvertAll(pathNode => TilemapNavigator.Instance.WorldToCellPos(pathNode));
+        } else
+        {
+            availableMoves = null;
         }
-
-        if (movementType == MovementType.Diagonal || movementType == MovementType.Both)
-        {
-            directions.Add(new Vector3Int(-1, -1, 0), diagonalMovementRange);
-            directions.Add(new Vector3Int(1, -1, 0), diagonalMovementRange);
-            directions.Add(new Vector3Int(-1, 1, 0), diagonalMovementRange);
-            directions.Add(new Vector3Int(1, 1, 0), diagonalMovementRange);
-        } 
-
-        List<Vector3Int> availableMoves = new List<Vector3Int>();
-
-        foreach(KeyValuePair<Vector3Int, int> direction in directions)
-        {
-            availableMoves = availableMoves.Union(CheckMovementLine(direction.Key, direction.Value)).ToList();
-        }
-
-        return availableMoves;
-    }
-
-    List<Vector3Int> CheckMovementLine(Vector3Int direction, int range)
-    {
-        List<Vector3Int> availableMoves = new List<Vector3Int>();
-
-        for (int i = 1; i <= range; i++)
-        {
-            TilemapNavigator navigator = TilemapNavigator.Instance;
-            Vector3Int nextPosition = CellPosition + direction * i;
-
-            bool tileExists = navigator.HasTile(nextPosition);
-            if (!tileExists) break;
-
-            bool tileIsMoveable = navigator.IsTileMoveable(nextPosition);
-            bool tileIsTaken = navigator.IsTileTaken(nextPosition);
-
-            if (tileIsMoveable && !tileIsTaken) availableMoves.Add(nextPosition);
-
-            if (!tileIsMoveable && !canPassObstacles) break;
-            if (tileIsTaken && !canPassUnits) break;
-        }
-
-        return availableMoves;
     }
 }

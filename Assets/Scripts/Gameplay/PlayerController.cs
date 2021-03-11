@@ -124,6 +124,7 @@ public class PlayerController : MonoBehaviour
             {
                 AttackPattern attackPattern = CurrentUnit.GetAttackPattern(AttackMode);
                 if (attackPattern.attackType == AttackType.Area) UpdateAttackArea();
+                yield return StartCoroutine(UpdateMovementPath());
             }
 
             if (Input.GetMouseButtonDown(0))
@@ -188,6 +189,15 @@ public class PlayerController : MonoBehaviour
             attackPattern.direction = direction;
             AvailableActionsChanged.Invoke();
         }
+    }
+
+    private IEnumerator UpdateMovementPath()
+    {
+        Vector3 cursorWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector3Int targetCell = TilemapNavigator.Instance.WorldToCellPos(cursorWorldPos);
+
+        yield return StartCoroutine(CurrentUnit.UpdateAvailableMoves(targetCell));
+        AvailableActionsChanged.Invoke();
     }
 
     private void SelectUnit(Unit unit)
