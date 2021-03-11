@@ -85,6 +85,11 @@ class TilemapNavigator : MonoBehaviour
         Debug.DrawLine(secondStart, secondEnd, color, 5f);
     }
 
+    public BoundsInt GetTilemapBounds()
+    {
+        return tilemap.cellBounds;
+    }
+
     public GameObject GetObjectAtWorldPos(Vector3 worldPos)
     {
         worldPos.z = -10;

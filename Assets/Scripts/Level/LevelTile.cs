@@ -13,9 +13,16 @@ public class LevelTile : Tile
     [Header("Custom fields")]
     [SerializeField]
     private TileType _type;
-
     public TileType Type
     {
         get { return _type; }
     }
+
+    [SerializeField]
+    private uint _cost;
+    public uint Cost
+    {
+        get { return _cost; }
+    }
+
 }
