@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
         private set { _units = value; }
     }
 
-    private Unit _currentUnit;  
+    private Unit _currentUnit;
     public Unit CurrentUnit {
         get { return _currentUnit; }
         private set
@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
             _currentUnit = value;
             _currentUnit?.Focus();
             UnitSelectionChanged.Invoke();
-        } 
+        }
     }
 
     void Start()
@@ -124,7 +124,6 @@ public class PlayerController : MonoBehaviour
             {
                 AttackPattern attackPattern = CurrentUnit.GetAttackPattern(AttackMode);
                 if (attackPattern.attackType == AttackType.Area) UpdateAttackArea();
-                yield return StartCoroutine(UpdateMovementPath());
             }
 
             if (Input.GetMouseButtonDown(0))
@@ -191,14 +190,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private IEnumerator UpdateMovementPath()
-    {
-        Vector3 cursorWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        Vector3Int targetCell = TilemapNavigator.Instance.WorldToCellPos(cursorWorldPos);
-
-        yield return StartCoroutine(CurrentUnit.UpdateAvailableMoves(targetCell));
-        AvailableActionsChanged.Invoke();
-    }
+    //private void UpdateMovementPath()
+    //{
+    //    CurrentUnit.UpdateAvailableMoves();
+    //    AvailableActionsChanged.Invoke();
+    //}
 
     private void SelectUnit(Unit unit)
     {
