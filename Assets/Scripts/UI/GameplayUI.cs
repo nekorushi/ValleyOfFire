@@ -115,8 +115,7 @@ public class GameplayUI : MonoBehaviour
 
     void RenderAvailableMoves()
     {
-        List<Vector3Int> moves = activePlayer.CurrentUnit?.availableMoves;
-        Debug.Log(activePlayer.CurrentUnit?.availableMoves.Count);
+        List<Vector3Int> moves = activePlayer.CurrentUnit?.AvailableMoves;
         if (moves != null)
         {
             moves.ForEach(position =>

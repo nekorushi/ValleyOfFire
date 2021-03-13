@@ -1,9 +1,14 @@
+using System;
+using System.Collections.Generic;
+using Pathfinding;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 class TilemapNavigator : MonoBehaviour
 {
     public static TilemapNavigator Instance;
+    public static Vector3 CellCenterOffset = new Vector3(.5f, .5f, 0);
+    TilesetGraph pathfindingGraph;
 
     [SerializeField]
     private LayerMask clickableLayerMask;
@@ -22,6 +27,7 @@ class TilemapNavigator : MonoBehaviour
     private void Start()
     {
         grid = GetComponent<Grid>();
+        pathfindingGraph = (TilesetGraph)AstarPath.active.data.FindGraph(g => g.name == "TilesetGraph");
     }
 
     public bool HasTile(Vector3Int position)
@@ -46,14 +52,42 @@ class TilemapNavigator : MonoBehaviour
         return foundObject != null ? foundObject.GetComponent<Unit>() : null;
     }
 
+    public BoundsInt GetTilemapBounds()
+    {
+        return tilemap.cellBounds;
+    }
+
+    public GameObject GetObjectAtWorldPos(Vector3 worldPos)
+    {
+        Vector3 raycastPos = new Vector3(worldPos.x, worldPos.y, -10);
+        RaycastHit2D hit = Physics2D.Raycast(raycastPos, Vector2.zero, Mathf.Infinity, clickableLayerMask);
+
+        DrawTarget(new Vector3(hit.point.x, hit.point.y, 0), Color.blue);
+
+        if (hit.collider != null)
+        {
+            return hit.collider.gameObject;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public Vector3 CellToWorldPos(Vector3Int position)
     {
-        return grid.CellToWorld(position) + new Vector3(.5f, .5f, 0);
+        return grid.CellToWorld(position) + CellCenterOffset;
     }
 
     public Vector3Int WorldToCellPos(Vector3 worldPos)
     {
         return grid.WorldToCell(worldPos);
+    }
+
+    public Vector3Int Int3ToCellPos(Int3 position)
+    {
+        Vector3 floatPos = (Vector3)position;
+        return new Vector3Int((int)floatPos.x, (int)floatPos.y, (int)floatPos.z);
     }
 
     public bool IsTileTaken(Vector3Int position)
@@ -74,36 +108,32 @@ class TilemapNavigator : MonoBehaviour
 
     private void DrawTarget(Vector3 worldPos, Color color)
     {
-        float radius = 0.1f;
+        float radius = 0.3f;
 
-        Vector3 firstStart = new Vector3(worldPos.x - radius, worldPos.y - radius, 0);
-        Vector3 firstEnd = new Vector3(worldPos.x + radius, worldPos.y + radius, 0);
-        Vector3 secondStart = new Vector3(worldPos.x - radius, worldPos.y + radius, 0);
-        Vector3 secondEnd = new Vector3(worldPos.x + radius, worldPos.y - radius, 0);
+        Vector3 firstStart = new Vector3(worldPos.x - radius, worldPos.y - radius, -5f);
+        Vector3 firstEnd = new Vector3(worldPos.x + radius, worldPos.y + radius, -5f);
+        Vector3 secondStart = new Vector3(worldPos.x - radius, worldPos.y + radius, -5f);
+        Vector3 secondEnd = new Vector3(worldPos.x + radius, worldPos.y - radius, -5f);
 
-        Debug.DrawLine(firstStart, firstEnd, color, 5f);
-        Debug.DrawLine(secondStart, secondEnd, color, 5f);
+        Debug.DrawLine(firstStart, firstEnd, color, 2f);
+        Debug.DrawLine(secondStart, secondEnd, color, 2f);
     }
 
-    public BoundsInt GetTilemapBounds()
+    public List<Vector3Int> CalculateMovementRange(Vector3Int startingCell, int range)
     {
-        return tilemap.cellBounds;
-    }
+        Int3 startingNodePos = (Int3)(Vector3)startingCell;
+        PointNode initialNode = Array.Find(pathfindingGraph.nodes, node => node.position == startingNodePos);
+        List<GraphNode> reachableNodes = PathUtilities.BFS(initialNode, range, -1, node => {
+            Vector3Int nodeCellPos = Int3ToCellPos(node.position);
+            bool result = nodeCellPos == startingCell || !IsTileTaken(nodeCellPos);
+            return result;
+        });
 
-    public GameObject GetObjectAtWorldPos(Vector3 worldPos)
-    {
-        worldPos.z = -10;
-        RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero, Mathf.Infinity, clickableLayerMask);
-
-        DrawTarget(new Vector3(hit.point.x, hit.point.y, 0), Color. blue);
-
-        if (hit.collider != null)
+        List<Vector3Int> moves = new List<Vector3Int>();
+        foreach(GraphNode node in reachableNodes)
         {
-            return hit.collider.gameObject;
+            if (node.position != startingNodePos) moves.Add(Int3ToCellPos(node.position));
         }
-        else
-        {
-            return null;
-        }
+        return moves;
     }
 }

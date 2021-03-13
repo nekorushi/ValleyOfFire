@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEngine;
 using TMPro;
 using Pathfinding;
-using System;
 
 enum MovementType
 {
@@ -23,7 +22,7 @@ public class Unit : MonoBehaviour
     private TMP_Text damageText;
 
     private readonly float UNIT_Z_POSITION = -0.5f;
-    public List<Vector3Int> availableMoves { get; private set; }
+    public List<Vector3Int> AvailableMoves { get; private set; }
     public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
 
     [Header("Unit settings")]
@@ -37,6 +36,7 @@ public class Unit : MonoBehaviour
 
     [SerializeField]
     private int movementRange;
+    private TilesetTraversalProvider tilesetTraversalProvider;
 
     public AttackPattern PrimaryAttack { get; private set; }
     public AttackPattern SecondaryAttack { get; private set; }
@@ -58,15 +58,19 @@ public class Unit : MonoBehaviour
 
         AlignToGrid();
         UpdateHealthText();
+
+        tilesetTraversalProvider = UnitBlockManager.Instance.traversalProvider;
+        tilesetTraversalProvider.ReserveNode(CellPosition);
     }
 
     public void Focus() {
+        UnitBlockManager.Instance.traversalProvider.selectedUnitCell = CellPosition;
         UpdateAvailableMoves();
     }
 
     public void Blur()
     {
-        availableMoves = null;
+        AvailableMoves = null;
     }
 
     public AttackPattern GetAttackPattern(AttackModes mode)
@@ -108,52 +112,41 @@ public class Unit : MonoBehaviour
 
     public IEnumerator Move(Vector3Int cellTargetPos)
     {
+        TilemapNavigator navigator = TilemapNavigator.Instance;
+
         Vector3 startingPos = transform.position;
-        Vector3 targetWorldPos = TilemapNavigator.Instance.CellToWorldPos(cellTargetPos);
+        Vector3 targetWorldPos = navigator.CellToWorldPos(cellTargetPos);
         Vector3 targetPos = new Vector3(targetWorldPos.x, targetWorldPos.y, UNIT_Z_POSITION);
 
         float movementSpeed = 3;
         float movementDuration = 1 / movementSpeed;
 
-        Seeker pathfindingSeeker = GetComponent<Seeker>();
-        Path path = pathfindingSeeker.StartPath(transform.position, TilemapNavigator.Instance.CellToWorldPos(cellTargetPos));
+        Path path = ABPath.Construct(CellPosition, cellTargetPos, null);
+        path.traversalProvider = tilesetTraversalProvider;
+        AstarPath.StartPath(path);
+
+
         yield return StartCoroutine(path.WaitForPath());
         if (!path.error)
         {
-            for (int currentTarget = 1; currentTarget < path.vectorPath.Count; currentTarget++)
+            List<Vector3> waypoints = path.vectorPath.ConvertAll(node => navigator.CellToWorldPos(navigator.WorldToCellPos(node)));
+
+            for (int currentTarget = 1; currentTarget < waypoints.Count; currentTarget++)
             {
                 float elapsedTime = 0f;
-                Vector3 currentStart = currentTarget == 1 ? startingPos : path.vectorPath[currentTarget - 1];
+                Vector3 currentStart = currentTarget == 1 ? startingPos : waypoints[currentTarget - 1];
                 while (elapsedTime < movementDuration)
                 {
-                    transform.position = Vector3.Lerp(currentStart, path.vectorPath[currentTarget], (elapsedTime / movementDuration));
+                    transform.position = Vector3.Lerp(currentStart, waypoints[currentTarget], (elapsedTime / movementDuration));
                     elapsedTime += Time.deltaTime;
                     yield return null;
                 }
             }
+
+            tilesetTraversalProvider.ReleaseNode(CellPosition);
+            tilesetTraversalProvider.ReserveNode(cellTargetPos);
+            transform.position = targetPos;
         }
-
-        transform.position = targetPos;
-
-        //for (int xPos = -movementRange; xPos <= movementRange; xPos++)
-        //{
-        //    for (int yPos = -movementRange; yPos <= movementRange; yPos++)
-        //    {
-        //        if (xPos != 0 || yPos != 0)
-        //        {
-        //            Vector3Int targetCellPos = CellPosition + new Vector3Int(xPos, yPos, 0);
-        //            LevelTile targetCell = navigator.GetTile(targetCellPos);
-        //            bool isTaken = navigator.IsTileTaken(targetCellPos);
-
-        //            if (!isTaken && target Cell != null && targetCell.Type == TileType.Walkable)
-        //            {
-        //                Path path = pathfindingSeeker.StartPath(transform.position, TilemapNavigator.Instance.CellToWorldPos(targetCellPos));
-        //                yield return StartCoroutine(path.WaitForPath());
-        //                if (!path.error && path.vectorPath.Count <= movementRange + 1) moves.Add(targetCellPos);
-        //            }
-        //        }
-        //    }
-        //}
     }
 
     public bool Attack(Vector3Int clickedPos, Unit clickedUnit)
@@ -216,13 +209,6 @@ public class Unit : MonoBehaviour
 
     public void UpdateAvailableMoves()
     {
-        TilemapNavigator navigator = TilemapNavigator.Instance;
-
-        TilesetGraph graph = (TilesetGraph)AstarPath.active.data.FindGraph(g => g.name == "Tileset Graph");
-        GraphNode pathfindingNode = graph.GetNearest(navigator.CellToWorldPos(CellPosition)).node;
-        List<GraphNode> reachableNodes = PathUtilities.BFS(pathfindingNode, movementRange);
-        List<Vector3Int> moves = reachableNodes.ConvertAll(node => navigator.WorldToCellPos((Vector3)node.position));
-
-        availableMoves = moves.Where((cellPos) => !navigator.IsTileTaken(cellPos)).ToList();
+        AvailableMoves = TilemapNavigator.Instance.CalculateMovementRange(CellPosition, movementRange);
     }
 }

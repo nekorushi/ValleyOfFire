@@ -96,9 +96,9 @@ public class TilesetGraph : NavGraph
     {
         TilemapNavigator navigator = TilemapNavigator.Instance;
         LevelTile tile = navigator.GetTile(cellPos);
-        Vector3 worldPos = navigator.CellToWorldPos(cellPos);
         PointNode node = new PointNode(active);
-        node.position = (Int3)worldPos;
+        Vector3 floatCellPos = cellPos;
+        node.position = (Int3)floatCellPos;
         node.Walkable = tile.Type == TileType.Walkable;
         return node;
     }

@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
         private set
         {
             _currentUnit?.Blur();
-            _currentUnit = value;
+            _currentUnit = value;            
             _currentUnit?.Focus();
             UnitSelectionChanged.Invoke();
         }
@@ -219,7 +219,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator PerformMovementAction(Vector3Int clickedPos)
     {
-        bool isMovementClicked = CurrentUnit.availableMoves.Contains(clickedPos);
+        bool isMovementClicked = CurrentUnit.AvailableMoves.Contains(clickedPos);
         if (isMovementClicked)
         {
             Unit actingUnit = CurrentUnit;
