@@ -6,17 +6,25 @@ using UnityEngine.Tilemaps;
 
 class TilemapNavigator : MonoBehaviour
 {
-    public static TilemapNavigator Instance;
+    private static TilemapNavigator _instance;
+    public static TilemapNavigator Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<TilemapNavigator>();
+            }
+
+            return _instance;
+        }
+    }
+
     public static Vector3 CellCenterOffset = new Vector3(.5f, .5f, 0);
     TilesetGraph pathfindingGraph;
 
     [SerializeField]
     private LayerMask clickableLayerMask;
-
-    public TilemapNavigator()
-    {
-        Instance = this;
-    }
 
     [SerializeField]
     private Grid grid;

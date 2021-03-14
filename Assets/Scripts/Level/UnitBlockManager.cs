@@ -5,15 +5,24 @@ using UnityEngine;
 
 public class UnitBlockManager : MonoBehaviour
 {
-    public static UnitBlockManager Instance;
+    private static UnitBlockManager _instance;
+    public static UnitBlockManager Instance {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<UnitBlockManager>();
+            }
+
+            return _instance;
+        }
+    }
 
     public TilesetTraversalProvider traversalProvider;
     public List<SingleNodeBlocker> obstacles;
 
     void Start()
     {
-        Instance = this;
-
         BlockManager blockManager = GetComponent<BlockManager>();
         List<SingleNodeBlocker> obstacles = FindObjectsOfType<SingleNodeBlocker>().ToList();
 
