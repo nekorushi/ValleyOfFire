@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,73 +11,73 @@ public enum AttackPatternField
     Off
 }
 
-
 [Serializable]
-public enum AttackType
+public enum AttackTrajectory
 {
-    Targeted,
-    Area
-}
-
-public enum AttackDirection
-{
-    Up,
-    Down,
-    Left,
-    Right
+    Straight,
+    Curve
 }
 
 [Serializable]
 public class AttackPattern : MonoBehaviour
 {
+    private Unit unit;
+
     [SerializeField]
     private float _damage = 2f;
     public float Damage { get { return _damage; } private set { _damage = value; } }
+
+    public AttackEffect effect;
 
     [HideInInspector]
     public int surroundingAreaWidth = 0;
 
     [HideInInspector]
-    public AttackType attackType = AttackType.Targeted;
-
-    [HideInInspector]
-    public AttackDirection direction = AttackDirection.Up;
-
-    [HideInInspector]
-    public SerializableDictionary<Vector2Int, AttackPatternField> sourcePattern =
+    public SerializableDictionary<Vector2Int, AttackPatternField> _pattern =
         new SerializableDictionary<Vector2Int, AttackPatternField>() {
             { Vector2Int.zero, AttackPatternField.Player } 
         };
 
     public SerializableDictionary<Vector2Int, AttackPatternField> Pattern {
-        get {
-            switch (direction)
-            {
-                case AttackDirection.Down:
-                    return Rotate180(sourcePattern);
-                case AttackDirection.Left:
-                    return Rotate90L(sourcePattern);
-                case AttackDirection.Right:
-                    return Rotate90R(sourcePattern);
-            }
+        get { return _pattern; }
+    }
 
-            return sourcePattern;
-        }
+    private void Awake()
+    {
+        unit = GetComponent<Unit>();  
+    }
+
+    public IEnumerator ExecuteAttack(Vector3Int targetPos, Unit targetUnit)
+    {
+        if (Damage > 0) targetUnit.ApplyDamage(Damage);
+        yield return StartCoroutine(effect.Execute(unit.CellPosition, targetPos, targetUnit));
+    }
+
+    public bool Contains(Vector3Int cellPos)
+    {
+        Vector3Int relativeCellPos = cellPos - unit.CellPosition;
+        return GetField(new Vector2Int(relativeCellPos.x, relativeCellPos.y)) != null;
+    }
+
+    private AttackPatternField? GetField(Vector2Int pos)
+    {
+        if (Pattern.ContainsKey(pos)) return Pattern[pos];
+        return null;
     }
 
     public void ToggleField(Vector2Int cellPos)
     {
         if (Mathf.Abs(cellPos.x) <= surroundingAreaWidth && Mathf.Abs(cellPos.y) <= surroundingAreaWidth)
         {
-            if (!sourcePattern.ContainsKey(cellPos)) sourcePattern.Add(cellPos, AttackPatternField.On);
+            if (!_pattern.ContainsKey(cellPos)) _pattern.Add(cellPos, AttackPatternField.On);
             else
             {
-                sourcePattern[cellPos] = sourcePattern[cellPos] == AttackPatternField.Off ? AttackPatternField.On : AttackPatternField.Off;
+                _pattern[cellPos] = _pattern[cellPos] == AttackPatternField.Off ? AttackPatternField.On : AttackPatternField.Off;
             }
         }
     }
 
-    public void expandArea()
+    public void ExpandArea()
     {
         surroundingAreaWidth += 1;
         for (int row = -surroundingAreaWidth; row <= surroundingAreaWidth; row++)
@@ -86,13 +87,13 @@ public class AttackPattern : MonoBehaviour
                 if (Mathf.Abs(row) == surroundingAreaWidth || Mathf.Abs(column) == surroundingAreaWidth)
                 {
                     Vector2Int cellPos = new Vector2Int(row, column);
-                    sourcePattern.Add(cellPos, AttackPatternField.Off);
+                    _pattern.Add(cellPos, AttackPatternField.Off);
                 }
             }
         }
     }
 
-    public void detractArea()
+    public void DetractArea()
     {
         if (surroundingAreaWidth > 0)
         {
@@ -103,61 +104,11 @@ public class AttackPattern : MonoBehaviour
                     if (Mathf.Abs(row) == surroundingAreaWidth || Mathf.Abs(column) == surroundingAreaWidth)
                     {
                         Vector2Int cellPos = new Vector2Int(row, column);
-                        sourcePattern.Remove(cellPos);
+                        _pattern.Remove(cellPos);
                     }
                 }
             }
             surroundingAreaWidth -= 1;
         }
-    }
-
-    private SerializableDictionary<Vector2Int, AttackPatternField> Transform(SerializableDictionary<Vector2Int, AttackPatternField> pattern, Func<Vector2Int, Vector2Int> newPosFormula)
-    {
-        SerializableDictionary<Vector2Int, AttackPatternField> result = new SerializableDictionary<Vector2Int, AttackPatternField>();
-        foreach (KeyValuePair<Vector2Int, AttackPatternField> field in pattern)
-        {
-            Vector2Int newPosition = newPosFormula(field.Key);
-            result.Add(newPosition, field.Value);
-        }
-
-        return result;
-    }
-
-    private SerializableDictionary<Vector2Int, AttackPatternField> Transpose(SerializableDictionary<Vector2Int, AttackPatternField> pattern)
-    {
-        return Transform(pattern, (Vector2Int sourcePos) => {
-            return new Vector2Int(sourcePos.y, sourcePos.x);
-        });
-    }
-
-    private SerializableDictionary<Vector2Int, AttackPatternField> FlipVertically(SerializableDictionary<Vector2Int, AttackPatternField> pattern)
-    {
-        return Transform(pattern, (Vector2Int sourcePos) => {
-            return new Vector2Int(sourcePos.x, -sourcePos.y);
-        });
-    }
-
-    private SerializableDictionary<Vector2Int, AttackPatternField> FlipHorizontally(SerializableDictionary<Vector2Int, AttackPatternField> pattern)
-    {
-        return Transform(pattern, (Vector2Int sourcePos) => {
-            return new Vector2Int(-sourcePos.x, sourcePos.y);
-        });
-    }
-
-    private SerializableDictionary<Vector2Int, AttackPatternField> Rotate180(SerializableDictionary<Vector2Int, AttackPatternField> pattern)
-    {
-        return Transform(pattern, (Vector2Int sourcePos) => {
-            return new Vector2Int(-sourcePos.x, -sourcePos.y);
-        });
-    }
-
-    private SerializableDictionary<Vector2Int, AttackPatternField> Rotate90R(SerializableDictionary<Vector2Int, AttackPatternField> pattern)
-    {
-        return FlipHorizontally(Transpose(pattern));
-    }
-
-    private SerializableDictionary<Vector2Int, AttackPatternField> Rotate90L(SerializableDictionary<Vector2Int, AttackPatternField> pattern)
-    {
-        return FlipVertically(Transpose(pattern));
     }
 }

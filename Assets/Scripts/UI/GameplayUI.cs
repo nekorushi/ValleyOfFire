@@ -44,7 +44,7 @@ public class GameplayUI : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Awake()
     {
         mainCamera = Camera.main;
         canvasRect = GetComponent<RectTransform>();
@@ -83,7 +83,7 @@ public class GameplayUI : MonoBehaviour
         ClearAvailableAttacks();
         ClearDamageFormulas();
 
-        if (activePlayer.ControlMode == ControlModes.Movement)
+        if (activePlayer.AttackMode == AttackModes.None)
         {
             RenderAvailableMoves();
         } else

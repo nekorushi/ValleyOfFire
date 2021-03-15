@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
             yield return PerformPlayerTurn(currentPlayer);
             currentPlayerIdx = GetNextPlayer(currentPlayerIdx);
             yield return null;
-        }
+        }Debug.Log(WorldUtils.DirectionToTarget(new Vector3(0,0,0), new Vector3(0,0,0)));
 
         summaryWinner.text = players.FirstOrDefault(player => player.HasAliveUnits).name;
         summaryPanel.gameObject.SetActive(true);

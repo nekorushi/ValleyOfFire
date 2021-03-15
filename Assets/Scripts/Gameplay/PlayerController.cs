@@ -4,13 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public enum ControlModes
-{
-    Movement,
-    Attack
-}
 public enum AttackModes
 {
+    None,
     Primary,
     Secondary
 }
@@ -36,17 +32,7 @@ public class PlayerController : MonoBehaviour
     private Color _playerColor;
     public Color PlayerColor { get { return _playerColor; } }
 
-    private ControlModes _controlMode = ControlModes.Movement;
-    public ControlModes ControlMode {
-        get { return _controlMode; }
-        private set
-        {
-            _controlMode = value;
-            ControlModeChanged.Invoke();
-        }
-    }
-
-    private AttackModes _attackMode = AttackModes.Primary;
+    private AttackModes _attackMode = AttackModes.None;
     public AttackModes AttackMode
     {
         get { return _attackMode; }
@@ -103,14 +89,9 @@ public class PlayerController : MonoBehaviour
         });
     }
 
-    public void ChangeControlMode()
+    public void ChangeAttackMode(AttackModes mode)
     {
-        ControlMode = ControlMode == ControlModes.Attack ? ControlModes.Movement : ControlModes.Attack;
-    }
-
-    public void ChangeAttackMode()
-    {
-        AttackMode = AttackMode == AttackModes.Primary ? AttackModes.Secondary : AttackModes.Primary;
+        AttackMode = AttackMode == mode ? AttackModes.None : mode;
     }
 
     public IEnumerator PerformTurn()
@@ -119,13 +100,6 @@ public class PlayerController : MonoBehaviour
 
         while(currentActionPoints > 0)
         {
-
-            if (CurrentUnit)
-            {
-                AttackPattern attackPattern = CurrentUnit.GetAttackPattern(AttackMode);
-                if (attackPattern.attackType == AttackType.Area) UpdateAttackArea();
-            }
-
             if (Input.GetMouseButtonDown(0))
             {
                 yield return StartCoroutine(HandleMouseClick());
@@ -152,49 +126,14 @@ public class PlayerController : MonoBehaviour
                 SelectUnit(shouldUnselect ? null : clickedUnit);
             } else
             {
-                Vector3Int clickedCellPos = TilemapNavigator.Instance.WorldToCellPos(clickedWorldPos);
-                if (CurrentUnit) yield return StartCoroutine(PerformUnitAction(clickedCellPos, clickedUnit));
+                if (CurrentUnit)
+                {
+                    Vector3Int clickedCellPos = TilemapNavigator.Instance.WorldToCellPos(clickedWorldPos);
+                    yield return StartCoroutine(PerformUnitAction(clickedCellPos, clickedUnit));
+                }
             }
         }
     }
-
-    private void UpdateAttackArea()
-    {
-        Vector3 cursorWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 unitWorldPos = CurrentUnit.transform.position;
-
-        cursorWorldPos.z = 0;
-        unitWorldPos.z = 0;
-
-        float angle = Vector3.Angle(Vector3.up, cursorWorldPos - unitWorldPos);
-        AttackDirection direction;
-
-        if (angle <= 45)
-        {
-            direction = AttackDirection.Up;
-        } else if (angle <= 135)
-        {
-            direction = Vector3.Cross(Vector3.up, cursorWorldPos - unitWorldPos).z < 0
-                ? AttackDirection.Left
-                : AttackDirection.Right;
-        } else
-        {
-            direction = AttackDirection.Down;
-        }
-
-        AttackPattern attackPattern = CurrentUnit.GetAttackPattern(AttackMode);
-        if (attackPattern.direction != direction)
-        {
-            attackPattern.direction = direction;
-            AvailableActionsChanged.Invoke();
-        }
-    }
-
-    //private void UpdateMovementPath()
-    //{
-    //    CurrentUnit.UpdateAvailableMoves();
-    //    AvailableActionsChanged.Invoke();
-    //}
 
     private void SelectUnit(Unit unit)
     {
@@ -203,17 +142,12 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator PerformUnitAction(Vector3Int clickedPos, Unit clickedUnit)
     {
-        if (ControlMode == ControlModes.Movement)
+        if (AttackMode == AttackModes.None)
         {
             yield return StartCoroutine(PerformMovementAction(clickedPos));
-        } else if (ControlMode == ControlModes.Attack)
+        } else
         {
-            bool actionWasPerformed = CurrentUnit.Attack(clickedPos, clickedUnit);
-            if (actionWasPerformed)
-            {
-                currentActionPoints -= 1;
-                AvailableActionsChanged.Invoke();
-            }
+            yield return StartCoroutine(PerformAttackAction(clickedPos, clickedUnit));
         }
     }
 
@@ -227,6 +161,19 @@ public class PlayerController : MonoBehaviour
             yield return StartCoroutine(actingUnit.Move(clickedPos));
             SelectUnit(actingUnit);
             currentActionPoints -= 1;
+        }
+    }
+
+    private IEnumerator PerformAttackAction(Vector3Int clickedPos, Unit clickedUnit)
+    {
+        AttackPattern pattern = CurrentUnit.GetAttackPattern(AttackMode);
+
+        bool isAttackClicked = pattern.Contains(clickedPos);
+        if (isAttackClicked)
+        {
+            yield return StartCoroutine(CurrentUnit.Attack(clickedPos, clickedUnit));
+            currentActionPoints -= 1;
+            AvailableActionsChanged.Invoke();
         }
     }
 }

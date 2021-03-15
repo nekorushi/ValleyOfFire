@@ -23,12 +23,15 @@ public class UnitBlockManager : MonoBehaviour
 
     void Awake()
     {
+        traversalProvider = new TilesetTraversalProvider();
+    }
+
+    private void Start()
+    {
         BlockManager blockManager = GetComponent<BlockManager>();
         List<SingleNodeBlocker> obstacles = FindObjectsOfType<SingleNodeBlocker>().ToList();
 
-        traversalProvider = new TilesetTraversalProvider();
-
-        foreach(SingleNodeBlocker obstacle in obstacles)
+        foreach (SingleNodeBlocker obstacle in obstacles)
         {
             obstacle.manager = blockManager;
         }

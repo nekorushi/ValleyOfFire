@@ -7,13 +7,9 @@ public class AttackPatternEditor : Editor
 {
     private AttackPattern pattern = null;
 
-    SerializedProperty attackType;
-
     void OnEnable()
     {
         pattern = (AttackPattern)target;
-
-        attackType = serializedObject.FindProperty("attackType");
     }
 
     public override void OnInspectorGUI()
@@ -21,24 +17,28 @@ public class AttackPatternEditor : Editor
         DrawDefaultInspector();
         serializedObject.Update();
 
+        GUILayout.BeginVertical("HelpBox");
+
+        GUILayout.BeginVertical("HelpBox");
+        EditorGUILayout.LabelField("Pattern shape");
+        GUILayout.EndVertical();
+        EditorGUILayout.Space(10);
+
         Rect headerRect = EditorGUILayout.BeginVertical();
 
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label(string.Format("Size: {0}", pattern.surroundingAreaWidth));
         if (GUILayout.Button("Expand"))
         {
-            pattern.expandArea();
+            pattern.ExpandArea();
             EditorUtility.SetDirty(target);
         };
         if (GUILayout.Button("Detract"))
         {
-            pattern.detractArea();
+            pattern.DetractArea();
             EditorUtility.SetDirty(target);
         }
         EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.PropertyField(attackType, new GUIContent("Attack type"));
-
         EditorGUILayout.EndVertical();
 
         int cellWidth = 20;
@@ -50,7 +50,7 @@ public class AttackPatternEditor : Editor
 
         bool changeMade = false;
 
-        foreach (KeyValuePair<Vector2Int, AttackPatternField> item in pattern.sourcePattern)
+        foreach (KeyValuePair<Vector2Int, AttackPatternField> item in pattern._pattern)
         {
             if (item.Key.x < minCellX) minCellX = item.Key.x;
             if (item.Key.y < minCellY) minCellY = item.Key.y;
@@ -71,7 +71,7 @@ public class AttackPatternEditor : Editor
             boardHeight * cellHeight + 30
         );
 
-        foreach (KeyValuePair<Vector2Int, AttackPatternField> cell in pattern.sourcePattern)
+        foreach (KeyValuePair<Vector2Int, AttackPatternField> cell in pattern._pattern)
         {
             Vector2Int cellPos = cell.Key;
 
@@ -101,6 +101,10 @@ public class AttackPatternEditor : Editor
 
             if (changeMade) break;
         }
+        GUI.color = Color.white;
+
+        EditorGUILayout.Space(10);
+        GUILayout.EndVertical();
 
         serializedObject.ApplyModifiedProperties();
     }

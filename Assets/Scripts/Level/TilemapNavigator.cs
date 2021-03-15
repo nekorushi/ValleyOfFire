@@ -32,9 +32,13 @@ class TilemapNavigator : MonoBehaviour
     [SerializeField]
     private Tilemap tilemap;
 
-    private void Start()
+    private void Awake()
     {
         grid = GetComponent<Grid>();
+    }
+
+    private void Start()
+    {
         pathfindingGraph = (TilesetGraph)AstarPath.active.data.FindGraph(g => g.name == "TilesetGraph");
     }
 
@@ -108,7 +112,7 @@ class TilemapNavigator : MonoBehaviour
         return unitFound;
     }
 
-    public bool IsTileMoveable(Vector3Int position)
+    public bool IsTileWalkable(Vector3Int position)
     {
         LevelTile tile = GetTile(position);
         return tile != null && tile.Type == TileType.Walkable;

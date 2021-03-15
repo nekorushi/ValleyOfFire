@@ -14,16 +14,16 @@ public class PlayerUI : MonoBehaviour
     private Text playerNameLabel;
 
     [SerializeField]
-    private Button controlMode;
+    private Button primaryAttack;
 
     [SerializeField]
-    private Text controlModeLabel;
+    private Text primaryAttackLabel;
 
     [SerializeField]
-    private Button attackMode;
+    private Button secondaryAttack;
 
     [SerializeField]
-    private Text attackModeLabel;
+    private Text secondaryAttackLabel;
 
     private void OnEnable()
     {
@@ -33,8 +33,8 @@ public class PlayerUI : MonoBehaviour
         playerNameLabel.text = player.name;
         playerNameLabel.color = player.PlayerColor;
 
-        controlMode.onClick.AddListener(player.ChangeControlMode);
-        attackMode.onClick.AddListener(player.ChangeAttackMode);
+        primaryAttack.onClick.AddListener(delegate { player.ChangeAttackMode(AttackModes.Primary); });
+        secondaryAttack.onClick.AddListener(delegate { player.ChangeAttackMode(AttackModes.Secondary); });
         UpdateControlMode();
     }
 
@@ -45,19 +45,21 @@ public class PlayerUI : MonoBehaviour
 
     void UpdateControlMode()
     {
-        Dictionary<ControlModes, string> controlLabels = new Dictionary<ControlModes, string>()
-        {
-            {ControlModes.Movement, "Movement"},
-            {ControlModes.Attack, "Attack"}
-        };
+        ChangeButtonColor(primaryAttack, Color.white);
+        ChangeButtonColor(secondaryAttack, Color.white);
 
-        Dictionary<AttackModes, string> attackLabels = new Dictionary<AttackModes, string>()
-        {
-            {AttackModes.Primary, "Primary Attack"},
-            {AttackModes.Secondary, "Secondary Attack"}
-        };
+        if (player.AttackMode == AttackModes.Primary) ChangeButtonColor(primaryAttack, Color.green);
+        if (player.AttackMode == AttackModes.Secondary) ChangeButtonColor(secondaryAttack, Color.green);
+    }
 
-        controlModeLabel.text = controlLabels[player.ControlMode];
-        attackModeLabel.text = attackLabels[player.AttackMode];
+    private void ChangeButtonColor(Button button, Color color)
+    {
+        ColorBlock colors = button.colors;
+        colors.normalColor = color;
+        colors.highlightedColor = color * 0.9f;
+        colors.pressedColor = color * 0.6f;
+        colors.selectedColor = color * 0.9f;
+        colors.disabledColor = color * 0.6f;
+        button.colors = colors;
     }
 }

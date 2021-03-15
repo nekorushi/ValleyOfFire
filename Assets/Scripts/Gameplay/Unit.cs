@@ -22,8 +22,12 @@ public class Unit : MonoBehaviour
     private TMP_Text damageText;
 
     private readonly float UNIT_Z_POSITION = -0.5f;
+    private TilesetTraversalProvider tilesetTraversalProvider;
     public List<Vector3Int> AvailableMoves { get; private set; }
     public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
+
+    public AttackPattern PrimaryAttack { get; private set; }
+    public AttackPattern SecondaryAttack { get; private set; }
 
     [Header("Unit settings")]
     [SerializeField]
@@ -36,10 +40,6 @@ public class Unit : MonoBehaviour
 
     [SerializeField]
     private int movementRange;
-    private TilesetTraversalProvider tilesetTraversalProvider;
-
-    public AttackPattern PrimaryAttack { get; private set; }
-    public AttackPattern SecondaryAttack { get; private set; }
 
     public void SetOwner(PlayerController player)
     {
@@ -49,12 +49,16 @@ public class Unit : MonoBehaviour
         if (unitSprite) unitSprite.color = player.PlayerColor;
     }
 
-    private void Start()
+    private void Awake()
     {
         AttackPattern[] attackPatterns = GetComponents<AttackPattern>();
 
         PrimaryAttack = attackPatterns[0];
         SecondaryAttack = attackPatterns[1];
+    }
+
+    private void Start()
+    {
 
         AlignToGrid();
         UpdateHealthText();
@@ -64,7 +68,6 @@ public class Unit : MonoBehaviour
     }
 
     public void Focus() {
-        UnitBlockManager.Instance.traversalProvider.selectedUnitCell = CellPosition;
         UpdateAvailableMoves();
     }
 
@@ -110,7 +113,37 @@ public class Unit : MonoBehaviour
         damageText.gameObject.SetActive(false);
     }
 
-    public IEnumerator Move(Vector3Int cellTargetPos)
+    public IEnumerator Push(WorldUtils.Direction direction, int distance)
+    {
+        TilemapNavigator navigator = TilemapNavigator.Instance;
+        Vector3Int step = new Dictionary<WorldUtils.Direction, Vector3Int> {
+            { WorldUtils.Direction.Up, Vector3Int.up },
+            { WorldUtils.Direction.Down, Vector3Int.down },
+            { WorldUtils.Direction.Left, Vector3Int.left },
+            { WorldUtils.Direction.Right, Vector3Int.right },
+        }[direction];
+
+        Vector3Int? positionAfterPush = null;
+
+        for (int i = 1; i <= distance; i++)
+        {
+            Vector3Int testedSpot = CellPosition + step * i;
+            if (navigator.IsTileWalkable(testedSpot) && !navigator.IsTileTaken(testedSpot))
+            {
+                positionAfterPush = testedSpot;
+            } else
+            {
+                break;
+            }
+        }
+
+        if (positionAfterPush.HasValue)
+        {
+            yield return StartCoroutine(Move(positionAfterPush.Value, 15));
+        }
+    }
+
+    public IEnumerator Move(Vector3Int cellTargetPos, float movementSpeed = 3)
     {
         TilemapNavigator navigator = TilemapNavigator.Instance;
 
@@ -118,9 +151,9 @@ public class Unit : MonoBehaviour
         Vector3 targetWorldPos = navigator.CellToWorldPos(cellTargetPos);
         Vector3 targetPos = new Vector3(targetWorldPos.x, targetWorldPos.y, UNIT_Z_POSITION);
 
-        float movementSpeed = 3;
         float movementDuration = 1 / movementSpeed;
 
+        UnitBlockManager.Instance.traversalProvider.selectedUnitCell = CellPosition;
         Path path = ABPath.Construct(CellPosition, cellTargetPos, null);
         path.traversalProvider = tilesetTraversalProvider;
         AstarPath.StartPath(path);
@@ -129,6 +162,7 @@ public class Unit : MonoBehaviour
         yield return StartCoroutine(path.WaitForPath());
         if (!path.error)
         {
+            tilesetTraversalProvider.ReleaseNode(CellPosition);
             List<Vector3> waypoints = path.vectorPath.ConvertAll(node => navigator.CellToWorldPos(navigator.WorldToCellPos(node)));
 
             for (int currentTarget = 1; currentTarget < waypoints.Count; currentTarget++)
@@ -143,13 +177,12 @@ public class Unit : MonoBehaviour
                 }
             }
 
-            tilesetTraversalProvider.ReleaseNode(CellPosition);
             tilesetTraversalProvider.ReserveNode(cellTargetPos);
             transform.position = targetPos;
         }
     }
 
-    public bool Attack(Vector3Int clickedPos, Unit clickedUnit)
+    public IEnumerator Attack(Vector3Int clickedPos, Unit clickedUnit)
     {
         Vector3Int clickRelativePos = clickedPos - CellPosition;
         Vector2Int clickRelativePos2D = new Vector2Int(clickRelativePos.x, clickRelativePos.y);
@@ -159,43 +192,7 @@ public class Unit : MonoBehaviour
         bool isAttackClicked = fields.ContainsKey(clickRelativePos2D) && fields[clickRelativePos2D] == AttackPatternField.On;
         if (isAttackClicked)
         {
-            switch (attackPattern.attackType)
-            {
-                case AttackType.Targeted:
-                    if (clickedUnit != null)
-                    {
-                        UnitTypes defenderType = clickedUnit.UnitType;
-                        DamageValue damageInflicted = UnitsConfig.Instance.GetDamageValue(attackPattern.Damage, UnitType, defenderType);
-                        clickedUnit.ApplyDamage(damageInflicted.totalDamage);
-                        return true;
-                    }
-                    break;
-                case AttackType.Area:
-                    PerformAreaAttack();
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
-    private void PerformAreaAttack()
-    {
-        AttackPattern attackPattern = GetAttackPattern(Owner.AttackMode);
-        SerializableDictionary<Vector2Int, AttackPatternField> fields = attackPattern.Pattern;
-
-        foreach (KeyValuePair<Vector2Int, AttackPatternField> field in fields)
-        {
-            if (field.Value == AttackPatternField.On)
-            {
-                Unit reachedUnit = TilemapNavigator.Instance.GetUnit(CellPosition + new Vector3Int(field.Key.x, field.Key.y, 0));
-                if (reachedUnit && !Owner.Units.Contains(reachedUnit))
-                {
-                    UnitTypes defenderType = reachedUnit.UnitType;
-                    DamageValue damageInflicted = UnitsConfig.Instance.GetDamageValue(attackPattern.Damage, UnitType, defenderType);
-                    reachedUnit.ApplyDamage(damageInflicted.totalDamage);
-                }
-            }
+            yield return StartCoroutine(attackPattern.ExecuteAttack(clickedPos, clickedUnit));
         }
     }
 
