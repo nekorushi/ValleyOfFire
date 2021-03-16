@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using TMPro;
 using Pathfinding;
@@ -16,18 +15,21 @@ enum MovementType
 public class Unit : MonoBehaviour
 {
     public PlayerController Owner { get; private set; }
+    public AttackPattern PrimaryAttack { get; private set; }
+    public AttackPattern SecondaryAttack { get; private set; }
     [SerializeField]
     private TMP_Text healthText;
     [SerializeField]
     private TMP_Text damageText;
+    [SerializeField]
+    public Animator fxAnimator;
 
     private readonly float UNIT_Z_POSITION = -0.5f;
     private TilesetTraversalProvider tilesetTraversalProvider;
-    public List<Vector3Int> AvailableMoves { get; private set; }
     public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
 
-    public AttackPattern PrimaryAttack { get; private set; }
-    public AttackPattern SecondaryAttack { get; private set; }
+    public List<Vector3Int> AvailableMoves { get; private set; }
+    private List<UnitStatus> statuses = new List<UnitStatus>();
 
     [Header("Unit settings")]
     [SerializeField]
@@ -38,12 +40,17 @@ public class Unit : MonoBehaviour
     private float _health = 5f;
     public float Health { get { return _health; } private set { _health = value; } }
 
+    private float _shield = 100f;
+    public float Shield { get { return _shield; } private set { _shield = value; } }
+
     [SerializeField]
     private int movementRange;
 
     public void SetOwner(PlayerController player)
     {
+        RemoveListeners();
         Owner = player;
+        AddListeners();
 
         SpriteRenderer unitSprite = GetComponentInChildren<SpriteRenderer>();
         if (unitSprite) unitSprite.color = player.PlayerColor;
@@ -65,6 +72,23 @@ public class Unit : MonoBehaviour
 
         tilesetTraversalProvider = UnitBlockManager.Instance.traversalProvider;
         tilesetTraversalProvider.ReserveNode(CellPosition);
+
+    }
+
+    private void AddListeners()
+    {
+        if (Owner)
+        {
+            Owner.TurnStarted.AddListener(ApplyStatuses);
+        }
+    }
+
+    private void RemoveListeners()
+    {
+        if (Owner)
+        {
+            Owner.TurnStarted.RemoveListener(ApplyStatuses);
+        }
     }
 
     public void Focus() {
@@ -82,16 +106,46 @@ public class Unit : MonoBehaviour
         return SecondaryAttack;
     }
 
-    public void ApplyDamage(float amount)
+    public void ApplyDamage(float baseDamage)
     {
+        float amount = baseDamage * (1 + (100 - Shield) / 100);
+
         Health = Mathf.Clamp(Health - amount, 0, Health);
         UpdateHealthText();
         StartCoroutine(AnimateDamage(amount));
 
         if (Health == 0)
         {
-            gameObject.SetActive(false);
+            Kill();
         }
+    }
+
+    private void ApplyStatuses()
+    {
+        List<UnitStatus> toRemove = new List<UnitStatus>();
+        foreach(UnitStatus status in statuses)
+        {
+            bool shouldRemoveStatus = status.OnTick(this);
+            if (shouldRemoveStatus) toRemove.Add(status);
+        }
+
+        foreach(UnitStatus status in toRemove)
+        {
+            statuses.Remove(status);
+        }
+    }
+
+    public void AddStatus(UnitStatus newStatus)
+    {
+        Debug.Log(newStatus.GetType());
+        statuses.Add(newStatus);
+        newStatus.OnAdd(this);
+    }
+
+    private void Kill()
+    {
+        RemoveListeners();
+        gameObject.SetActive(false);
     }
 
     private void UpdateHealthText()
@@ -157,7 +211,6 @@ public class Unit : MonoBehaviour
         Path path = ABPath.Construct(CellPosition, cellTargetPos, null);
         path.traversalProvider = tilesetTraversalProvider;
         AstarPath.StartPath(path);
-
 
         yield return StartCoroutine(path.WaitForPath());
         if (!path.error)

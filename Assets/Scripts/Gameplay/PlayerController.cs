@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public UnityEvent UnitSelectionChanged;
     public UnityEvent ControlModeChanged;
     public UnityEvent AvailableActionsChanged;
+    public UnityEvent TurnStarted;
 
     [Header("Component configuration")]
     [SerializeField]
@@ -96,6 +97,7 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator PerformTurn()
     {
+        TurnStarted.Invoke();
         currentActionPoints = maxActionPoints;
 
         while(currentActionPoints > 0)
@@ -130,6 +132,7 @@ public class PlayerController : MonoBehaviour
                 {
                     Vector3Int clickedCellPos = TilemapNavigator.Instance.WorldToCellPos(clickedWorldPos);
                     yield return StartCoroutine(PerformUnitAction(clickedCellPos, clickedUnit));
+                    ChangeAttackMode(AttackModes.None);
                 }
             }
         }

@@ -115,7 +115,7 @@ RectTransform:
   - {fileID: 5873865682772595578}
   - {fileID: 4086927980892958505}
   m_Father: {fileID: 8907512749714802914}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -353,6 +353,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4074105457893682666}
+  - {fileID: 2585080979732208521}
   - {fileID: 8918006363633757662}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -439,6 +440,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthText: {fileID: 2483239743946132603}
   damageText: {fileID: 1727341705531428583}
+  fxAnimator: {fileID: 2718362712576230480}
   _unitType: 0
   _health: 5
   movementRange: 0
@@ -455,56 +457,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damage: 2
+  effect:
+    type: 0
+    distance: 1
+    duration: 1
+    damage: 1
   surroundingAreaWidth: 2
-  attackType: 0
-  direction: 0
-  sourcePattern:
-    _Buckets: 000000000700000016000000010000000500000008000000170000000e000000110000001300000018000000ffffffff0d0000000f0000001000000012000000140000000300000004000000060000001500000002000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-    _HashCodes: 0000000003000000ffffff7ffbffff7ffcffff7f04000000fdffff7f01000000050000000600000002000000feffff7ffaffff7ff6ffff7f07000000f7ffff7ff8ffff7f08000000f9ffff7f09000000faffff7ffeffff7f02000000060000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-    _Next: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0c0000000b0000000a00000009000000ffffffff000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-    _Count: 25
-    _Version: 29
+  _pattern:
+    _Buckets: 00000000ffffffffffffffff
+    _HashCodes: 000000000000000000000000
+    _Next: ffffffff0000000000000000
+    _Count: 1
+    _Version: 1
     _FreeList: -1
     _FreeCount: 0
     _Keys:
     - {x: 0, y: 0}
-    - {x: -1, y: -1}
-    - {x: -1, y: 0}
-    - {x: -1, y: 1}
-    - {x: 0, y: -1}
-    - {x: 0, y: 1}
-    - {x: 1, y: -1}
-    - {x: 1, y: 0}
-    - {x: 1, y: 1}
-    - {x: -2, y: -2}
-    - {x: -2, y: -1}
-    - {x: -2, y: 0}
-    - {x: -2, y: 1}
-    - {x: -2, y: 2}
-    - {x: -1, y: -2}
-    - {x: -1, y: 2}
-    - {x: 0, y: -2}
-    - {x: 0, y: 2}
-    - {x: 1, y: -2}
-    - {x: 1, y: 2}
-    - {x: 2, y: -2}
-    - {x: 2, y: -1}
-    - {x: 2, y: 0}
-    - {x: 2, y: 1}
-    - {x: 2, y: 2}
     - {x: 0, y: 0}
     - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    _Values: 00000000020000000200000002000000020000000200000002000000020000000200000001000000020000000200000002000000010000000200000002000000020000000200000002000000020000000100000002000000020000000200000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    _Values: 000000000000000000000000
 --- !u!114 &4346880765994208225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,10 +489,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damage: 2
+  effect:
+    type: 0
+    distance: 1
+    duration: 1
+    damage: 1
   surroundingAreaWidth: 0
-  attackType: 0
-  direction: 0
-  sourcePattern:
+  _pattern:
     _Buckets: 00000000ffffffffffffffff
     _HashCodes: 000000000000000000000000
     _Next: ffffffff0000000000000000
@@ -534,6 +508,108 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     _Values: 000000000000000000000000
+--- !u!1 &3934036101571914756
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2585080979732208521}
+  - component: {fileID: 1901470179236270025}
+  - component: {fileID: 2718362712576230480}
+  m_Layer: 0
+  m_Name: FX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2585080979732208521
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3934036101571914756}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8907512749714802914}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &1901470179236270025
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3934036101571914756}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.28, y: 1.28}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!95 &2718362712576230480
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3934036101571914756}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9366e191c59544be5b3891a44e303fe4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5162790994383495780
 GameObject:
   m_ObjectHideFlags: 0

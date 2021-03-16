@@ -50,7 +50,7 @@ public class AttackPattern : MonoBehaviour
     public IEnumerator ExecuteAttack(Vector3Int targetPos, Unit targetUnit)
     {
         if (Damage > 0) targetUnit.ApplyDamage(Damage);
-        yield return StartCoroutine(effect.Execute(unit.CellPosition, targetPos, targetUnit));
+        if (effect != null) yield return StartCoroutine(effect.Execute(unit.CellPosition, targetPos, targetUnit));
     }
 
     public bool Contains(Vector3Int cellPos)
