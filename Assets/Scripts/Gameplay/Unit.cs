@@ -31,7 +31,7 @@ public class Unit : MonoBehaviour
     public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
 
     public List<Vector3Int> AvailableMoves { get; private set; }
-    private List<UnitStatus> statuses = new List<UnitStatus>();
+    private Dictionary<string, UnitStatus> statuses = new Dictionary<string, UnitStatus>();
 
     [Header("Unit settings")]
     [SerializeField]
@@ -124,14 +124,14 @@ public class Unit : MonoBehaviour
 
     private void ApplyStatuses()
     {
-        List<UnitStatus> toRemove = new List<UnitStatus>();
-        foreach(UnitStatus status in statuses)
+        List<string> toRemove = new List<string>();
+        foreach(KeyValuePair<string, UnitStatus> status in statuses)
         {
-            bool shouldRemoveStatus = status.OnTick(this);
-            if (shouldRemoveStatus) toRemove.Add(status);
+            bool shouldRemoveStatus = status.Value.OnTick(this);
+            if (shouldRemoveStatus) toRemove.Add(status.Value.StatusName);
         }
 
-        foreach(UnitStatus status in toRemove)
+        foreach(string status in toRemove)
         {
             statuses.Remove(status);
         }
@@ -139,8 +139,7 @@ public class Unit : MonoBehaviour
 
     public void AddStatus(UnitStatus newStatus)
     {
-        Debug.Log(newStatus.GetType());
-        statuses.Add(newStatus);
+        statuses[newStatus.StatusName] = newStatus;
         newStatus.OnAdd(this);
     }
 
