@@ -22,6 +22,8 @@ public class Unit : MonoBehaviour
     [SerializeField]
     private TMP_Text damageText;
     [SerializeField]
+    public Animator animator;
+    [SerializeField]
     public Animator fxAnimator;
 
     private readonly float UNIT_Z_POSITION = -0.5f;
@@ -155,6 +157,7 @@ public class Unit : MonoBehaviour
 
     private IEnumerator AnimateDamage(float amount)
     {
+        animator.SetTrigger("Hit");
         damageText.text = amount.ToString();
         damageText.gameObject.SetActive(true);
 
