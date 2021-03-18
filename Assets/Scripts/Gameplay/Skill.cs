@@ -54,7 +54,10 @@ public class Skill : MonoBehaviour
 
     public IEnumerator ExecuteAttack(Vector3Int targetPos, Unit targetUnit)
     {
-        if (Damage > 0) targetUnit.ApplyDamage(Damage);
+        if (Damage > 0) {
+            yield return StartCoroutine(ProjectileAnimator.Instance.Play(attackerUnit.CellPosition, targetPos, attackTrajectory));
+            targetUnit.ApplyDamage(Damage);
+        }
         if (effect != null) yield return StartCoroutine(effect.Execute(attackerUnit.CellPosition, targetPos, targetUnit));
     }
 

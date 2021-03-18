@@ -169,12 +169,15 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator PerformAttackAction(Vector3Int clickedPos, Unit clickedUnit)
     {
-        Skill pattern = CurrentUnit.GetAttackPattern(AttackMode);
+        Unit actingUnit = CurrentUnit;
+        Skill pattern = actingUnit.GetAttackPattern(AttackMode);
 
         bool isAttackClicked = pattern.Contains(clickedPos);
         if (isAttackClicked)
         {
-            yield return StartCoroutine(CurrentUnit.Attack(clickedPos, clickedUnit));
+            SelectUnit(null);
+            yield return StartCoroutine(actingUnit.Attack(clickedPos, clickedUnit));
+            SelectUnit(actingUnit);
             currentActionPoints -= 1;
             AvailableActionsChanged.Invoke();
         }
