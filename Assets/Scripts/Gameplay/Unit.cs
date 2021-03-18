@@ -11,12 +11,12 @@ enum MovementType
     Both
 }
 
-[RequireComponent(typeof(AttackPattern))]
+[RequireComponent(typeof(Skill))]
 public class Unit : MonoBehaviour
 {
     public PlayerController Owner { get; private set; }
-    public AttackPattern PrimaryAttack { get; private set; }
-    public AttackPattern SecondaryAttack { get; private set; }
+    public Skill PrimaryAttack { get; private set; }
+    public Skill SecondaryAttack { get; private set; }
     [SerializeField]
     private TMP_Text healthText;
     [SerializeField]
@@ -60,7 +60,7 @@ public class Unit : MonoBehaviour
 
     private void Awake()
     {
-        AttackPattern[] attackPatterns = GetComponents<AttackPattern>();
+        Skill[] attackPatterns = GetComponents<Skill>();
 
         PrimaryAttack = attackPatterns[0];
         SecondaryAttack = attackPatterns[1];
@@ -102,7 +102,7 @@ public class Unit : MonoBehaviour
         AvailableMoves = null;
     }
 
-    public AttackPattern GetAttackPattern(AttackModes mode)
+    public Skill GetAttackPattern(AttackModes mode)
     {
         if (mode == AttackModes.Primary) return PrimaryAttack;
         return SecondaryAttack;
@@ -198,7 +198,7 @@ public class Unit : MonoBehaviour
             yield return StartCoroutine(Move(positionAfterPush.Value, 15));
         }
     }
-
+     
     public IEnumerator Move(Vector3Int cellTargetPos, float movementSpeed = 3)
     {
         TilemapNavigator navigator = TilemapNavigator.Instance;
@@ -239,12 +239,10 @@ public class Unit : MonoBehaviour
 
     public IEnumerator Attack(Vector3Int clickedPos, Unit clickedUnit)
     {
-        Vector3Int clickRelativePos = clickedPos - CellPosition;
-        Vector2Int clickRelativePos2D = new Vector2Int(clickRelativePos.x, clickRelativePos.y);
-        AttackPattern attackPattern = GetAttackPattern(Owner.AttackMode);
-        SerializableDictionary<Vector2Int, AttackPatternField> fields = attackPattern.Pattern;
+        Skill attackPattern = GetAttackPattern(Owner.AttackMode);
+        SerializableDictionary<Vector3Int, AttackPatternField> fields = attackPattern.AttackArea;
 
-        bool isAttackClicked = fields.ContainsKey(clickRelativePos2D) && fields[clickRelativePos2D] == AttackPatternField.On;
+        bool isAttackClicked = fields.ContainsKey(clickedPos) && fields[clickedPos] == AttackPatternField.On;
         if (isAttackClicked)
         {
             yield return StartCoroutine(attackPattern.ExecuteAttack(clickedPos, clickedUnit));

@@ -142,18 +142,16 @@ public class GameplayUI : MonoBehaviour
     {
         if (activePlayer.CurrentUnit == null) return;
 
-        AttackPattern attackPattern = activePlayer.CurrentUnit.GetAttackPattern(activePlayer.AttackMode);
-        SerializableDictionary<Vector2Int, AttackPatternField> pattern = attackPattern.Pattern;
+        Skill attackPattern = activePlayer.CurrentUnit.GetAttackPattern(activePlayer.AttackMode);
+        SerializableDictionary<Vector3Int, AttackPatternField> pattern = attackPattern.AttackArea;
 
         if (pattern != null)
         {
-            foreach (KeyValuePair<Vector2Int, AttackPatternField> field in pattern)
+            foreach (KeyValuePair<Vector3Int, AttackPatternField> field in pattern)
             {
-                Vector3Int position = activePlayer.CurrentUnit.CellPosition + new Vector3Int(field.Key.x, field.Key.y, 0);
-
-                if (field.Value == AttackPatternField.On && TilemapNavigator.Instance.HasTile(position))
+                if (field.Value == AttackPatternField.On && TilemapNavigator.Instance.HasTile(field.Key))
                 {
-                    GameObject marker = CreateMarker(position, "AttackMarker", availableAttacksSprite);
+                    GameObject marker = CreateMarker(field.Key, "AttackMarker", availableAttacksSprite);
                     availableMoves.Add(marker);
                 }
             }
@@ -173,7 +171,7 @@ public class GameplayUI : MonoBehaviour
                     Unit attacker = activePlayer.CurrentUnit;
                     if (defender != null && defender.Owner != activePlayer && defender.Health > 0)
                     {
-                        AttackPattern attackPattern = activePlayer.CurrentUnit.GetAttackPattern(activePlayer.AttackMode);
+                        Skill attackPattern = activePlayer.CurrentUnit.GetAttackPattern(activePlayer.AttackMode);
                         DamageValue damage = UnitsConfig.Instance.GetDamageValue(attackPattern.Damage, attacker.UnitType, defender.UnitType);
                         GameObject formula = CreateDmgFormula(defender.CellPosition, damage, defender.UnitType);
                         dmgFormulas.Add(formula);

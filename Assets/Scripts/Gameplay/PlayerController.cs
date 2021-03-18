@@ -169,7 +169,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator PerformAttackAction(Vector3Int clickedPos, Unit clickedUnit)
     {
-        AttackPattern pattern = CurrentUnit.GetAttackPattern(AttackMode);
+        Skill pattern = CurrentUnit.GetAttackPattern(AttackMode);
 
         bool isAttackClicked = pattern.Contains(clickedPos);
         if (isAttackClicked)
