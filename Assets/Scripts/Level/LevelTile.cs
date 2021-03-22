@@ -25,4 +25,8 @@ public class LevelTile : Tile
         get { return _cost; }
     }
 
+    private void Awake()
+    {
+        flags = TileFlags.LockTransform;
+    }
 }

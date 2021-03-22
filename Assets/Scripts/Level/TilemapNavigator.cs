@@ -30,7 +30,10 @@ class TilemapNavigator : MonoBehaviour
     private Grid grid;
 
     [SerializeField]
-    private Tilemap tilemap;
+    private Tilemap objectsTilemap;
+
+    [SerializeField]
+    private Tilemap areaTilemap;
 
     private void Awake()
     {
@@ -44,12 +47,13 @@ class TilemapNavigator : MonoBehaviour
 
     public bool HasTile(Vector3Int position)
     {
-        return tilemap.HasTile(position);
+        return objectsTilemap.HasTile(position) || areaTilemap.HasTile(position);
     }
 
     public LevelTile GetTile(Vector3Int position)
     {
-        return tilemap.GetTile<LevelTile>(position);
+        LevelTile objectTile = objectsTilemap.GetTile<LevelTile>(position);
+        return objectTile != null ? objectTile : areaTilemap.GetTile<LevelTile>(position);
     }
 
     public Unit GetUnit(Vector3Int cellPos)
@@ -66,7 +70,22 @@ class TilemapNavigator : MonoBehaviour
 
     public BoundsInt GetTilemapBounds()
     {
-        return tilemap.cellBounds;
+        int xMin = Mathf.Min(objectsTilemap.cellBounds.xMin, areaTilemap.cellBounds.xMin);
+        int yMin = Mathf.Min(objectsTilemap.cellBounds.yMin, areaTilemap.cellBounds.yMin);
+        int zMin = Mathf.Min(objectsTilemap.cellBounds.zMin, areaTilemap.cellBounds.zMin);
+
+        int xMax = Mathf.Max(objectsTilemap.cellBounds.xMax, areaTilemap.cellBounds.xMax);
+        int yMax = Mathf.Max(objectsTilemap.cellBounds.yMax, areaTilemap.cellBounds.yMax);
+        int zMax = Mathf.Max(objectsTilemap.cellBounds.zMax, areaTilemap.cellBounds.zMax);
+
+        return new BoundsInt(
+            xMin,
+            yMin,
+            zMin,
+            xMax - xMin,
+            yMax - yMin,
+            zMax - zMin
+        );
     }
 
     public GameObject GetObjectAtWorldPos(Vector3 worldPos)

@@ -21,10 +21,12 @@ public class Unit : MonoBehaviour
     private TMP_Text healthText;
     [SerializeField]
     private TMP_Text damageText;
-    [SerializeField]
     public Animator animator;
-    [SerializeField]
     public Animator fxAnimator;
+
+    [SerializeField]
+    private SpriteRenderer sprite;
+    private Material spriteMaterial;
 
     private readonly float UNIT_Z_POSITION = -0.5f;
     private TilesetTraversalProvider tilesetTraversalProvider;
@@ -54,8 +56,7 @@ public class Unit : MonoBehaviour
         Owner = player;
         AddListeners();
 
-        SpriteRenderer unitSprite = GetComponentInChildren<SpriteRenderer>();
-        if (unitSprite) unitSprite.color = player.PlayerColor;
+        sprite.material.SetColor("_Color", player.PlayerColor);
     }
 
     private void Awake()
@@ -64,6 +65,8 @@ public class Unit : MonoBehaviour
 
         PrimaryAttack = attackPatterns[0];
         SecondaryAttack = attackPatterns[1];
+
+        spriteMaterial = sprite.material;
     }
 
     private void Start()
@@ -95,11 +98,15 @@ public class Unit : MonoBehaviour
 
     public void Focus() {
         UpdateAvailableMoves();
+
+        spriteMaterial.EnableKeyword("OUTBASE_ON");
     }
 
     public void Blur()
     {
         AvailableMoves = null;
+
+        spriteMaterial.DisableKeyword("OUTBASE_ON");
     }
 
     public Skill GetAttackPattern(AttackModes mode)

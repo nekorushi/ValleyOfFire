@@ -3,6 +3,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Tilemaps;
+
+enum MarkerTypes
+{
+    Default,
+    Movement,
+    Attack,
+}
 
 public class GameplayUI : MonoBehaviour
 {
@@ -15,15 +23,20 @@ public class GameplayUI : MonoBehaviour
     private Image unitTarget;
 
     [SerializeField]
-    private Grid grid;
+    private Tilemap areaTilemap;
 
     [SerializeField]
-    private Sprite availableMovesSprite;
-    private List<GameObject> availableMoves = new List<GameObject>();
+    private List<Vector3Int> availableMoves = new List<Vector3Int>();
 
     [SerializeField]
-    private Sprite availableAttacksSprite;
-    private List<GameObject> availableAttacks = new List<GameObject>();
+    private List<Vector3Int> availableAttacks = new List<Vector3Int>();
+
+    [SerializeField]
+    private Color defaultTileTint = Color.white;
+    [SerializeField]
+    private Color movementTileTint = Color.green;
+    [SerializeField]
+    private Color attackTileTint = Color.red;
 
     [SerializeField]
     private GameObject dmgFormulaPrefab;
@@ -49,6 +62,7 @@ public class GameplayUI : MonoBehaviour
         mainCamera = Camera.main;
         canvasRect = GetComponent<RectTransform>();
         unitTarget.enabled = false;
+        ResetTint();
     }
 
     void ConnectPlayer()
@@ -109,7 +123,7 @@ public class GameplayUI : MonoBehaviour
 
     void ClearAvailableMoves()
     {
-        availableMoves.ForEach(image => Destroy(image));
+        availableMoves.ForEach(position => TintMarker(position, MarkerTypes.Default));
         availableMoves.Clear();
     }
 
@@ -120,15 +134,16 @@ public class GameplayUI : MonoBehaviour
         {
             moves.ForEach(position =>
             {
-                GameObject marker = CreateMarker(position, "MovementMarker", availableMovesSprite);
-                availableMoves.Add(marker);
+                TintMarker(position, MarkerTypes.Movement);
+                //GameObject marker = CreateMarker(position, "MovementMarker", availableMovesSprite);
+                availableMoves.Add(position);
             });
         }
     }
 
     void ClearAvailableAttacks()
     {
-        availableAttacks.ForEach(image => Destroy(image));
+        availableAttacks.ForEach(position => TintMarker(position, MarkerTypes.Default));
         availableAttacks.Clear();
     }
 
@@ -151,8 +166,9 @@ public class GameplayUI : MonoBehaviour
             {
                 if (field.Value == AttackPatternField.On && TilemapNavigator.Instance.HasTile(field.Key))
                 {
-                    GameObject marker = CreateMarker(field.Key, "AttackMarker", availableAttacksSprite);
-                    availableMoves.Add(marker);
+                    //GameObject marker = CreateMarker(field.Key, "AttackMarker", availableAttacksSprite);
+                    TintMarker(field.Key, MarkerTypes.Attack);
+                    availableMoves.Add(field.Key);
                 }
             }
         }
@@ -181,19 +197,38 @@ public class GameplayUI : MonoBehaviour
         }
     }
 
-    private GameObject CreateMarker(Vector3Int position, string name, Sprite sprite)
+    private void TintMarker(Vector3Int position, MarkerTypes type)
     {
-        Vector3 worldPos = TilemapNavigator.Instance.CellToWorldPos(position);
-        Vector2 canvasPos = WorldToCanvasPos(worldPos);
+        Dictionary<MarkerTypes, Color> markerColors = new Dictionary<MarkerTypes, Color>()
+        {
+            {MarkerTypes.Default, defaultTileTint },
+            {MarkerTypes.Attack, attackTileTint },
+            {MarkerTypes.Movement, movementTileTint }
+        };
 
-        GameObject marker = new GameObject(name);
-        Image markerSprite = marker.AddComponent<Image>();
-        markerSprite.sprite = sprite;
-        RectTransform markerRect = marker.GetComponent<RectTransform>();
-        markerRect.SetParent(canvasRect);
-        markerRect.anchoredPosition = canvasPos;
-        markerRect.sizeDelta = Vector2.one;
-        return marker;
+        Color tintColor = markerColors[type];
+        areaTilemap.SetColor(position, tintColor);
+    }
+
+    private void ResetTint()
+    {
+        BoundsInt bounds = areaTilemap.cellBounds;
+
+        for (int x = bounds.min.x; x < bounds.max.x; x++)
+        {
+            for (int y = bounds.min.y; y < bounds.max.y; y++)
+            {
+                for (int z = bounds.min.z; z < bounds.max.z; z++)
+                {
+                    Vector3Int cellPos = new Vector3Int(x, y, z);
+                    if (areaTilemap.HasTile(cellPos))
+                    {
+                        TintMarker(cellPos, MarkerTypes.Default);
+                    }
+                }
+            }
+
+        }
     }
 
     private GameObject CreateDmgFormula(Vector3Int position, DamageValue damage, UnitTypes defenderClass)
