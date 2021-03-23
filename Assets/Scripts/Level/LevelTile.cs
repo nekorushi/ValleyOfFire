@@ -29,4 +29,7 @@ public class LevelTile : Tile
     {
         flags = TileFlags.LockTransform;
     }
+
+    public virtual void OnEnter(Unit unitEntered) { }
+    public virtual void Activate(Vector3Int cellPos) { }
 }

@@ -33,7 +33,7 @@ public class Unit : MonoBehaviour
     public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
 
     public List<Vector3Int> AvailableMoves { get; private set; }
-    private Dictionary<string, UnitStatus> statuses = new Dictionary<string, UnitStatus>();
+    private UnitStatus inflictedStatus;
 
     [Header("Unit settings")]
     [SerializeField]
@@ -84,7 +84,7 @@ public class Unit : MonoBehaviour
     {
         if (Owner)
         {
-            Owner.TurnStarted.AddListener(ApplyStatuses);
+            Owner.TurnStarted.AddListener(ApplyStatus);
         }
     }
 
@@ -92,7 +92,7 @@ public class Unit : MonoBehaviour
     {
         if (Owner)
         {
-            Owner.TurnStarted.RemoveListener(ApplyStatuses);
+            Owner.TurnStarted.RemoveListener(ApplyStatus);
         }
     }
 
@@ -129,24 +129,18 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private void ApplyStatuses()
+    private void ApplyStatus()
     {
-        List<string> toRemove = new List<string>();
-        foreach(KeyValuePair<string, UnitStatus> status in statuses)
+        if (inflictedStatus != null)
         {
-            bool shouldRemoveStatus = status.Value.OnTick(this);
-            if (shouldRemoveStatus) toRemove.Add(status.Value.StatusName);
-        }
-
-        foreach(string status in toRemove)
-        {
-            statuses.Remove(status);
+            bool shouldRemoveStatus = inflictedStatus.OnTick(this);
+            if (shouldRemoveStatus) inflictedStatus = null;
         }
     }
 
-    public void AddStatus(UnitStatus newStatus)
+    public void InflictStatus(UnitStatus newStatus)
     {
-        statuses[newStatus.StatusName] = newStatus;
+        inflictedStatus = newStatus;
         newStatus.OnAdd(this);
     }
 
@@ -237,6 +231,9 @@ public class Unit : MonoBehaviour
                     elapsedTime += Time.deltaTime;
                     yield return null;
                 }
+
+                LevelTile reachedTile = navigator.GetTile(CellPosition);
+                reachedTile.OnEnter(this);
             }
 
             tilesetTraversalProvider.ReserveNode(cellTargetPos);

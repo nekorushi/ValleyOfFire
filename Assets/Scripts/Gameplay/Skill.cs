@@ -54,13 +54,23 @@ public class Skill : MonoBehaviour
 
     public IEnumerator ExecuteAttack(Vector3Int targetPos, Unit targetUnit)
     {
-        if (targetUnit != null)
+        
+
+        if (targetUnit != null && Damage > 0)
         {
-            if (Damage > 0) {
-                yield return StartCoroutine(ProjectileAnimator.Instance.Play(attackerUnit.CellPosition, targetPos, attackTrajectory));
-                targetUnit.ApplyDamage(Damage);
-            }
-            if (effect != null) yield return StartCoroutine(effect.Execute(attackerUnit.CellPosition, targetPos, targetUnit));
+            yield return StartCoroutine(ProjectileAnimator.Instance.Play(attackerUnit.CellPosition, targetPos, attackTrajectory));
+            targetUnit.ApplyDamage(Damage);
+        }
+        if (effect != null)
+        {
+            yield return StartCoroutine(
+                effect.Execute(
+                    attackerUnit.CellPosition,
+                    targetPos,
+                    targetUnit,
+                    TilemapNavigator.Instance.GetTile(targetPos)
+                )
+            );
         }
     }
 

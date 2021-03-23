@@ -4,13 +4,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "IgniteEffect", menuName = "GDS/AttackEffects/IgniteEffect", order = 1)]
 public class IgniteEffect : AttackEffect
 {
-    [SerializeField]
-    private IgnitedStatus status;
-
-    public override IEnumerator Execute(Vector3Int attackerPos, Vector3Int targetPos, Unit targetUnit)
+    public override IEnumerator Execute(Vector3Int attackerPos, Vector3Int targetPos, Unit targetUnit, LevelTile targetTile)
     {
-        IgnitedStatus statusInstance = Instantiate(status);
-        targetUnit.AddStatus(statusInstance);
+        if (targetTile && targetTile.GetType() == typeof(BushTile))
+        {
+            targetTile.Activate(targetPos);
+        }
         yield return new WaitForEndOfFrame();
     }
 }
