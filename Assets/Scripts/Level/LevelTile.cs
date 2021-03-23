@@ -25,11 +25,13 @@ public class LevelTile : Tile
         get { return _cost; }
     }
 
-    private void Awake()
+    private void OnEnable()
     {
         flags = TileFlags.LockTransform;
     }
 
-    public virtual void OnEnter(Unit unitEntered) { }
+    public virtual void OnUnitEnter(Unit unitEntered) { }
+    public virtual void OnUnitLeave(Unit unitEntered) { }
+    public virtual void OnTick() { }
     public virtual void Activate(Vector3Int cellPos) { }
 }

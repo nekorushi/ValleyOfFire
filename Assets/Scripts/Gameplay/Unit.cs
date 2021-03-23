@@ -221,6 +221,12 @@ public class Unit : MonoBehaviour
             tilesetTraversalProvider.ReleaseNode(CellPosition);
             List<Vector3> waypoints = path.vectorPath.ConvertAll(node => navigator.CellToWorldPos(navigator.WorldToCellPos(node)));
 
+            if (waypoints.Count > 0)
+            {
+                LevelTile reachedTile = navigator.GetTile(CellPosition);
+                reachedTile.OnUnitLeave(this);
+            }
+
             for (int currentTarget = 1; currentTarget < waypoints.Count; currentTarget++)
             {
                 float elapsedTime = 0f;
@@ -233,7 +239,7 @@ public class Unit : MonoBehaviour
                 }
 
                 LevelTile reachedTile = navigator.GetTile(CellPosition);
-                reachedTile.OnEnter(this);
+                reachedTile.OnUnitEnter(this);
             }
 
             tilesetTraversalProvider.ReserveNode(cellTargetPos);

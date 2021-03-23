@@ -135,7 +135,6 @@ public class GameplayUI : MonoBehaviour
             moves.ForEach(position =>
             {
                 TintMarker(position, MarkerTypes.Movement);
-                //GameObject marker = CreateMarker(position, "MovementMarker", availableMovesSprite);
                 availableMoves.Add(position);
             });
         }
@@ -166,7 +165,6 @@ public class GameplayUI : MonoBehaviour
             {
                 if (field.Value == AttackPatternField.On && TilemapNavigator.Instance.HasTile(field.Key))
                 {
-                    //GameObject marker = CreateMarker(field.Key, "AttackMarker", availableAttacksSprite);
                     TintMarker(field.Key, MarkerTypes.Attack);
                     availableMoves.Add(field.Key);
                 }

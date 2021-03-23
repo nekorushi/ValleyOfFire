@@ -2,9 +2,24 @@ using System.Linq;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
+    private static GameManager _instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<GameManager>();
+            }
+
+            return _instance;
+        }
+    }
+
     [SerializeField]
     private PlayerController[] players;
 
@@ -17,6 +32,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Text summaryWinner;
 
+    [SerializeField]
+    private LevelTile[] tickingTiles;
+
     private void Start()
     {
         summaryPanel.gameObject.SetActive(false);
@@ -28,11 +46,19 @@ public class GameManager : MonoBehaviour
         int currentPlayerIdx = 0;
         while (!CheckWinningConditions())
         {
+            if (currentPlayerIdx == 0)
+            {
+                foreach(LevelTile tile in tickingTiles)
+                {
+                    tile.OnTick();
+                }
+            }
+
             PlayerController currentPlayer = players[currentPlayerIdx];
             yield return PerformPlayerTurn(currentPlayer);
             currentPlayerIdx = GetNextPlayer(currentPlayerIdx);
             yield return null;
-        }Debug.Log(WorldUtils.DirectionToTarget(new Vector3(0,0,0), new Vector3(0,0,0)));
+        }
 
         summaryWinner.text = players.FirstOrDefault(player => player.HasAliveUnits).name;
         summaryPanel.gameObject.SetActive(true);
