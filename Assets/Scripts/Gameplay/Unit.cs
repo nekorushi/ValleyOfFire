@@ -49,6 +49,8 @@ public class Unit : MonoBehaviour
 
     [SerializeField]
     private int movementRange;
+    [SerializeField]
+    private int swampedMovementRange;
 
     public void SetOwner(PlayerController player)
     {
@@ -134,7 +136,7 @@ public class Unit : MonoBehaviour
         if (inflictedStatus != null)
         {
             bool shouldRemoveStatus = inflictedStatus.OnTick(this);
-            if (shouldRemoveStatus) inflictedStatus = null;
+            if (shouldRemoveStatus) RemoveStatus();
         }
     }
 
@@ -142,6 +144,16 @@ public class Unit : MonoBehaviour
     {
         inflictedStatus = newStatus;
         newStatus.OnAdd(this);
+    }
+
+    public void RemoveStatus()
+    {
+        inflictedStatus = null;
+    }
+
+    private bool HasStatus(System.Type statusType)
+    {
+        return inflictedStatus != null && inflictedStatus.GetType() == statusType;
     }
 
     private void Kill()
@@ -239,7 +251,13 @@ public class Unit : MonoBehaviour
                 }
 
                 LevelTile reachedTile = navigator.GetTile(CellPosition);
-                reachedTile.OnUnitEnter(this);
+                bool canGoFurther = reachedTile.OnUnitEnter(this);
+                if (!canGoFurther)
+                {
+                    cellTargetPos = CellPosition;
+                    targetPos = targetPos = navigator.CellToWorldPos(CellPosition);
+                    break;
+                }
             }
 
             tilesetTraversalProvider.ReserveNode(cellTargetPos);
@@ -269,6 +287,7 @@ public class Unit : MonoBehaviour
 
     public void UpdateAvailableMoves()
     {
-        AvailableMoves = TilemapNavigator.Instance.CalculateMovementRange(CellPosition, movementRange);
+        int range = HasStatus(typeof(SwampedStatus)) && swampedMovementRange > 0 ? swampedMovementRange : movementRange;
+        AvailableMoves = TilemapNavigator.Instance.CalculateMovementRange(CellPosition, range);
     }
 }

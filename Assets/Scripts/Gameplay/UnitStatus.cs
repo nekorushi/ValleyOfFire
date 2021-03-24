@@ -2,6 +2,8 @@
 
 public abstract class UnitStatus : ScriptableObject
 {
+    public Sprite icon;
+
     public string StatusName
     {
         get { return this.GetType().ToString(); }

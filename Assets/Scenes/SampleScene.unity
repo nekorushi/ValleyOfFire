@@ -243,6 +243,8 @@ MonoBehaviour:
   gameplayUI: {fileID: 1081348067}
   summaryPanel: {fileID: 1394483055}
   summaryWinner: {fileID: 1472287930}
+  tickingTiles:
+  - {fileID: 11400000, guid: 723eccc35a4a84d969c49efc0c432b27, type: 2}
 --- !u!4 &310636191
 Transform:
   m_ObjectHideFlags: 0
@@ -1136,7 +1138,7 @@ MonoBehaviour:
     cacheStartup: 0
   showNavGraphs: 1
   showUnwalkableNodes: 1
-  debugMode: 0
+  debugMode: 4
   debugFloor: 0
   debugRoof: 1
   manualDebugFloorRoof: 0
@@ -1145,7 +1147,7 @@ MonoBehaviour:
   logPathResults: 1
   maxNearestNodeDistance: 1
   scanOnStartup: 1
-  fullGetNearestSearch: 0
+  fullGetNearestSearch: 1
   prioritizeGraphs: 0
   prioritizeGraphsLimit: 1
   colorSettings:
@@ -1190,7 +1192,7 @@ MonoBehaviour:
   - 29
   - 30
   - 31
-  heuristic: 2
+  heuristic: 0
   heuristicScale: 1
   threadCount: 1
   maxFrameTime: 10

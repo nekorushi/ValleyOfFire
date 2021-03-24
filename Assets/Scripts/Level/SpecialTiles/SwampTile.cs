@@ -6,8 +6,14 @@ public class SwampTile : LevelTile
     [SerializeField]
     private UnitStatus inflictedStatus;
 
-    public override void OnUnitEnter(Unit unitEntered)
+    public override bool OnUnitEnter(Unit unitEntered)
     {
         unitEntered.InflictStatus(inflictedStatus);
+        return false;
+    }
+
+    public override void OnUnitLeave(Unit unitEntered)
+    {
+        unitEntered.RemoveStatus();
     }
 }

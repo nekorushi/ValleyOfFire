@@ -49,13 +49,15 @@ public class BushTile : LevelTile
         }
     }
 
-    public override void OnUnitEnter(Unit unitEntered)
+    public override bool OnUnitEnter(Unit unitEntered)
     {
         if (burningBushes.ContainsKey(unitEntered.CellPosition)
             && burningBushes[unitEntered.CellPosition].ticksLeft > 0)
         {
             unitEntered.InflictStatus(inflictedStatus);
         }
+
+        return true;
     }
 
     public override void Activate(Vector3Int cellPos)

@@ -35,7 +35,7 @@ MonoBehaviour:
   m_Flags: 2
   m_ColliderType: 1
   _type: 0
-  _cost: 0
+  _cost: 10
   flameDuration: 2
   inflictedStatus: {fileID: 11400000, guid: 826601521dd64415ba38105b89a190bd, type: 2}
   flamePrefab: {fileID: 7021983529575103000, guid: 2545bb4cb9e164398bc18f2d94563bf6, type: 3}

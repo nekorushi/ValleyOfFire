@@ -49,12 +49,14 @@ public class TilesetGraph : NavGraph
                         Vector2Int.right,
                     };
 
-                    foreach(Vector2Int offset in neighbors)
+                    node.Penalty = tile.Cost;
+
+                    foreach (Vector2Int offset in neighbors)
                     {
                         PointNode neighborNode = GetNodeInDict(gridNodes, xPos + offset.x, yPos + offset.y);
                         if (neighborNode != null && neighborNode.Walkable)
                         {
-                            connections.Add(new Connection(neighborNode, tile.Cost));
+                            connections.Add(new Connection(neighborNode, 0));
                         }
                     }
 

@@ -30,7 +30,7 @@ public class LevelTile : Tile
         flags = TileFlags.LockTransform;
     }
 
-    public virtual void OnUnitEnter(Unit unitEntered) { }
+    public virtual bool OnUnitEnter(Unit unitEntered) { return true; }
     public virtual void OnUnitLeave(Unit unitEntered) { }
     public virtual void OnTick() { }
     public virtual void Activate(Vector3Int cellPos) { }

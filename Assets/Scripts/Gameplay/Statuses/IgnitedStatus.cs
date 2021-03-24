@@ -5,7 +5,6 @@ using UnityEngine;
 public class IgnitedStatus : UnitStatus
 {
     private int _durationLeft = 0;
-    public Sprite icon;
     [SerializeField] private int _duration = 0;
     [SerializeField] private int _damagePerTick = 0;
 
