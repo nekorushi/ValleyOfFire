@@ -17,10 +17,16 @@ public class Unit : MonoBehaviour
     public PlayerController Owner { get; private set; }
     public Skill PrimaryAttack { get; private set; }
     public Skill SecondaryAttack { get; private set; }
+
     [SerializeField]
-    private TMP_Text healthText;
+    private HealthBar healthBar;
+
+    [SerializeField]
+    private StatusIcon statusIcon;
+
     [SerializeField]
     private TMP_Text damageText;
+
     public Animator animator;
     public Animator fxAnimator;
 
@@ -33,7 +39,16 @@ public class Unit : MonoBehaviour
     public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
 
     public List<Vector3Int> AvailableMoves { get; private set; }
-    private UnitStatus inflictedStatus;
+
+    private UnitStatus _inflictedStatus;
+    public UnitStatus InflictedStatus
+    {
+        get { return _inflictedStatus; }
+        private set {
+            _inflictedStatus = value;
+            statusIcon.SetValue(value);
+        } 
+    }
 
     [Header("Unit settings")]
     [SerializeField]
@@ -41,13 +56,21 @@ public class Unit : MonoBehaviour
     public UnitTypes UnitType { get { return _unitType; } private set { _unitType = value; } }
 
     [SerializeField]
-    private float _health = 5f;
-    public float Health { get { return _health; } private set { _health = value; } }
+    private float maxHealth = 5f;
+
+    private float _health;
+    public float Health {
+        get { return _health; }
+        private set {
+            _health = value;
+            healthBar.SetValue(value, maxHealth);
+        }
+    }
 
     private float baseShield = 100f;
     public float Shield {
         get {
-            int shieldReduction = inflictedStatus != null ? inflictedStatus.GetShieldReduction(UnitType) : 0;
+            int shieldReduction = InflictedStatus != null ? InflictedStatus.GetShieldReduction(UnitType) : 0;
             int appliedPenalty = Mathf.Clamp(shieldReduction, 0, 100);
                 return baseShield - appliedPenalty;
         }
@@ -76,13 +99,14 @@ public class Unit : MonoBehaviour
         SecondaryAttack = attackPatterns[1];
 
         spriteMaterial = sprite.material;
+
+        Health = maxHealth;
     }
 
     private void Start()
     {
 
         AlignToGrid();
-        UpdateHealthText();
 
         tilesetTraversalProvider = UnitBlockManager.Instance.traversalProvider;
         tilesetTraversalProvider.ReserveNode(CellPosition);
@@ -124,12 +148,11 @@ public class Unit : MonoBehaviour
         return SecondaryAttack;
     }
 
-    public void ApplyDamage(float baseDamage, DamageType type)
+    public void ApplyDamage(float baseDamage, DamageConfig.Types type)
     {
         float amount = baseDamage * (1 + (100 - Shield) / 100);
 
         Health = Mathf.Clamp(Health - amount, 0, Health);
-        UpdateHealthText();
         StartCoroutine(AnimateDamage(amount, type));
 
         if (Health == 0)
@@ -140,27 +163,27 @@ public class Unit : MonoBehaviour
 
     private void ApplyStatus()
     {
-        if (inflictedStatus != null)
+        if (InflictedStatus != null)
         {
-            bool shouldRemoveStatus = inflictedStatus.OnTick(this);
+            bool shouldRemoveStatus = InflictedStatus.OnTick(this);
             if (shouldRemoveStatus) RemoveStatus();
         }
     }
 
     public void InflictStatus(UnitStatus newStatus)
     {
-        inflictedStatus = newStatus;
+        InflictedStatus = newStatus;
         newStatus.OnAdd(this);
     }
 
     public void RemoveStatus()
     {
-        inflictedStatus = null;
+        InflictedStatus = null;
     }
 
     private bool HasStatus(System.Type statusType)
     {
-        return inflictedStatus != null && inflictedStatus.GetType() == statusType;
+        return InflictedStatus != null && InflictedStatus.GetType() == statusType;
     }
 
     private void Kill()
@@ -169,22 +192,10 @@ public class Unit : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void UpdateHealthText()
+    private IEnumerator AnimateDamage(float amount, DamageConfig.Types type)
     {
-        healthText.text = Health.ToString("N1");
-    }
-
-    private IEnumerator AnimateDamage(float amount, DamageType type)
-    {
-        Dictionary<DamageType, Color> dmgColors = new Dictionary<DamageType, Color>()
-        {
-            { DamageType.Fire, new Color(1, .5f, 0) },
-            { DamageType.Normal, Color.red },
-            { DamageType.Heal, Color.green }
-        };
-
         animator.SetTrigger("Hit");
-        damageText.color = dmgColors[type];
+        damageText.color = DamageConfig.Colors[type];
         damageText.text = amount.ToString();
         damageText.gameObject.SetActive(true);
 

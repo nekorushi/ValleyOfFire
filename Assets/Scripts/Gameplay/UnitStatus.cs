@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class UnitStatus : ScriptableObject
 {
     public Sprite icon;
+    public Color iconColor;
 
     [SerializeField]
     private ShieldRecutionDict shieldReduction = new ShieldRecutionDict();

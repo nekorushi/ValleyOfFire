@@ -18,13 +18,6 @@ public enum AttackTrajectory
     Curve
 }
 
-public enum DamageType
-{
-    Heal,
-    Fire,
-    Normal
-}
-
 [Serializable]
 public class Skill : MonoBehaviour
 {
@@ -66,7 +59,7 @@ public class Skill : MonoBehaviour
         if (targetUnit != null && Damage > 0)
         {
             yield return StartCoroutine(ProjectileAnimator.Instance.Play(attackerUnit.CellPosition, targetPos, attackTrajectory));
-            targetUnit.ApplyDamage(Damage, DamageType.Normal);
+            targetUnit.ApplyDamage(Damage, DamageConfig.Types.Normal);
         }
         if (effect != null)
         {
