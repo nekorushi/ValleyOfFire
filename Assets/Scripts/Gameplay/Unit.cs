@@ -44,8 +44,15 @@ public class Unit : MonoBehaviour
     private float _health = 5f;
     public float Health { get { return _health; } private set { _health = value; } }
 
-    private float _shield = 100f;
-    public float Shield { get { return _shield; } private set { _shield = value; } }
+    private float baseShield = 100f;
+    public float Shield {
+        get {
+            int shieldReduction = inflictedStatus != null ? inflictedStatus.GetShieldReduction(UnitType) : 0;
+            int appliedPenalty = Mathf.Clamp(shieldReduction, 0, 100);
+                return baseShield - appliedPenalty;
+        }
+        private set { baseShield = value; }
+    }
 
     [SerializeField]
     private int movementRange;
@@ -117,13 +124,13 @@ public class Unit : MonoBehaviour
         return SecondaryAttack;
     }
 
-    public void ApplyDamage(float baseDamage)
+    public void ApplyDamage(float baseDamage, DamageType type)
     {
         float amount = baseDamage * (1 + (100 - Shield) / 100);
 
         Health = Mathf.Clamp(Health - amount, 0, Health);
         UpdateHealthText();
-        StartCoroutine(AnimateDamage(amount));
+        StartCoroutine(AnimateDamage(amount, type));
 
         if (Health == 0)
         {
@@ -167,9 +174,17 @@ public class Unit : MonoBehaviour
         healthText.text = Health.ToString("N1");
     }
 
-    private IEnumerator AnimateDamage(float amount)
+    private IEnumerator AnimateDamage(float amount, DamageType type)
     {
+        Dictionary<DamageType, Color> dmgColors = new Dictionary<DamageType, Color>()
+        {
+            { DamageType.Fire, new Color(1, .5f, 0) },
+            { DamageType.Normal, Color.red },
+            { DamageType.Heal, Color.green }
+        };
+
         animator.SetTrigger("Hit");
+        damageText.color = dmgColors[type];
         damageText.text = amount.ToString();
         damageText.gameObject.SetActive(true);
 
