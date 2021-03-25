@@ -145,9 +145,7 @@ public class GameplayUI : MonoBehaviour
     void RenderAvailableAttacks()
     {
         if (activePlayer.CurrentUnit == null) return;
-
-        Skill attackPattern = activePlayer.CurrentUnit.GetAttackPattern(activePlayer.AttackMode);
-        SerializableDictionary<Vector3Int, AttackPatternField> pattern = attackPattern.AttackArea;
+        SerializableDictionary<Vector3Int, AttackPatternField> pattern = activePlayer.CurrentUnit.skillHandler.AttackArea;
 
         if (pattern != null)
         {
@@ -175,9 +173,9 @@ public class GameplayUI : MonoBehaviour
                     Unit attacker = activePlayer.CurrentUnit;
                     if (defender != null && defender.Owner != activePlayer && defender.Health > 0)
                     {
-                        Skill attackPattern = activePlayer.CurrentUnit.GetAttackPattern(activePlayer.AttackMode);
-                        DamageValue damage = UnitsConfig.Instance.GetDamageValue(attackPattern.Damage, attacker.UnitType, defender.UnitType);
-                        GameObject formula = CreateDmgFormula(defender.CellPosition, damage, defender.UnitType);
+                        SkillConfig skillConfig = activePlayer.CurrentUnit.GetSkillConfig(activePlayer.AttackMode);
+                        DamageValue damage = UnitsConfig.Instance.GetDamageValue(skillConfig.damage, attacker.unitClass.Type, defender.unitClass.Type);
+                        GameObject formula = CreateDmgFormula(defender.CellPosition, damage, defender.unitClass.Type);
                         dmgFormulas.Add(formula);
                     }
                 }

@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Component configuration")]
     [SerializeField]
-    private LayerMask layerMask;
     private Camera mainCamera;
     private byte currentActionPoints = 0;
 
@@ -30,6 +29,7 @@ public class PlayerController : MonoBehaviour
     public string PlayerName { get { return _playerName; } }
 
     public PlayerFaction faction;
+    public bool FacingLeft = false;
 
     [SerializeField]
     private Color _playerColor;
@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
         private set
         {
             _attackMode = value;
+            CurrentUnit.skillHandler.config = CurrentUnit.GetSkillConfig(AttackMode);
             ControlModeChanged.Invoke();
         }
     }
@@ -50,10 +51,12 @@ public class PlayerController : MonoBehaviour
     private byte maxActionPoints = 2;
 
     [SerializeField]
-    private List<Unit> _units;
-    public List<Unit> Units {
-        get { return _units; }
-        private set { _units = value; }
+    private List<Unit> _units = new List<Unit>();
+    public List<Unit> Units { get { return _units; } }
+
+    public void AddUnit(Unit unit)
+    {
+        _units.Add(unit);
     }
 
     private Unit _currentUnit;
@@ -71,7 +74,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
-        AssignOwnedUnits();
     }
 
     private void Reset()
@@ -79,17 +81,13 @@ public class PlayerController : MonoBehaviour
         SelectUnit(null);
     }
 
-    public bool HasAliveUnits {get {return Units.Where(unit => unit.Health > 0).ToList().Count > 0; } }
-
-    private void AssignOwnedUnits()
-    {
-        Units.ForEach(unit =>
-        {
-            if (unit != null)
-            {
-                unit.SetOwner(this);
-            }
-        });
+    public bool HasAliveUnits {
+        get {
+            return Units
+                .Where(unit => unit.Health > 0)
+                .ToList()
+                .Count > 0;
+        }
     }
 
     public void ChangeAttackMode(AttackModes mode)
@@ -172,9 +170,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator PerformAttackAction(Vector3Int clickedPos, Unit clickedUnit)
     {
         Unit actingUnit = CurrentUnit;
-        Skill pattern = actingUnit.GetAttackPattern(AttackMode);
-
-        bool isAttackClicked = pattern.Contains(clickedPos);
+        bool isAttackClicked = actingUnit.skillHandler.Contains(clickedPos);
         if (isAttackClicked)
         {
             SelectUnit(null);

@@ -20,7 +20,7 @@ public class PlayerUI : MonoBehaviour
 
     private void OnPlayerChange()
     {
-        playerNameLabel.text = gameplayUI.activePlayer.name;
+        playerNameLabel.text = gameplayUI.activePlayer.PlayerName;
         background.color = gameplayUI.activePlayer.PlayerColor;
     }
 }

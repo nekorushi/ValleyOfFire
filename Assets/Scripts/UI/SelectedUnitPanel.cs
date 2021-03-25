@@ -64,7 +64,7 @@ public class SelectedUnitPanel : MonoBehaviour
     private void UpdatePortrait()
     {
         Unit unit = currentPlayer.CurrentUnit;
-        Sprite unitPortrait = unit.portrait[currentPlayer.faction];
+        Sprite unitPortrait = unit.unitClass.portraits[currentPlayer.faction];
         portrait.sprite = unitPortrait;
     }
 

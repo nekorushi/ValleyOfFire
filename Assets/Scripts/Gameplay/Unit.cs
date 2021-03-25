@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Pathfinding;
-using System;
 
 enum MovementType
 {
@@ -18,15 +17,16 @@ public enum PlayerFaction
     Demons
 }
 
-[Serializable] public class UnitPortraitDict : SerializableDictionary<PlayerFaction, Sprite> { }
-
-[RequireComponent(typeof(Skill))]
+[RequireComponent(typeof(SkillHandler))]
 public class Unit : MonoBehaviour
 {
-    public PlayerController Owner { get; private set; }
-    public Skill PrimaryAttack { get; private set; }
-    public Skill SecondaryAttack { get; private set; }
+    [SerializeField]
+    private PlayerController _owner;
+    public PlayerController Owner { get { return _owner; } }
+    public UnitConfig unitClass;
 
+    [HideInInspector]
+    public SkillHandler skillHandler;
 
     [SerializeField]
     private HealthBar healthBar;
@@ -40,8 +40,6 @@ public class Unit : MonoBehaviour
     public Animator animator;
     public Animator fxAnimator;
 
-    public UnitPortraitDict portrait = new UnitPortraitDict();
-
     [SerializeField]
     private SpriteRenderer sprite;
     private Material spriteMaterial;
@@ -49,7 +47,6 @@ public class Unit : MonoBehaviour
     private readonly float UNIT_Z_POSITION = -0.5f;
     private TilesetTraversalProvider tilesetTraversalProvider;
     public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
-
     public List<Vector3Int> AvailableMoves { get; private set; }
 
     private UnitStatus _inflictedStatus;
@@ -62,57 +59,39 @@ public class Unit : MonoBehaviour
         } 
     }
 
-    [Header("Unit settings")]
-    [SerializeField]
-    private UnitTypes _unitType;
-    public UnitTypes UnitType { get { return _unitType; } private set { _unitType = value; } }
-
-    [SerializeField]
-    private float maxHealth = 5f;
-
     private float _health;
     public float Health {
         get { return _health; }
         private set {
             _health = value;
-            healthBar.SetValue(value, maxHealth);
+            healthBar.SetValue(value, unitClass.BaseHealth);
         }
     }
 
     private float baseShield = 100f;
     public float Shield {
         get {
-            int shieldReduction = InflictedStatus != null ? InflictedStatus.GetShieldReduction(UnitType) : 0;
+            int shieldReduction = InflictedStatus != null ? InflictedStatus.GetShieldReduction(unitClass.Type) : 0;
             int appliedPenalty = Mathf.Clamp(shieldReduction, 0, 100);
                 return baseShield - appliedPenalty;
         }
         private set { baseShield = value; }
     }
 
-    [SerializeField]
-    private int movementRange;
-    [SerializeField]
-    private int swampedMovementRange;
-
-    public void SetOwner(PlayerController player)
-    {
-        RemoveListeners();
-        Owner = player;
-        AddListeners();
-
-        sprite.material.SetColor("_Color", player.PlayerColor);
-    }
-
     private void Awake()
     {
-        Skill[] attackPatterns = GetComponents<Skill>();
+        // Assign references
+        skillHandler = GetComponent<SkillHandler>();
 
-        PrimaryAttack = attackPatterns[0];
-        SecondaryAttack = attackPatterns[1];
-
+        // Initial setup
+        Owner.AddUnit(this);
+        Health = unitClass.BaseHealth;
         spriteMaterial = sprite.material;
+        sprite.sprite = unitClass.inGameSprites[Owner.faction];
+        sprite.flipX = Owner.FacingLeft;
 
-        Health = maxHealth;
+        // Register listeners
+        AddListeners();
     }
 
     private void Start()
@@ -154,17 +133,23 @@ public class Unit : MonoBehaviour
         spriteMaterial.DisableKeyword("OUTBASE_ON");
     }
 
-    public Skill GetAttackPattern(AttackModes mode)
+    public SkillConfig GetSkillConfig(AttackModes mode)
     {
-        if (mode == AttackModes.Primary) return PrimaryAttack;
-        return SecondaryAttack;
+        Dictionary<AttackModes, SkillConfig> configsDict = new Dictionary<AttackModes, SkillConfig>()
+        {
+            { AttackModes.None, null },
+            { AttackModes.Primary, unitClass.primarySkill },
+            { AttackModes.Secondary, unitClass.secondarySkill },
+        };
+
+        return configsDict[mode];
     }
 
     public void ApplyDamage(float baseDamage, DamageConfig.Types type)
     {
         float amount = baseDamage * (1 + (100 - Shield) / 100);
 
-        Health = Mathf.Clamp(Health - amount, 0, Health);
+        Health = Mathf.Clamp(Health - amount, 0, unitClass.BaseHealth);
         StartCoroutine(AnimateDamage(amount, type));
 
         if (Health == 0)
@@ -305,13 +290,12 @@ public class Unit : MonoBehaviour
 
     public IEnumerator Attack(Vector3Int clickedPos, Unit clickedUnit)
     {
-        Skill attackPattern = GetAttackPattern(Owner.AttackMode);
-        SerializableDictionary<Vector3Int, AttackPatternField> fields = attackPattern.AttackArea;
+        SerializableDictionary<Vector3Int, AttackPatternField> fields = skillHandler.AttackArea;
 
         bool isAttackClicked = fields.ContainsKey(clickedPos) && fields[clickedPos] == AttackPatternField.On;
         if (isAttackClicked)
         {
-            yield return StartCoroutine(attackPattern.ExecuteAttack(clickedPos, clickedUnit));
+            yield return StartCoroutine(skillHandler.ExecuteAttack(clickedPos, clickedUnit));
         }
     }
 
@@ -325,7 +309,7 @@ public class Unit : MonoBehaviour
 
     public void UpdateAvailableMoves()
     {
-        int range = HasStatus(typeof(SwampedStatus)) && swampedMovementRange > 0 ? swampedMovementRange : movementRange;
+        int range = HasStatus(typeof(SwampedStatus)) && unitClass.SwampedMovementRange > 0 ? unitClass.SwampedMovementRange : unitClass.MovementRange;
         AvailableMoves = TilemapNavigator.Instance.CalculateMovementRange(CellPosition, range);
     }
 }

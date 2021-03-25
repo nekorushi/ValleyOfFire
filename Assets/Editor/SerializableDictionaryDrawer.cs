@@ -8,9 +8,6 @@ using UnityObject = UnityEngine.Object;
 public abstract class SerializableDictionaryDrawer<TK, TV> : PropertyDrawer
 {
     private SerializableDictionary<TK, TV> _Dictionary;
-    private TK newItemKey;
-    private TK newItemVal;
-
     private bool _Foldout;
     private const float kButtonWidth = 18f;
 
@@ -100,6 +97,13 @@ public abstract class SerializableDictionaryDrawer<TK, TV> : PropertyDrawer
                 break;
             }
         }
+
+
+        if (GUI.changed)
+        {
+            var target = property.serializedObject.targetObject;
+            EditorUtility.SetDirty(target);
+        }
     }
 
     private void RemoveItem(TK key)
@@ -184,5 +188,5 @@ public abstract class SerializableDictionaryDrawer<TK, TV> : PropertyDrawer
 [CustomPropertyDrawer(typeof(ShieldRecutionDict))]
 public class ShieldRecutionDictDrawer : SerializableDictionaryDrawer<UnitTypes, int> { }
 
-[CustomPropertyDrawer(typeof(UnitPortraitDict))]
+[CustomPropertyDrawer(typeof(FactionSpriteDict))]
 public class UnitPortraitDictDrawer : SerializableDictionaryDrawer<PlayerFaction, Sprite> { }

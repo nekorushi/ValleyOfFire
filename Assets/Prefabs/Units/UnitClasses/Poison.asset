@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc133265b13c46b0973e61462722dd7, type: 3}
+  m_Name: Poison
+  m_EditorClassIdentifier: 
+  _type: 2
+  portraits:
+    _Buckets: 0000000001000000ffffffff
+    _HashCodes: 000000000100000000000000
+    _Next: ffffffffffffffff00000000
+    _Count: 2
+    _Version: 8
+    _FreeList: -1
+    _FreeCount: 0
+    _Keys: 000000000100000000000000
+    _Values:
+    - {fileID: 21300000, guid: 7f36f5493189f495386c6d0719fdaf0f, type: 3}
+    - {fileID: 21300000, guid: 011d011825837479786e7991af060282, type: 3}
+    - {fileID: 0}
+  inGameSprites:
+    _Buckets: 0000000001000000ffffffff
+    _HashCodes: 000000000100000000000000
+    _Next: ffffffffffffffff00000000
+    _Count: 2
+    _Version: 4
+    _FreeList: -1
+    _FreeCount: 0
+    _Keys: 000000000100000000000000
+    _Values:
+    - {fileID: 21300000, guid: 0bae7f0c611014dfdb56872eff71cf03, type: 3}
+    - {fileID: 21300000, guid: 792abe2123ab14681820ff1e648eeb88, type: 3}
+    - {fileID: 0}
+  _baseHealth: 5
+  _movementRange: 0
+  _swampedMovementRange: 0
+  primarySkill:
+    damage: 2
+    effect: {fileID: 0}
+    trajectory: 0
+    straightRange: 0
+    curveRange: 0
+    pattern:
+      _Buckets: 00000000ffffffffffffffff
+      _HashCodes: 000000000000000000000000
+      _Next: ffffffff0000000000000000
+      _Count: 1
+      _Version: 1
+      _FreeList: -1
+      _FreeCount: 0
+      _Keys:
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      _Values: 000000000000000000000000
+  secondarySkill:
+    damage: 2
+    effect: {fileID: 0}
+    trajectory: 0
+    straightRange: 0
+    curveRange: 0
+    pattern:
+      _Buckets: 00000000ffffffffffffffff
+      _HashCodes: 000000000000000000000000
+      _Next: ffffffff0000000000000000
+      _Count: 1
+      _Version: 1
+      _FreeList: -1
+      _FreeCount: 0
+      _Keys:
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      _Values: 000000000000000000000000

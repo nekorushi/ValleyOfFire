@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e195f327a90f146ec98e6869d60e012b, type: 3}
-  m_Name: PushEffect_4
+  m_Name: PushEffect_1
   m_EditorClassIdentifier: 
-  distance: 4
+  distance: 1
