@@ -8,6 +8,9 @@ using UnityObject = UnityEngine.Object;
 public abstract class SerializableDictionaryDrawer<TK, TV> : PropertyDrawer
 {
     private SerializableDictionary<TK, TV> _Dictionary;
+    private TK newItemKey;
+    private TK newItemVal;
+
     private bool _Foldout;
     private const float kButtonWidth = 18f;
 
@@ -156,8 +159,6 @@ public abstract class SerializableDictionaryDrawer<TK, TV> : PropertyDrawer
 
     private void AddNewItem()
     {
-        
-
         TK key;
         if (typeof(TK) == typeof(string))
             key = (TK)(object)"";
@@ -182,3 +183,6 @@ public abstract class SerializableDictionaryDrawer<TK, TV> : PropertyDrawer
 
 [CustomPropertyDrawer(typeof(ShieldRecutionDict))]
 public class ShieldRecutionDictDrawer : SerializableDictionaryDrawer<UnitTypes, int> { }
+
+[CustomPropertyDrawer(typeof(UnitPortraitDict))]
+public class UnitPortraitDictDrawer : SerializableDictionaryDrawer<PlayerFaction, Sprite> { }

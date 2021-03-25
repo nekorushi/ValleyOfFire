@@ -20,9 +20,6 @@ public class GameplayUI : MonoBehaviour
     private RectTransform canvasRect;
 
     [SerializeField]
-    private Image unitTarget;
-
-    [SerializeField]
     private Tilemap areaTilemap;
 
     [SerializeField]
@@ -43,6 +40,9 @@ public class GameplayUI : MonoBehaviour
     private List<GameObject> dmgFormulas = new List<GameObject>();
 
     [SerializeField]
+    private SelectedUnitPanel selectedUnitPanel;
+
+    [SerializeField]
     private List<PlayerController> allPlayers;
 
     private PlayerController _activePlayer;
@@ -61,7 +61,6 @@ public class GameplayUI : MonoBehaviour
     {
         mainCamera = Camera.main;
         canvasRect = GetComponent<RectTransform>();
-        unitTarget.enabled = false;
         ResetTint();
     }
 
@@ -87,7 +86,7 @@ public class GameplayUI : MonoBehaviour
 
     void UpdateUnitSelection()
     {
-        UpdateUnitTarget();
+        UpdateUnitPanel();
         UpdateAvailableActions();
     }
 
@@ -107,18 +106,9 @@ public class GameplayUI : MonoBehaviour
         }
     }
 
-    void UpdateUnitTarget()
+    void UpdateUnitPanel()
     {
-        if (activePlayer.CurrentUnit)
-        {
-            Vector2 canvasPos = WorldToCanvasPos(activePlayer.CurrentUnit.transform.position);
-
-            unitTarget.rectTransform.anchoredPosition = canvasPos;
-            unitTarget.enabled = true;
-        } else
-        {
-            unitTarget.enabled = false;
-        }
+        selectedUnitPanel.UpdateUnit(activePlayer);
     }
 
     void ClearAvailableMoves()

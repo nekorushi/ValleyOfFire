@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour
     private string _playerName;
     public string PlayerName { get { return _playerName; } }
 
+    public PlayerFaction faction;
+
     [SerializeField]
     private Color _playerColor;
     public Color PlayerColor { get { return _playerColor; } }

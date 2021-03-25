@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Pathfinding;
+using System;
 
 enum MovementType
 {
@@ -11,12 +12,21 @@ enum MovementType
     Both
 }
 
+public enum PlayerFaction
+{
+    Humans,
+    Demons
+}
+
+[Serializable] public class UnitPortraitDict : SerializableDictionary<PlayerFaction, Sprite> { }
+
 [RequireComponent(typeof(Skill))]
 public class Unit : MonoBehaviour
 {
     public PlayerController Owner { get; private set; }
     public Skill PrimaryAttack { get; private set; }
     public Skill SecondaryAttack { get; private set; }
+
 
     [SerializeField]
     private HealthBar healthBar;
@@ -29,6 +39,8 @@ public class Unit : MonoBehaviour
 
     public Animator animator;
     public Animator fxAnimator;
+
+    public UnitPortraitDict portrait = new UnitPortraitDict();
 
     [SerializeField]
     private SpriteRenderer sprite;

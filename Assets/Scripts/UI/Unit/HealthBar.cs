@@ -12,6 +12,6 @@ public class HealthBar : MonoBehaviour
     public void SetValue(float health, float maxHealth)
     {
         barFill.anchorMax = new Vector2(health / maxHealth, barFill.anchorMax.y);
-        valueText.text = health.ToString("N1");
+        valueText.text = UIHelpers.FormatHealth(health);
     }
 }
