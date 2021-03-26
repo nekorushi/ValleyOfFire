@@ -43,7 +43,8 @@ MonoBehaviour:
   _movementRange: 4
   _swampedMovementRange: 1
   primarySkill:
-    damage: 20
+    isActive: 1
+    baseDamage: 20
     targets: 1
     effect: {fileID: 0}
     trajectory: 0
@@ -77,7 +78,8 @@ MonoBehaviour:
       - {x: 0, y: 0}
       _Values: 0000000002000000010000000200000001000000010000000200000001000000020000000000000000000000000000000000000000000000000000000000000000000000
   secondarySkill:
-    damage: 10
+    isActive: 1
+    baseDamage: 20
     targets: 1
     effect: {fileID: 11400000, guid: 6d40139cc2c7944af9a1a419795c0dfa, type: 2}
     trajectory: 0

@@ -11,7 +11,7 @@ public class SplitEffect : AttackEffect
 
     public override IEnumerator Execute(Unit attackerUnit, Unit targetUnit, Vector3Int targetPos, LevelTile targetTile)
     {
-        bool isAttackingAlly = attackerUnit.Player.faction == targetUnit.Player.faction;
+        bool isAttackingAlly = targetUnit != null && attackerUnit.Player.faction == targetUnit.Player.faction;
         AttackEffect executedEffect = isAttackingAlly ? allyAttackEffect : enemyAttackEffect;
 
         yield return executedEffect.Execute(attackerUnit, targetUnit, targetPos, targetTile);

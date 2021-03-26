@@ -1,6 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public struct DamageValue
+{
+    public DamageValue(float baseDmg, float multiplier)
+    {
+        baseDamage = baseDmg;
+        totalDamage = baseDmg * multiplier;
+        bonusDamage = totalDamage - baseDmg;
+    }
+
+    public readonly float baseDamage;
+    public readonly float bonusDamage;
+    public readonly float totalDamage;
+}
+
 public class DamageConfig
 {
     public enum Types

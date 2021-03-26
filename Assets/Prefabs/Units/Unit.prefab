@@ -581,7 +581,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   config:
     isActive: 1
-    damage: 2
+    baseDamage: 2
     targets: 0
     effect: {fileID: 0}
     trajectory: 0

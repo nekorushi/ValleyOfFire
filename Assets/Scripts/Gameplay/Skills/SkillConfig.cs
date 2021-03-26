@@ -31,7 +31,7 @@ public enum AttackTargets
 public class SkillConfig
 {
     public bool isActive = true;
-    public float damage = 2f;
+    public float baseDamage = 2f;
     public AttackTargets targets = AttackTargets.Enemies;
     public AttackEffect effect;
     public AttackTrajectory trajectory = AttackTrajectory.Straight;

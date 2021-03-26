@@ -17,8 +17,9 @@ public class IgnitedStatus : UnitStatus
     public override bool OnTick(Unit afflictedUnit)
     {
         afflictedUnit.fxAnimator.SetTrigger("Fire");
-        afflictedUnit.ModifyHealth(_damagePerTick, DamageConfig.Types.Fire);
+        afflictedUnit.ModifyHealth(new DamageValue(_damagePerTick, 1), DamageConfig.Types.Fire);
         _durationLeft--;
+
         return _durationLeft <= 0;
     }
 }

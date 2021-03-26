@@ -49,15 +49,15 @@ public class SkillConfigDrawer : PropertyDrawer
         if (_SkillConfig.isActive)
         {
             // Damage field
-            float damageVal = _SkillConfig.damage;
+            float damageVal = _SkillConfig.baseDamage;
             EditorGUI.BeginChangeCheck();
-            float newDamageVal = EditorGUI.FloatField(position, "Damage", damageVal);
+            float newDamageVal = EditorGUI.FloatField(position, "Base damage", damageVal);
             position.y += fieldHeight;
             if (EditorGUI.EndChangeCheck())
             {
                 try
                 {
-                    _SkillConfig.damage = newDamageVal;
+                    _SkillConfig.baseDamage = newDamageVal;
                 }
                 catch (Exception e)
                 {

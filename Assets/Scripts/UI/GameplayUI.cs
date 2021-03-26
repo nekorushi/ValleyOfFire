@@ -174,7 +174,7 @@ public class GameplayUI : MonoBehaviour
                     if (defender != null && defender.Player != activePlayer && defender.Health > 0)
                     {
                         SkillConfig skillConfig = activePlayer.CurrentUnit.GetSkillConfig(activePlayer.AttackMode);
-                        DamageValue damage = UnitsConfig.Instance.GetDamageValue(skillConfig.damage, attacker.unitClass.Type, defender.unitClass.Type);
+                        DamageValue damage = UnitsConfig.Instance.GetDamageValue(skillConfig.baseDamage, attacker.unitClass.Type, defender.unitClass.Type);
                         GameObject formula = CreateDmgFormula(defender.CellPosition, damage, defender.unitClass.Type);
                         dmgFormulas.Add(formula);
                     }

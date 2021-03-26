@@ -152,11 +152,11 @@ public class Unit : MonoBehaviour
         return configsDict[mode];
     }
 
-    public void ModifyHealth(float baseAmount, DamageConfig.Types type)
+    public void ModifyHealth(DamageValue baseDamage, DamageConfig.Types type)
     {
         float amount = type == DamageConfig.Types.Heal
-            ? baseAmount
-            : -baseAmount * (1 + (100 - Shield) / 100);
+            ? baseDamage.totalDamage
+            : -baseDamage.totalDamage * (1 + (100 - Shield) / 100);
 
         Health = Mathf.Clamp(Health + amount, 0, unitClass.BaseHealth);
         StartCoroutine(AnimateHealthChange(amount, type));
