@@ -39,7 +39,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: ed41af8897e2eec409771097d28331aa, type: 3}
     - {fileID: 21300000, guid: f73be0205502941c1a28f31e18253c37, type: 3}
     - {fileID: 0}
-  _baseHealth: 5
+  _baseHealth: 100
   _movementRange: 3
   _swampedMovementRange: 1
   primarySkill:

@@ -18,8 +18,6 @@ public class PlayerController : MonoBehaviour
     public UnityEvent AvailableActionsChanged;
     public UnityEvent TurnStarted;
 
-    [Header("Component configuration (for programmers)")]
-    [SerializeField]
     private Camera mainCamera;
     private byte currentActionPoints = 0;
 
@@ -125,7 +123,7 @@ public class PlayerController : MonoBehaviour
                 Vector3Int clickedCellPos = TilemapNavigator.Instance.WorldToCellPos(clickedWorldPos);
                 yield return StartCoroutine(PerformUnitAction(clickedCellPos, clickedUnit));
                 ChangeAttackMode(AttackModes.None);
-            } else if (clickedUnit != null)
+            } else if (clickedUnit != null && Units.Contains(clickedUnit))
             {
                 SelectUnit(clickedUnit);
             }

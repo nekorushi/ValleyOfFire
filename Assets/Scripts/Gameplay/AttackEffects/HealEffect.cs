@@ -9,7 +9,7 @@ public class HealEffect : AttackEffect
 
     public override IEnumerator Execute(Unit attackerUnit, Unit targetUnit, Vector3Int targetPos, LevelTile targetTile)
     {
-        targetUnit.ModifyHealth(-healAmount, DamageConfig.Types.Heal);
+        targetUnit.ModifyHealth(healAmount, DamageConfig.Types.Heal);
 
         yield return new WaitForEndOfFrame();
     }
