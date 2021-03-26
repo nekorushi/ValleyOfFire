@@ -256,16 +256,14 @@ public class Unit : MonoBehaviour
             tilesetTraversalProvider.ReleaseNode(CellPosition);
             List<Vector3> waypoints = path.vectorPath.ConvertAll(node => navigator.CellToWorldPos(navigator.WorldToCellPos(node)));
 
-            if (waypoints.Count > 0)
-            {
-                LevelTile reachedTile = navigator.GetTile(CellPosition);
-                reachedTile.OnUnitLeave(this);
-            }
-
             for (int currentTarget = 1; currentTarget < waypoints.Count; currentTarget++)
             {
-                float elapsedTime = 0f;
+                navigator.GetTile(CellPosition).OnUnitLeave(this);
+
                 Vector3 currentStart = currentTarget == 1 ? startingPos : waypoints[currentTarget - 1];
+                yield return StartCoroutine(CheckTurningAnimation(currentStart, waypoints[currentTarget]));
+
+                float elapsedTime = 0f;
                 while (elapsedTime < movementDuration)
                 {
                     transform.position = Vector3.Lerp(currentStart, waypoints[currentTarget], (elapsedTime / movementDuration));
@@ -273,8 +271,7 @@ public class Unit : MonoBehaviour
                     yield return null;
                 }
 
-                LevelTile reachedTile = navigator.GetTile(CellPosition);
-                bool canGoFurther = reachedTile.OnUnitEnter(this);
+                bool canGoFurther = navigator.GetTile(CellPosition).OnUnitEnter(this);
                 if (!canGoFurther)
                 {
                     cellTargetPos = CellPosition;
@@ -285,7 +282,45 @@ public class Unit : MonoBehaviour
 
             tilesetTraversalProvider.ReserveNode(cellTargetPos);
             transform.position = targetPos;
+            yield return AnimateFlip(Owner.FacingLeft);
         }
+    }
+
+    private IEnumerator CheckTurningAnimation(Vector3 moveFrom, Vector3 moveTo)
+    {
+        if (moveTo.x != moveFrom.x)
+        {
+            bool shouldFaceLeft = moveTo.x < moveFrom.x;
+            yield return StartCoroutine(AnimateFlip(shouldFaceLeft));
+        }
+    }
+
+    private IEnumerator AnimateFlip(bool shouldFaceLeft)
+    {
+        bool isFacingLeft = sprite.flipX;
+
+        if (shouldFaceLeft != isFacingLeft)
+        {
+            yield return StartCoroutine(AnimateFlipShow(false));
+            sprite.flipX = shouldFaceLeft;
+            yield return StartCoroutine(AnimateFlipShow(true));
+        }
+    }
+
+    private IEnumerator AnimateFlipShow(bool show)
+    {
+        float from = show ? 0 : 1f;
+        float to = show ? 1f : 0;
+
+        float duration = .1f;
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            sprite.transform.localScale = new Vector3(Mathf.Lerp(from, to, (elapsedTime / duration)), 1f, 1f);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        sprite.transform.localScale = new Vector3(to, 1f, 1f);
     }
 
     public IEnumerator Attack(Vector3Int clickedPos, Unit clickedUnit)
