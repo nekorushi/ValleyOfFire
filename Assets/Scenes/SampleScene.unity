@@ -226,6 +226,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Demons_Fire
       objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: _player
       value: 
@@ -487,6 +511,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Humans_Fire
       objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: _player
       value: 
@@ -565,6 +613,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Demons_Heavy
       objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: _player
       value: 
@@ -638,6 +710,30 @@ PrefabInstance:
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
       value: Humans_Rapid
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: _player
@@ -817,6 +913,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Humans_Heavy
       objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: _player
       value: 
@@ -940,6 +1060,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Demons_Cannon
       objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: _player
       value: 
@@ -1040,7 +1184,6 @@ MonoBehaviour:
   TurnStarted:
     m_PersistentCalls:
       m_Calls: []
-  mainCamera: {fileID: 0}
   _playerName: Humans
   faction: 0
   FacingLeft: 0
@@ -1608,6 +1751,30 @@ PrefabInstance:
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
       value: Demons_Poison
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: _player
@@ -3624,7 +3791,6 @@ MonoBehaviour:
   TurnStarted:
     m_PersistentCalls:
       m_Calls: []
-  mainCamera: {fileID: 0}
   _playerName: Demons
   faction: 1
   FacingLeft: 1
@@ -4065,6 +4231,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Demons_Fire
       objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: _player
       value: 
@@ -4159,6 +4349,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Demons_Rapid
       objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: _player
       value: 
@@ -4232,6 +4446,30 @@ PrefabInstance:
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
       value: Humans_Fire
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: _player
@@ -4307,6 +4545,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Humans_Cannon
       objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: _player
       value: 
@@ -4380,6 +4642,30 @@ PrefabInstance:
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
       value: Humans_Poison
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086927980892958505, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6860315079294312894, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: _player

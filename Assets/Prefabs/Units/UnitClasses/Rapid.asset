@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Rapid
   m_EditorClassIdentifier: 
   _type: 1
+  icon: {fileID: 21300000, guid: fc0847cb537cd4598a9a35e6a06982a6, type: 3}
   portraits:
     _Buckets: 0000000001000000ffffffff
     _HashCodes: 000000000100000000000000

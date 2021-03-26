@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Cannon
   m_EditorClassIdentifier: 
   _type: 3
+  icon: {fileID: 21300000, guid: 543c58a606fd44f0a82e14b1d3e7dd82, type: 3}
   portraits:
     _Buckets: 0000000001000000ffffffff
     _HashCodes: 000000000100000000000000

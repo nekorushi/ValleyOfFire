@@ -190,3 +190,6 @@ public class ShieldRecutionDictDrawer : SerializableDictionaryDrawer<UnitTypes, 
 
 [CustomPropertyDrawer(typeof(FactionSpriteDict))]
 public class UnitPortraitDictDrawer : SerializableDictionaryDrawer<PlayerFaction, Sprite> { }
+
+[CustomPropertyDrawer(typeof(ClassSpriteDict))]
+public class ClassSpriteDictDrawer : SerializableDictionaryDrawer<UnitTypes, Sprite> { }

@@ -29,10 +29,11 @@ public class Unit : MonoBehaviour
     public UnitConfig unitClass;
 
     [HideInInspector] public SkillHandler skillHandler;
-    [HideInInspector] private HealthBar healthBar;
     [HideInInspector] private StatusIcon statusIcon;
 
     [Header("Technical settings (for programmers)")]
+    [SerializeField] private ValueBar healthBar;
+    [SerializeField] private ValueBar shieldBar;
     [SerializeField] private TMP_Text damageText;
 
     public Animator animator;
@@ -54,6 +55,7 @@ public class Unit : MonoBehaviour
         private set {
             _inflictedStatus = value;
             statusIcon.SetValue(value);
+            shieldBar.SetValue(Shield, baseShield);
         } 
     }
 
@@ -71,22 +73,23 @@ public class Unit : MonoBehaviour
         get {
             int shieldReduction = InflictedStatus != null ? InflictedStatus.GetShieldReduction(unitClass.Type) : 0;
             int appliedPenalty = Mathf.Clamp(shieldReduction, 0, 100);
-                return baseShield - appliedPenalty;
+            float result = baseShield - appliedPenalty;
+            return result;
         }
-        private set { baseShield = value; }
     }
 
     private void Awake()
     {
         // Assign references
         skillHandler = GetComponent<SkillHandler>();
-        healthBar = GetComponentInChildren<HealthBar>();
         statusIcon = GetComponentInChildren<StatusIcon>();
 
         // Initial setup
         Player.AddUnit(this);
         Health = unitClass.BaseHealth;
         spriteMaterial = sprite.material;
+        GetComponentInChildren<ClassIcon>().SetValue(unitClass.Type);
+        shieldBar.SetValue(Shield, baseShield);
 
         // Register listeners
         AddListeners();
@@ -102,13 +105,16 @@ public class Unit : MonoBehaviour
 
     private void OnValidate()
     {
-        string teamName = Player != null ? Player.PlayerName : "NoTeam";
-        string unitName = unitClass != null ? unitClass.name : "NoClass";
+        if (transform.parent != null)
+        {
+            string teamName = Player != null ? Player.PlayerName : "NoTeam";
+            string unitName = unitClass != null ? unitClass.name : "NoClass";
 
-        if (unitClass != null) sprite.sprite = unitClass.inGameSprites[Player.faction];
-        if (Player != null) sprite.flipX = Player.FacingLeft;
+            if (unitClass != null) sprite.sprite = unitClass.inGameSprites[Player.faction];
+            if (Player != null) sprite.flipX = Player.FacingLeft;
 
-        name = string.Format("{0}_{1}", teamName, unitName);
+            name = string.Format("{0}_{1}", teamName, unitName);
+        }
     }
 
     private void AddListeners()

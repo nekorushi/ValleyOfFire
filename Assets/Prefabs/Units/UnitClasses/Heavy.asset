@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Heavy
   m_EditorClassIdentifier: 
   _type: 0
+  icon: {fileID: 21300000, guid: 57d4ab942f759476a85a664eb7aeb75e, type: 3}
   portraits:
     _Buckets: 0100000000000000ffffffff
     _HashCodes: 010000000000000000000000

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Fire
   m_EditorClassIdentifier: 
   _type: 4
+  icon: {fileID: 21300000, guid: 6c390f4c8d6a142aa84f6d861e6bf470, type: 3}
   portraits:
     _Buckets: 0000000001000000ffffffff
     _HashCodes: 000000000100000000000000
