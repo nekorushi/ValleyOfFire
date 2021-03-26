@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7216ff95dd4724cb5a70236f5eaf2952, type: 3}
+  m_Name: FireAbilityEffect
+  m_EditorClassIdentifier: 
+  allyAttackEffect: {fileID: 11400000, guid: 7560675793d9545f5b39820c16b6d28e, type: 2}
+  enemyAttackEffect: {fileID: 11400000, guid: 2c332323cc158425ea538b7625f1cdf7, type: 2}

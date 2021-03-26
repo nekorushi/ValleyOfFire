@@ -39,33 +39,69 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 0bae7f0c611014dfdb56872eff71cf03, type: 3}
     - {fileID: 21300000, guid: 792abe2123ab14681820ff1e648eeb88, type: 3}
     - {fileID: 0}
-  _baseHealth: 5
-  _movementRange: 0
-  _swampedMovementRange: 0
+  _baseHealth: 100
+  _movementRange: 3
+  _swampedMovementRange: 1
   primarySkill:
-    damage: 2
-    effect: {fileID: 0}
-    trajectory: 0
+    damage: 20
+    targets: 1
+    effect: {fileID: 11400000, guid: 2c332323cc158425ea538b7625f1cdf7, type: 2}
+    trajectory: 1
     straightRange: 0
     curveRange: 0
     pattern:
-      _Buckets: 00000000ffffffffffffffff
-      _HashCodes: 000000000000000000000000
-      _Next: ffffffff0000000000000000
-      _Count: 1
-      _Version: 1
+      _Buckets: 0c0000001100000016000000060000000d0000001200000017000000050000000e0000001300000018000000ffffffff04000000090000000a0000000f00000014000000080000000b000000100000001500000007000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+      _HashCodes: 0600000002000000feffff7ffaffff7ff6ffff7f0700000003000000ffffff7ffbffff7ff7ffff7ff8ffff7ffcffff7f000000000400000008000000f9ffff7ffdffff7f010000000500000009000000faffff7ffeffff7f02000000060000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+      _Next: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03000000020000000100000000000000ffffffff000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+      _Count: 25
+      _Version: 31
       _FreeList: -1
       _FreeCount: 0
       _Keys:
+      - {x: -2, y: -2}
+      - {x: -2, y: -1}
+      - {x: -2, y: 0}
+      - {x: -2, y: 1}
+      - {x: -2, y: 2}
+      - {x: -1, y: -2}
+      - {x: -1, y: -1}
+      - {x: -1, y: 0}
+      - {x: -1, y: 1}
+      - {x: -1, y: 2}
+      - {x: 0, y: -2}
+      - {x: 0, y: -1}
+      - {x: 0, y: 0}
+      - {x: 0, y: 1}
+      - {x: 0, y: 2}
+      - {x: 1, y: -2}
+      - {x: 1, y: -1}
+      - {x: 1, y: 0}
+      - {x: 1, y: 1}
+      - {x: 1, y: 2}
+      - {x: 2, y: -2}
+      - {x: 2, y: -1}
+      - {x: 2, y: 0}
+      - {x: 2, y: 1}
+      - {x: 2, y: 2}
       - {x: 0, y: 0}
       - {x: 0, y: 0}
       - {x: 0, y: 0}
-      _Values: 000000000000000000000000
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      _Values: 01000000020000000200000002000000010000000200000002000000020000000200000002000000020000000200000000000000020000000200000002000000020000000200000002000000020000000100000002000000020000000200000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   secondarySkill:
-    damage: 2
-    effect: {fileID: 0}
+    damage: 0
+    targets: 2
+    effect: {fileID: 11400000, guid: fd03fe2ee11644071b9ed89d7f92e85e, type: 2}
     trajectory: 0
-    straightRange: 0
+    straightRange: 1
     curveRange: 0
     pattern:
       _Buckets: 00000000ffffffffffffffff

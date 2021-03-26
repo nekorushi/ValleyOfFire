@@ -25,18 +25,20 @@ public class SkillHandler : MonoBehaviour
 
     public IEnumerator ExecuteAttack(Vector3Int targetPos, Unit targetUnit)
     {
-        if (targetUnit != null && config.damage > 0)
+        bool shouldAttackTarget = targetUnit != null && targetUnit.Player.faction != attackerUnit.Player.faction && config.damage > 0;
+        if (shouldAttackTarget)
         {
             yield return StartCoroutine(ProjectileAnimator.Instance.Play(attackerUnit.CellPosition, targetPos, config.trajectory));
-            targetUnit.ApplyDamage(config.damage, DamageConfig.Types.Normal);
+            targetUnit.ModifyHealth(config.damage, DamageConfig.Types.Normal);
         }
+
         if (config.effect != null)
         {
             yield return StartCoroutine(
                 config.effect.Execute(
-                    attackerUnit.CellPosition,
-                    targetPos,
+                    attackerUnit,
                     targetUnit,
+                    targetPos,
                     TilemapNavigator.Instance.GetTile(targetPos)
                 )
             );

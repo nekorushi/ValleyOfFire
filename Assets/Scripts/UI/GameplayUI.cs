@@ -171,7 +171,7 @@ public class GameplayUI : MonoBehaviour
                 foreach(Unit defender in player.Units)
                 {
                     Unit attacker = activePlayer.CurrentUnit;
-                    if (defender != null && defender.Owner != activePlayer && defender.Health > 0)
+                    if (defender != null && defender.Player != activePlayer && defender.Health > 0)
                     {
                         SkillConfig skillConfig = activePlayer.CurrentUnit.GetSkillConfig(activePlayer.AttackMode);
                         DamageValue damage = UnitsConfig.Instance.GetDamageValue(skillConfig.damage, attacker.unitClass.Type, defender.unitClass.Type);

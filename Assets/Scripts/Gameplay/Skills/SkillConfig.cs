@@ -18,11 +18,21 @@ public enum AttackTrajectory
 }
 
 [Serializable]
+public enum AttackTargets
+{
+    Allies,
+    Enemies,
+    Both,
+    SameClassAlly,
+    EnemiesOrSameClassAlly
+}
+
+[Serializable]
 public class SkillConfig
 {
-    [SerializeField]
+    public bool isActive = true;
     public float damage = 2f;
-
+    public AttackTargets targets = AttackTargets.Enemies;
     public AttackEffect effect;
     public AttackTrajectory trajectory = AttackTrajectory.Straight;
 
@@ -57,52 +67,4 @@ public class SkillConfig
 
         }
     }
-
-
-    //public void ToggleField(Vector2Int cellPos)
-    //{
-    //    if (Mathf.Abs(cellPos.x) <= curveRange && Mathf.Abs(cellPos.y) <= curveRange)
-    //    {
-    //        if (!pattern.ContainsKey(cellPos)) pattern.Add(cellPos, AttackPatternField.On);
-    //        else
-    //        {
-    //            pattern[cellPos] = pattern[cellPos] == AttackPatternField.Off ? AttackPatternField.On : AttackPatternField.Off;
-    //        }
-    //    }
-    //}
-
-    //public void ExpandArea()
-    //{
-    //    curveRange += 1;
-    //    for (int row = -curveRange; row <= curveRange; row++)
-    //    {
-    //        for (int column = -curveRange; column <= curveRange; column++)
-    //        {
-    //            if (Mathf.Abs(row) == curveRange || Mathf.Abs(column) == curveRange)
-    //            {
-    //                Vector2Int cellPos = new Vector2Int(row, column);
-    //                pattern.Add(cellPos, AttackPatternField.Off);
-    //            }
-    //        }
-    //    }
-    //}
-
-    //public void DetractArea()
-    //{
-    //    if (curveRange > 0)
-    //    {
-    //        for (int row = -curveRange; row <= curveRange; row++)
-    //        {
-    //            for (int column = -curveRange; column <= curveRange; column++)
-    //            {
-    //                if (Mathf.Abs(row) == curveRange || Mathf.Abs(column) == curveRange)
-    //                {
-    //                    Vector2Int cellPos = new Vector2Int(row, column);
-    //                    pattern.Remove(cellPos);
-    //                }
-    //            }
-    //        }
-    //        curveRange -= 1;
-    //    }
-    //}
 }

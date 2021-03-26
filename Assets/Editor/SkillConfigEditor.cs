@@ -13,7 +13,10 @@ public class SkillConfigDrawer : PropertyDrawer
     private float patternHeight = 0;
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        return fieldHeight * 7 + patternHeight;
+        CheckAndInitialize(property);
+        if (_SkillConfig.isActive)
+            return fieldHeight * 9 + patternHeight;
+        return 34f;
     }
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -26,16 +29,16 @@ public class SkillConfigDrawer : PropertyDrawer
 
         EditorGUI.indentLevel++;
 
-        // Damage field
-        float damageVal = _SkillConfig.damage;
+        // IsActive field
+        bool isActiveVal = _SkillConfig.isActive;
         EditorGUI.BeginChangeCheck();
-        float newDamageVal = EditorGUI.FloatField(position, "Damage", damageVal);
+        bool newIsActiveVal = EditorGUI.Toggle(position, "Is active?", isActiveVal);
         position.y += fieldHeight;
         if (EditorGUI.EndChangeCheck())
         {
             try
             {
-                _SkillConfig.damage = newDamageVal;
+                _SkillConfig.isActive = newIsActiveVal;
             }
             catch (Exception e)
             {
@@ -43,119 +46,162 @@ public class SkillConfigDrawer : PropertyDrawer
             }
         }
 
-        // Effect field
-        AttackEffect effectVal = _SkillConfig.effect;
-        EditorGUI.BeginChangeCheck();
-        AttackEffect newEffectVal =
-            (AttackEffect)EditorGUI.ObjectField(position, "Effect", (UnityObject)(object)effectVal, typeof(AttackEffect), true);
-        position.y += fieldHeight;
-        if (EditorGUI.EndChangeCheck())
+        if (_SkillConfig.isActive)
         {
-            try
-            {
-                _SkillConfig.effect = newEffectVal;
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e.Message);
-            }
-        }
-
-        // Trajectory field
-        AttackTrajectory trajectoryVal = _SkillConfig.trajectory;
-        EditorGUI.BeginChangeCheck();
-        AttackTrajectory newTrajectoryVal = (AttackTrajectory)EditorGUI.EnumPopup(position, "Trajectory", (Enum)(object)trajectoryVal);
-        position.y += fieldHeight;
-        if (EditorGUI.EndChangeCheck())
-        {
-            try
-            {
-                _SkillConfig.trajectory = newTrajectoryVal;
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e.Message);
-            }
-        }
-
-        if (_SkillConfig.trajectory == AttackTrajectory.Straight)
-        {
-            // Straight range field
-            int straightRangeVal = _SkillConfig.straightRange;
+            // Damage field
+            float damageVal = _SkillConfig.damage;
             EditorGUI.BeginChangeCheck();
-            int newStraightRangeVal = EditorGUI.IntField(position, "Range", straightRangeVal);
+            float newDamageVal = EditorGUI.FloatField(position, "Damage", damageVal);
             position.y += fieldHeight;
             if (EditorGUI.EndChangeCheck())
             {
                 try
                 {
-                    _SkillConfig.straightRange = newStraightRangeVal;
+                    _SkillConfig.damage = newDamageVal;
                 }
                 catch (Exception e)
                 {
                     Debug.Log(e.Message);
                 }
             }
+
+            // Targets field
+            AttackTargets targetsVal = _SkillConfig.targets;
+            EditorGUI.BeginChangeCheck();
+            AttackTargets newTargetsVal = (AttackTargets)EditorGUI.EnumPopup(position, "Targets", (Enum)(object)targetsVal);
+            position.y += fieldHeight;
+            if (EditorGUI.EndChangeCheck())
+            {
+                try
+                {
+                    _SkillConfig.targets = newTargetsVal;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e.Message);
+                }
+            }
+
+            // Effect field
+            AttackEffect effectVal = _SkillConfig.effect;
+            EditorGUI.BeginChangeCheck();
+            AttackEffect newEffectVal =
+                (AttackEffect)EditorGUI.ObjectField(position, "Effect", (UnityObject)(object)effectVal, typeof(AttackEffect), true);
+            position.y += fieldHeight;
+            if (EditorGUI.EndChangeCheck())
+            {
+                try
+                {
+                    _SkillConfig.effect = newEffectVal;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e.Message);
+                }
+            }
+
+            // Trajectory field
+            AttackTrajectory trajectoryVal = _SkillConfig.trajectory;
+            EditorGUI.BeginChangeCheck();
+            AttackTrajectory newTrajectoryVal = (AttackTrajectory)EditorGUI.EnumPopup(position, "Trajectory", (Enum)(object)trajectoryVal);
+            position.y += fieldHeight;
+            if (EditorGUI.EndChangeCheck())
+            {
+                try
+                {
+                    _SkillConfig.trajectory = newTrajectoryVal;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e.Message);
+                }
+            }
+
+            if (_SkillConfig.trajectory == AttackTrajectory.Straight)
+            {
+                // Straight range field
+                int straightRangeVal = _SkillConfig.straightRange;
+                EditorGUI.BeginChangeCheck();
+                int newStraightRangeVal = EditorGUI.IntField(position, "Range", straightRangeVal);
+                position.y += fieldHeight;
+                if (EditorGUI.EndChangeCheck())
+                {
+                    try
+                    {
+                        _SkillConfig.straightRange = newStraightRangeVal;
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log(e.Message);
+                    }
+                }
+            }
+
+            if (_SkillConfig.trajectory == AttackTrajectory.Curve)
+            {
+                position.y += fieldHeight;
+                // Curve range expand
+                Rect expandButtonRect = position;
+                expandButtonRect.width = position.width / 2;
+                if (GUI.Button(expandButtonRect, "Expand"))
+                {
+                    ExpandArea();
+                }
+
+                // Curve range shrink
+                Rect shrinkButtonRect = position;
+                shrinkButtonRect.width = position.width / 2;
+                shrinkButtonRect.x = position.x + expandButtonRect.width;
+                if (GUI.Button(shrinkButtonRect, "Shrink"))
+                {
+                    ShrinkArea();
+                }
+                position.y += fieldHeight;
+
+                int cellWidth = 20;
+                int cellHeight = 20;
+                BoundsInt bounds = _SkillConfig.patternBounds;
+
+                Rect patternAreaRect = position;
+                patternAreaRect.width = bounds.size.x * cellWidth;
+                patternAreaRect.height = bounds.size.y * cellHeight;
+                patternHeight = patternAreaRect.height;
+
+                foreach (KeyValuePair<Vector2Int, AttackPatternField> cell in _SkillConfig.pattern)
+                {
+                    Vector2Int cellPos = cell.Key;
+
+                    Rect cellRect = new Rect(
+                        patternAreaRect.x + position.width / 2 + (cellPos.x - .5f) * cellWidth,
+                        patternAreaRect.y + 5 - (cellPos.y - bounds.yMax) * cellHeight,
+                        cellWidth,
+                        cellHeight
+                    );
+                    GUI.color = Color.gray;
+
+                    if (cell.Value == AttackPatternField.Player)
+                    {
+                        GUI.color = Color.magenta;
+                        GUI.Button(cellRect, "");
+                    }
+                    else
+                    {
+                        if (cell.Value == AttackPatternField.On) GUI.color = Color.green;
+                        if (GUI.Button(cellRect, ""))
+                        {
+                            ToggleField(cellPos);
+                            break;
+                        };
+                    }
+                }
+                GUI.color = Color.white;
+            }
         }
 
-        if (_SkillConfig.trajectory == AttackTrajectory.Curve)
+        if (GUI.changed)
         {
-            position.y += fieldHeight;
-            // Curve range expand
-            Rect expandButtonRect = position;
-            expandButtonRect.width = position.width / 2;
-            if (GUI.Button(expandButtonRect, "Expand"))
-            {
-                ExpandArea();
-            }
-
-            // Curve range shrink
-            Rect shrinkButtonRect = position;
-            shrinkButtonRect.width = position.width / 2;
-            shrinkButtonRect.x = position.x + expandButtonRect.width;
-            if (GUI.Button(shrinkButtonRect, "Shrink"))
-            {
-                ShrinkArea();
-            }
-            position.y += fieldHeight;
-
-            int cellWidth = 20;
-            int cellHeight = 20;
-            BoundsInt bounds = _SkillConfig.patternBounds;
-
-            Rect patternAreaRect = position;
-            patternAreaRect.width = bounds.size.x * cellWidth;
-            patternAreaRect.height = bounds.size.y * cellHeight;
-            patternHeight = patternAreaRect.height;
-
-            foreach(KeyValuePair<Vector2Int, AttackPatternField> cell in _SkillConfig.pattern)
-            {
-                Vector2Int cellPos = cell.Key;
-
-                Rect cellRect = new Rect(
-                    patternAreaRect.x + position.width / 2 + (cellPos.x - .5f) * cellWidth,
-                    patternAreaRect.y + 5 - (cellPos.y - bounds.yMax) * cellHeight,
-                    cellWidth,
-                    cellHeight
-                );
-                GUI.color = Color.gray;
-
-                if (cell.Value == AttackPatternField.Player)
-                {
-                    GUI.color = Color.magenta;
-                    GUI.Button(cellRect, "");
-                }
-                else
-                {
-                    if (cell.Value == AttackPatternField.On) GUI.color = Color.green;
-                    if (GUI.Button(cellRect, ""))
-                    {
-                        ToggleField(cellPos);
-                        break;
-                    };
-                }
-            }
-            GUI.color = Color.white;
+            var target = property.serializedObject.targetObject;
+            EditorUtility.SetDirty(target);
         }
     }
 

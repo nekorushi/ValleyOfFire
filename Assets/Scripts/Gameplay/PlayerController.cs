@@ -18,12 +18,12 @@ public class PlayerController : MonoBehaviour
     public UnityEvent AvailableActionsChanged;
     public UnityEvent TurnStarted;
 
-    [Header("Component configuration")]
+    [Header("Component configuration (for programmers)")]
     [SerializeField]
     private Camera mainCamera;
     private byte currentActionPoints = 0;
 
-    [Header("Gameplay settings")]
+    [Header("Player settings (for designers)")]
     [SerializeField]
     private string _playerName;
     public string PlayerName { get { return _playerName; } }
@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
         private set
         {
             _attackMode = value;
-            CurrentUnit.skillHandler.config = CurrentUnit.GetSkillConfig(AttackMode);
+            if (CurrentUnit) CurrentUnit.skillHandler.config = CurrentUnit.GetSkillConfig(AttackMode);
             ControlModeChanged.Invoke();
         }
     }
@@ -50,7 +50,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private byte maxActionPoints = 2;
 
-    [SerializeField]
     private List<Unit> _units = new List<Unit>();
     public List<Unit> Units { get { return _units; } }
 
@@ -120,20 +119,15 @@ public class PlayerController : MonoBehaviour
         if (clickedObject != null)
         {
             Unit clickedUnit = clickedObject.GetComponent<Unit>();
-            bool clickedOwnUnit = Units.Contains(clickedUnit);
 
-            if (clickedOwnUnit)
+            if (CurrentUnit)
             {
-                bool shouldUnselect = CurrentUnit == clickedUnit;
-                SelectUnit(shouldUnselect ? null : clickedUnit);
-            } else
+                Vector3Int clickedCellPos = TilemapNavigator.Instance.WorldToCellPos(clickedWorldPos);
+                yield return StartCoroutine(PerformUnitAction(clickedCellPos, clickedUnit));
+                ChangeAttackMode(AttackModes.None);
+            } else if (clickedUnit != null)
             {
-                if (CurrentUnit)
-                {
-                    Vector3Int clickedCellPos = TilemapNavigator.Instance.WorldToCellPos(clickedWorldPos);
-                    yield return StartCoroutine(PerformUnitAction(clickedCellPos, clickedUnit));
-                    ChangeAttackMode(AttackModes.None);
-                }
+                SelectUnit(clickedUnit);
             }
         }
     }
@@ -147,11 +141,26 @@ public class PlayerController : MonoBehaviour
     {
         if (AttackMode == AttackModes.None)
         {
-            yield return StartCoroutine(PerformMovementAction(clickedPos));
+            if (clickedUnit == null)
+            {
+                yield return StartCoroutine(PerformMovementAction(clickedPos));
+            } else
+            {
+                yield return StartCoroutine(PerformUnitSelect(clickedUnit));
+            }
         } else
         {
             yield return StartCoroutine(PerformAttackAction(clickedPos, clickedUnit));
         }
+    }
+
+    private IEnumerator PerformUnitSelect(Unit clickedUnit)
+    {
+        bool clickedOwnUnit = clickedUnit != null && Units.Contains(clickedUnit);
+        bool shouldUnselect = CurrentUnit == clickedUnit;
+
+        SelectUnit(shouldUnselect || !clickedOwnUnit ? null : clickedUnit);
+        yield return new WaitForEndOfFrame();
     }
 
     private IEnumerator PerformMovementAction(Vector3Int clickedPos)
@@ -164,6 +173,9 @@ public class PlayerController : MonoBehaviour
             yield return StartCoroutine(actingUnit.Move(clickedPos));
             SelectUnit(actingUnit);
             currentActionPoints -= 1;
+        } else
+        {
+            SelectUnit(null);
         }
     }
 
@@ -173,11 +185,41 @@ public class PlayerController : MonoBehaviour
         bool isAttackClicked = actingUnit.skillHandler.Contains(clickedPos);
         if (isAttackClicked)
         {
-            SelectUnit(null);
-            yield return StartCoroutine(actingUnit.Attack(clickedPos, clickedUnit));
-            SelectUnit(actingUnit);
-            currentActionPoints -= 1;
-            AvailableActionsChanged.Invoke();
+            AttackTargets allowedTargets = actingUnit.skillHandler.config.targets;
+            bool isSkillAvailable = actingUnit.skillHandler.config.isActive;
+            bool canAttackAllies = allowedTargets == AttackTargets.Allies;
+            bool canAttackEnemies = allowedTargets == AttackTargets.Enemies;
+            bool canAttackSameClassAlly = allowedTargets == AttackTargets.SameClassAlly;
+            bool canAttackEnemiesAndSameClassAlly = allowedTargets == AttackTargets.EnemiesOrSameClassAlly;
+
+            bool clickedAlly = clickedUnit != actingUnit && Units.Contains(clickedUnit);
+            bool clickedEnemy = !Units.Contains(clickedUnit);
+            bool clickedSameClassAlly = clickedAlly && clickedUnit.unitClass.Type == actingUnit.unitClass.Type;
+            bool clickedEnemyOrSameClassAlly = clickedEnemy || clickedSameClassAlly;
+
+            LevelTile clickedTile = TilemapNavigator.Instance.GetTile(clickedPos);
+
+            bool canAttackEnvironment = clickedTile != null && clickedTile.CanBeAttacked;
+            bool canAttackUnit = clickedUnit != null
+                && (
+                    allowedTargets == AttackTargets.Both
+                    || canAttackAllies && clickedAlly
+                    || canAttackEnemies && clickedEnemy
+                    || canAttackSameClassAlly && clickedSameClassAlly
+                    || canAttackEnemiesAndSameClassAlly && clickedEnemyOrSameClassAlly
+                );
+            bool canAttack = isSkillAvailable && (canAttackUnit || canAttackEnvironment);
+
+            if (canAttack)
+            {
+                SelectUnit(null);
+                yield return StartCoroutine(actingUnit.Attack(clickedPos, clickedUnit));
+                SelectUnit(actingUnit);
+                currentActionPoints -= 1;
+            }
         }
+
+        ChangeAttackMode(AttackModes.None);
+        AvailableActionsChanged.Invoke();
     }
 }

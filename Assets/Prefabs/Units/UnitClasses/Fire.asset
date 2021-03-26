@@ -39,14 +39,16 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 956e59ccd3965493b956753142387f19, type: 3}
     - {fileID: 21300000, guid: 3282640b8d2b0465c9210c8f2ce0aa64, type: 3}
     - {fileID: 0}
-  _baseHealth: 5
-  _movementRange: 0
-  _swampedMovementRange: 0
+  _baseHealth: 2
+  _movementRange: 1
+  _swampedMovementRange: 1
   primarySkill:
-    damage: 2
-    effect: {fileID: 0}
+    isActive: 1
+    damage: 30
+    targets: 1
+    effect: {fileID: 11400000, guid: 2c332323cc158425ea538b7625f1cdf7, type: 2}
     trajectory: 0
-    straightRange: 0
+    straightRange: 1
     curveRange: 0
     pattern:
       _Buckets: 00000000ffffffffffffffff
@@ -62,8 +64,10 @@ MonoBehaviour:
       - {x: 0, y: 0}
       _Values: 000000000000000000000000
   secondarySkill:
-    damage: 2
-    effect: {fileID: 0}
+    isActive: 1
+    damage: 30
+    targets: 4
+    effect: {fileID: 11400000, guid: 7227d12e0d7ab40198ecdcd4a4394401, type: 2}
     trajectory: 0
     straightRange: 0
     curveRange: 0

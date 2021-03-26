@@ -5,5 +5,5 @@ using UnityEngine;
 [Serializable]
 public abstract class AttackEffect : ScriptableObject
 {
-    public abstract IEnumerator Execute(Vector3Int attackerPos, Vector3Int targetPos, Unit targetUnit, LevelTile targetTile);
+    public abstract IEnumerator Execute(Unit attackerUnit, Unit targetUnit, Vector3Int targetPos, LevelTile targetTile);
 }

@@ -48,6 +48,7 @@ public class SelectedUnitPanel : MonoBehaviour
             UpdatePortrait();
             UpdateHealth();
             UpdateShield();
+            UpdateSkills();
 
             wrapper.SetActive(true);
         } else
@@ -78,6 +79,13 @@ public class SelectedUnitPanel : MonoBehaviour
     {
         Unit unit = currentPlayer.CurrentUnit;
         shieldText.text = unit.Shield.ToString();
+    }
+
+    private void UpdateSkills()
+    {
+        Unit unit = currentPlayer.CurrentUnit;
+        primaryAttack.gameObject.SetActive(unit.unitClass.primarySkill.isActive);
+        secondaryAttack.gameObject.SetActive(unit.unitClass.secondarySkill.isActive);
     }
 
     private void OnPrimaryAttackClick()

@@ -25,6 +25,13 @@ public class LevelTile : Tile
         get { return _cost; }
     }
 
+    [SerializeField]
+    private bool _canBeAttacked = false;
+    public bool CanBeAttacked
+    {
+        get { return _canBeAttacked; }
+    }
+
     private void OnEnable()
     {
         flags = TileFlags.LockTransform;

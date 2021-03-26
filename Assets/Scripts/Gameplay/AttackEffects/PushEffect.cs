@@ -7,8 +7,8 @@ public class PushEffect : AttackEffect
     [SerializeField]
     private int distance;
 
-    public override IEnumerator Execute(Vector3Int attackerPos, Vector3Int targetPos, Unit targetUnit, LevelTile targetTile)
+    public override IEnumerator Execute(Unit attackerUnit, Unit targetUnit, Vector3Int targetPos, LevelTile targetTile)
     {
-        yield return targetUnit.Push(WorldUtils.DirectionToTarget(attackerPos, targetPos), distance);
+        yield return targetUnit.Push(WorldUtils.DirectionToTarget(attackerUnit.CellPosition, targetUnit.CellPosition), distance);
     }
 }

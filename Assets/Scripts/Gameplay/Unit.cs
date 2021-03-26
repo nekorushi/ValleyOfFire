@@ -18,24 +18,22 @@ public enum PlayerFaction
 }
 
 [RequireComponent(typeof(SkillHandler))]
+[SelectionBase]
 public class Unit : MonoBehaviour
 {
+
+    [Header("Unit settings (for designers)")]
     [SerializeField]
-    private PlayerController _owner;
-    public PlayerController Owner { get { return _owner; } }
+    private PlayerController _player;
+    public PlayerController Player { get { return _player; } }
     public UnitConfig unitClass;
 
-    [HideInInspector]
-    public SkillHandler skillHandler;
+    [HideInInspector] public SkillHandler skillHandler;
+    [HideInInspector] private HealthBar healthBar;
+    [HideInInspector] private StatusIcon statusIcon;
 
-    [SerializeField]
-    private HealthBar healthBar;
-
-    [SerializeField]
-    private StatusIcon statusIcon;
-
-    [SerializeField]
-    private TMP_Text damageText;
+    [Header("Technical settings (for programmers)")]
+    [SerializeField] private TMP_Text damageText;
 
     public Animator animator;
     public Animator fxAnimator;
@@ -82,13 +80,13 @@ public class Unit : MonoBehaviour
     {
         // Assign references
         skillHandler = GetComponent<SkillHandler>();
+        healthBar = GetComponentInChildren<HealthBar>();
+        statusIcon = GetComponentInChildren<StatusIcon>();
 
         // Initial setup
-        Owner.AddUnit(this);
+        Player.AddUnit(this);
         Health = unitClass.BaseHealth;
         spriteMaterial = sprite.material;
-        sprite.sprite = unitClass.inGameSprites[Owner.faction];
-        sprite.flipX = Owner.FacingLeft;
 
         // Register listeners
         AddListeners();
@@ -96,27 +94,36 @@ public class Unit : MonoBehaviour
 
     private void Start()
     {
-
         AlignToGrid();
 
         tilesetTraversalProvider = UnitBlockManager.Instance.traversalProvider;
         tilesetTraversalProvider.ReserveNode(CellPosition);
+    }
 
+    private void OnValidate()
+    {
+        string teamName = Player != null ? Player.PlayerName : "NoTeam";
+        string unitName = unitClass != null ? unitClass.name : "NoClass";
+
+        if (unitClass != null) sprite.sprite = unitClass.inGameSprites[Player.faction];
+        if (Player != null) sprite.flipX = Player.FacingLeft;
+
+        name = string.Format("{0}_{1}", teamName, unitName);
     }
 
     private void AddListeners()
     {
-        if (Owner)
+        if (Player)
         {
-            Owner.TurnStarted.AddListener(ApplyStatus);
+            Player.TurnStarted.AddListener(ApplyStatus);
         }
     }
 
     private void RemoveListeners()
     {
-        if (Owner)
+        if (Player)
         {
-            Owner.TurnStarted.RemoveListener(ApplyStatus);
+            Player.TurnStarted.RemoveListener(ApplyStatus);
         }
     }
 
@@ -145,12 +152,12 @@ public class Unit : MonoBehaviour
         return configsDict[mode];
     }
 
-    public void ApplyDamage(float baseDamage, DamageConfig.Types type)
+    public void ModifyHealth(float baseDamage, DamageConfig.Types type)
     {
         float amount = baseDamage * (1 + (100 - Shield) / 100);
 
         Health = Mathf.Clamp(Health - amount, 0, unitClass.BaseHealth);
-        StartCoroutine(AnimateDamage(amount, type));
+        StartCoroutine(AnimateHealthChange(amount, type));
 
         if (Health == 0)
         {
@@ -189,9 +196,9 @@ public class Unit : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private IEnumerator AnimateDamage(float amount, DamageConfig.Types type)
+    private IEnumerator AnimateHealthChange(float amount, DamageConfig.Types type)
     {
-        animator.SetTrigger("Hit");
+        animator.SetTrigger(type == DamageConfig.Types.Heal ? "Heal" : "Hit");
         damageText.color = DamageConfig.Colors[type];
         damageText.text = amount.ToString();
         damageText.gameObject.SetActive(true);
@@ -231,11 +238,11 @@ public class Unit : MonoBehaviour
 
         if (positionAfterPush.HasValue)
         {
-            yield return StartCoroutine(Move(positionAfterPush.Value, 15));
+            yield return StartCoroutine(Move(positionAfterPush.Value, 15, true));
         }
     }
      
-    public IEnumerator Move(Vector3Int cellTargetPos, float movementSpeed = 3)
+    public IEnumerator Move(Vector3Int cellTargetPos, float movementSpeed = 3, bool skipTurning = false)
     {
         TilemapNavigator navigator = TilemapNavigator.Instance;
 
@@ -261,7 +268,10 @@ public class Unit : MonoBehaviour
                 navigator.GetTile(CellPosition).OnUnitLeave(this);
 
                 Vector3 currentStart = currentTarget == 1 ? startingPos : waypoints[currentTarget - 1];
-                yield return StartCoroutine(CheckTurningAnimation(currentStart, waypoints[currentTarget]));
+                if (!skipTurning)
+                {
+                    yield return StartCoroutine(CheckTurningAnimation(currentStart, waypoints[currentTarget]));
+                }
 
                 float elapsedTime = 0f;
                 while (elapsedTime < movementDuration)
@@ -282,7 +292,7 @@ public class Unit : MonoBehaviour
 
             tilesetTraversalProvider.ReserveNode(cellTargetPos);
             transform.position = targetPos;
-            yield return AnimateFlip(Owner.FacingLeft);
+            yield return AnimateFlip(Player.FacingLeft);
         }
     }
 

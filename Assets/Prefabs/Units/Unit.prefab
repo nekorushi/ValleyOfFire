@@ -560,11 +560,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5ff682e44a8bcc4e89912a12ea33aad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _owner: {fileID: 0}
+  _player: {fileID: 0}
   unitClass: {fileID: 0}
   skillHandler: {fileID: 0}
-  healthBar: {fileID: 8301062561268466442}
-  statusIcon: {fileID: 1475667429920283648}
   damageText: {fileID: 1727341705531428583}
   animator: {fileID: 1764969596071600416}
   fxAnimator: {fileID: 376249795186185586}
@@ -582,7 +580,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config:
+    isActive: 1
     damage: 2
+    targets: 0
     effect: {fileID: 0}
     trajectory: 0
     straightRange: 0
