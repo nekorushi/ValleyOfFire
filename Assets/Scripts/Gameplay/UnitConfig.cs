@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable] public class FactionSpriteDict : SerializableDictionary<PlayerFaction, Sprite> { }
@@ -28,6 +29,9 @@ public class UnitConfig : ScriptableObject
     [SerializeField]
     private int _swampedMovementRange;
     public int SwampedMovementRange { get { return _swampedMovementRange; } }
+
+    [Header("Resistances"), Space(20)]
+    public List<Resistance> resistances;
 
     [Header("Skills settings"), Space(20)]
     public SkillConfig primarySkill;

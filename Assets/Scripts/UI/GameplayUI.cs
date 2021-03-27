@@ -174,8 +174,15 @@ public class GameplayUI : MonoBehaviour
                     if (defender != null && defender.Player != activePlayer && defender.Health > 0)
                     {
                         SkillConfig skillConfig = activePlayer.CurrentUnit.GetSkillConfig(activePlayer.AttackMode);
-                        DamageValue damage = UnitsConfig.Instance.GetDamageValue(skillConfig.baseDamage, attacker.unitClass.Type, defender.unitClass.Type);
-                        GameObject formula = CreateDmgFormula(defender.CellPosition, damage, defender.unitClass.Type);
+                        GameObject formula = CreateDmgFormula(
+                            defender.CellPosition,
+                            new DamageValue(
+                                skillConfig.baseDamage,
+                                UnitsConfig.Instance.GetExtraDmgVsClass(attacker.unitClass.Type, defender.unitClass.Type),
+                                DamageType.Normal
+                            ),
+                            defender.unitClass.Type
+                        );
                         dmgFormulas.Add(formula);
                     }
                 }
@@ -225,11 +232,11 @@ public class GameplayUI : MonoBehaviour
         GameObject formula = Instantiate(dmgFormulaPrefab);
         TMP_Text value = formula.GetComponentInChildren<TMP_Text>();
 
-        string messageFormat = damage.bonusDamage == 0f
+        string messageFormat = damage.extraFlatDamage == 0f
             ? "{0}"
-            : damage.bonusDamage > 0 ? "{0}\n(+{1})" : "{0}\n({1})";
+            : damage.extraFlatDamage > 0 ? "{0}\n(+{1})" : "{0}\n({1})";
 
-        value.text = string.Format(messageFormat,  damage.baseDamage, damage.bonusDamage, defenderClass);
+        value.text = string.Format(messageFormat,  damage.baseFlatDmg, damage.extraFlatDamage, defenderClass);
 
         RectTransform markerRect = formula.GetComponent<RectTransform>();
         markerRect.SetParent(canvasRect);

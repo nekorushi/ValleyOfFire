@@ -28,9 +28,12 @@ public class SkillHandler : MonoBehaviour
         bool shouldAttackTarget = targetUnit != null && targetUnit.Player.faction != attackerUnit.Player.faction && config.baseDamage > 0;
         if (shouldAttackTarget)
         {
-            DamageValue baseDamage = UnitsConfig.Instance.GetDamageValue(config.baseDamage, attackerUnit.unitClass.Type, targetUnit.unitClass.Type);
+            float extraDamage = UnitsConfig.Instance.GetExtraDmgVsClass(
+                attackerUnit.unitClass.Type,
+                targetUnit.unitClass.Type
+            );
             yield return StartCoroutine(ProjectileAnimator.Instance.Play(attackerUnit.CellPosition, targetPos, config.trajectory));
-            targetUnit.ModifyHealth(baseDamage, DamageConfig.Types.Normal);
+            targetUnit.ModifyHealth(new DamageValue(config.baseDamage, extraDamage, DamageType.Normal));
         }
 
         if (config.effect != null)

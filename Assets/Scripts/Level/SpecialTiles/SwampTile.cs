@@ -8,12 +8,12 @@ public class SwampTile : LevelTile
 
     public override bool OnUnitEnter(Unit unitEntered)
     {
-        unitEntered.InflictStatus(inflictedStatus);
+        unitEntered.statusManager.InflictStatus(inflictedStatus);
         return false;
     }
 
     public override void OnUnitLeave(Unit unitEntered)
     {
-        unitEntered.RemoveStatus();
+        unitEntered.statusManager.RemoveStatus();
     }
 }

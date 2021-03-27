@@ -28,19 +28,20 @@ public class Unit : MonoBehaviour
     public PlayerController Player { get { return _player; } }
     public UnitConfig unitClass;
 
+    [Header("Technical settings (for programmers)")]
     [HideInInspector] public SkillHandler skillHandler;
     [HideInInspector] private StatusIcon statusIcon;
 
-    [Header("Technical settings (for programmers)")]
     [SerializeField] private ValueBar healthBar;
     [SerializeField] private ValueBar shieldBar;
     [SerializeField] private TMP_Text damageText;
 
     public Animator animator;
+    public Animator bgFxAnimator;
     public Animator fxAnimator;
 
-    [SerializeField]
-    private SpriteRenderer sprite;
+    [SerializeField] private SpriteRenderer sprite;
+    [SerializeField] private SpriteRenderer spriteBgFX;
     private Material spriteMaterial;
 
     private readonly float UNIT_Z_POSITION = -0.5f;
@@ -48,16 +49,8 @@ public class Unit : MonoBehaviour
     public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
     public List<Vector3Int> AvailableMoves { get; private set; }
 
-    private UnitStatus _inflictedStatus;
-    public UnitStatus InflictedStatus
-    {
-        get { return _inflictedStatus; }
-        private set {
-            _inflictedStatus = value;
-            statusIcon.SetValue(value);
-            shieldBar.SetValue(Shield, baseShield);
-        } 
-    }
+    [HideInInspector] public ResistancesManager immunitiesManager;
+    [HideInInspector] public StatusManager statusManager;
 
     private float _health;
     public float Health {
@@ -71,7 +64,9 @@ public class Unit : MonoBehaviour
     private float baseShield = 100f;
     public float Shield {
         get {
-            int shieldReduction = InflictedStatus != null ? InflictedStatus.GetShieldReduction(unitClass.Type) : 0;
+            int shieldReduction = statusManager.InflictedStatus != null
+                ? statusManager.InflictedStatus.GetShieldReduction(unitClass.Type)
+                : 0;
             int appliedPenalty = Mathf.Clamp(shieldReduction, 0, 100);
             float result = baseShield - appliedPenalty;
             return result;
@@ -87,6 +82,8 @@ public class Unit : MonoBehaviour
         // Initial setup
         Player.AddUnit(this);
         Health = unitClass.BaseHealth;
+        immunitiesManager = new ResistancesManager(unitClass.resistances);
+        statusManager = new StatusManager(this, immunitiesManager);
         spriteMaterial = sprite.material;
         GetComponentInChildren<ClassIcon>().SetValue(unitClass.Type);
         shieldBar.SetValue(Shield, baseShield);
@@ -105,32 +102,60 @@ public class Unit : MonoBehaviour
 
     private void OnValidate()
     {
-        if (transform.parent != null)
+        bool isPrefabInstance = transform.parent != null;
+        if (isPrefabInstance)
         {
             string teamName = Player != null ? Player.PlayerName : "NoTeam";
             string unitName = unitClass != null ? unitClass.name : "NoClass";
 
-            if (unitClass != null) sprite.sprite = unitClass.inGameSprites[Player.faction];
-            if (Player != null) sprite.flipX = Player.FacingLeft;
+            if (unitClass != null)
+            {
+                SetSprite(unitClass.inGameSprites[Player.faction]);
+            }
+            if (Player != null)
+            {
+                FlipSprite(Player.FacingLeft);
+            }
 
             name = string.Format("{0}_{1}", teamName, unitName);
         }
     }
 
+    private void SetSprite(Sprite newSprite)
+    {
+        sprite.sprite = newSprite;
+        spriteBgFX.sprite = newSprite;
+    }
+
+    private bool IsSpriteFlipped()
+    {
+        return sprite.flipX;
+    }
+
+    private void FlipSprite(bool shouldFlip)
+    {
+        sprite.flipX = shouldFlip;
+        spriteBgFX.flipX = shouldFlip;
+    }
+
     private void AddListeners()
     {
-        if (Player)
-        {
-            Player.TurnStarted.AddListener(ApplyStatus);
-        }
+        if (Player) Player.TurnStarted.AddListener(statusManager.ApplyStatus);
+
+        statusManager.StatusChanged += OnStatusChange;
     }
 
     private void RemoveListeners()
     {
-        if (Player)
-        {
-            Player.TurnStarted.RemoveListener(ApplyStatus);
-        }
+        if (Player) Player.TurnStarted.RemoveListener(statusManager.ApplyStatus);
+
+        statusManager.StatusChanged -= OnStatusChange;
+    }
+
+    private void OnStatusChange()
+    {
+        statusIcon.SetValue(statusManager.InflictedStatus);
+        shieldBar.SetValue(Shield, baseShield);
     }
 
     public void Focus() {
@@ -158,57 +183,31 @@ public class Unit : MonoBehaviour
         return configsDict[mode];
     }
 
-    public void ModifyHealth(DamageValue baseDamage, DamageConfig.Types type)
+    public void ModifyHealth(DamageValue damageData)
     {
-        float amount = type == DamageConfig.Types.Heal
-            ? baseDamage.totalDamage
-            : -baseDamage.totalDamage * (1 + (100 - Shield) / 100);
-
-        Health = Mathf.Clamp(Health + amount, 0, unitClass.BaseHealth);
-        StartCoroutine(AnimateHealthChange(amount, type));
+        Health = Mathf.Clamp(
+            Health + damageData.DamageAfterShield(Shield),
+            0,
+            unitClass.BaseHealth
+        );
+        StartCoroutine(AnimateHealthChange(damageData));
 
         if (Health == 0)
         {
             Kill();
         }
     }
-
-    private void ApplyStatus()
-    {
-        if (InflictedStatus != null)
-        {
-            bool shouldRemoveStatus = InflictedStatus.OnTick(this);
-            if (shouldRemoveStatus) RemoveStatus();
-        }
-    }
-
-    public void InflictStatus(UnitStatus newStatus)
-    {
-        InflictedStatus = newStatus;
-        newStatus.OnAdd(this);
-    }
-
-    public void RemoveStatus()
-    {
-        InflictedStatus = null;
-    }
-
-    private bool HasStatus(System.Type statusType)
-    {
-        return InflictedStatus != null && InflictedStatus.GetType() == statusType;
-    }
-
     private void Kill()
     {
         RemoveListeners();
         gameObject.SetActive(false);
     }
 
-    private IEnumerator AnimateHealthChange(float amount, DamageConfig.Types type)
+    private IEnumerator AnimateHealthChange(DamageValue damageData)
     {
-        animator.SetTrigger(type == DamageConfig.Types.Heal ? "Heal" : "Hit");
-        damageText.color = DamageConfig.Colors[type];
-        damageText.text = amount.ToString();
+        animator.SetTrigger(damageData.type == DamageType.Heal ? "Heal" : "Hit");
+        damageText.color = damageData.Color;
+        damageText.text = damageData.DamageAfterShield(Shield).ToString();
         damageText.gameObject.SetActive(true);
 
         for (float current = 0; current < 1f; current += 0.1f)
@@ -315,12 +314,12 @@ public class Unit : MonoBehaviour
 
     private IEnumerator AnimateFlip(bool shouldFaceLeft)
     {
-        bool isFacingLeft = sprite.flipX;
+        bool isFacingLeft = IsSpriteFlipped();
 
         if (shouldFaceLeft != isFacingLeft)
         {
             yield return StartCoroutine(AnimateFlipShow(false));
-            sprite.flipX = shouldFaceLeft;
+            FlipSprite(shouldFaceLeft);
             yield return StartCoroutine(AnimateFlipShow(true));
         }
     }
@@ -362,7 +361,7 @@ public class Unit : MonoBehaviour
 
     public void UpdateAvailableMoves()
     {
-        int range = HasStatus(typeof(SwampedStatus)) && unitClass.SwampedMovementRange > 0 ? unitClass.SwampedMovementRange : unitClass.MovementRange;
+        int range = statusManager.HasStatus(typeof(SwampedStatus)) && unitClass.SwampedMovementRange > 0 ? unitClass.SwampedMovementRange : unitClass.MovementRange;
         AvailableMoves = TilemapNavigator.Instance.CalculateMovementRange(CellPosition, range);
     }
 }

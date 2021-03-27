@@ -54,7 +54,7 @@ public class BushTile : LevelTile
         if (burningBushes.ContainsKey(unitEntered.CellPosition)
             && burningBushes[unitEntered.CellPosition].ticksLeft > 0)
         {
-            unitEntered.InflictStatus(inflictedStatus);
+            unitEntered.statusManager.InflictStatus(inflictedStatus);
         }
 
         return true;

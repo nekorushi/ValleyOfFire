@@ -17,18 +17,12 @@ public class UnitsConfig : MonoBehaviour
         Instance = this;
     }
 
-    public DamageValue GetDamageValue(float baseDmg, UnitTypes attacker, UnitTypes defender)
+    public float GetExtraDmgVsClass(UnitTypes attacker, UnitTypes defender)
     {
-        if (damageMultipliers.ContainsKey(attacker))
-        {
-            if (damageMultipliers[attacker].ContainsKey(defender))
-            {
-                float multplier = damageMultipliers[attacker][defender];
-                return new DamageValue(baseDmg, multplier);
-            }
-        }
+        bool shouldApplyClassModifier = damageMultipliers.ContainsKey(attacker)
+            && damageMultipliers[attacker].ContainsKey(defender);
 
-        return new DamageValue(baseDmg, 1f);
+        return shouldApplyClassModifier ? damageMultipliers[attacker][defender] : 1f;
     }
 
     public float GetDamageMultiplier(UnitTypes attacker, UnitTypes defender)

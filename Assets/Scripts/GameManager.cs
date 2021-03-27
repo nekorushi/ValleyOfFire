@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public class GameManager : MonoBehaviour
     private Text summaryWinner;
 
     [SerializeField]
-    private LevelTile[] tickingTiles;
+    private List<LevelTile> tickingTiles;
 
     private void Start()
     {

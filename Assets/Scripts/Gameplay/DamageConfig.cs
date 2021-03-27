@@ -1,32 +1,49 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public struct DamageValue
+public enum DamageType
 {
-    public DamageValue(float baseDmg, float multiplier)
-    {
-        baseDamage = baseDmg;
-        totalDamage = baseDmg * multiplier;
-        bonusDamage = totalDamage - baseDmg;
-    }
-
-    public readonly float baseDamage;
-    public readonly float bonusDamage;
-    public readonly float totalDamage;
+    Normal,
+    Fire,
+    Heal,
 }
 
-public class DamageConfig
+public struct DamageValue
 {
-    public enum Types
+    private readonly Dictionary<DamageType, Color> typeColors;
+
+    public readonly float baseFlatDmg;
+    public readonly float extraFlatDamage;
+    public readonly float totalFlatDmg;
+
+    public readonly DamageType type;
+
+    public DamageValue(float skillDmg, float extraDmg, DamageType damageType)
     {
-        Heal,
-        Fire,
-        Normal
+        baseFlatDmg = skillDmg;
+        totalFlatDmg = skillDmg + extraDmg;
+        extraFlatDamage = totalFlatDmg - skillDmg;
+
+        type = damageType;
+        typeColors = new Dictionary<DamageType, Color>()
+            {
+                { DamageType.Normal, Color.red },
+                { DamageType.Fire, new Color(1, .5f, 0) },
+                { DamageType.Heal, Color.green }
+            };
     }
 
-    public static Dictionary<Types, Color> Colors = new Dictionary<Types, Color>() {
-        { Types.Normal, Color.red },
-        { Types.Fire, new Color(1, .5f, 0) },
-        { Types.Heal, Color.green }
-    };
+    public Color Color {
+        get { return typeColors[type]; }
+    }
+
+    public bool ShouldIgnoreShield
+    {
+        get { return type == DamageType.Heal; }
+    }
+
+    public float DamageAfterShield(float shield)
+    {
+        return ShouldIgnoreShield  ? -totalFlatDmg : -totalFlatDmg * (1 + (100 - shield) / 100);
+    }
 }
