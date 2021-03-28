@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fc133265b13c46b0973e61462722dd7, type: 3}
   m_Name: Poison
   m_EditorClassIdentifier: 
-  _type: 2
   icon: {fileID: 21300000, guid: 99c86736e3df4441b8280c86b6fa9e78, type: 3}
   portraits:
     _Buckets: 0000000001000000ffffffff
@@ -40,45 +39,47 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 0bae7f0c611014dfdb56872eff71cf03, type: 3}
     - {fileID: 21300000, guid: 792abe2123ab14681820ff1e648eeb88, type: 3}
     - {fileID: 0}
+  _type: 2
   _baseHealth: 100
   _movementRange: 3
   _swampedMovementRange: 1
+  resistances: []
   primarySkill:
     isActive: 1
     baseDamage: 20
+    trajectory: 2
     targets: 1
     effect: {fileID: 11400000, guid: 2c332323cc158425ea538b7625f1cdf7, type: 2}
-    trajectory: 1
     straightRange: 0
     curveRange: 0
     pattern:
-      _Buckets: 0c0000001100000016000000060000000d0000001200000017000000050000000e0000001300000018000000ffffffff04000000090000000a0000000f00000014000000080000000b000000100000001500000007000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-      _HashCodes: 0600000002000000feffff7ffaffff7ff6ffff7f0700000003000000ffffff7ffbffff7ff7ffff7ff8ffff7ffcffff7f000000000400000008000000f9ffff7ffdffff7f010000000500000009000000faffff7ffeffff7f02000000060000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-      _Next: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03000000020000000100000000000000ffffffff000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+      _Buckets: 000000000700000016000000010000000500000008000000170000000e000000110000001300000018000000ffffffff0d0000000f0000001000000012000000140000000300000004000000060000001500000002000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+      _HashCodes: 0000000003000000ffffff7ffbffff7ffcffff7f04000000fdffff7f01000000050000000600000002000000feffff7ffaffff7ff6ffff7f07000000f7ffff7ff8ffff7f08000000f9ffff7f09000000faffff7ffeffff7f02000000060000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+      _Next: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0c0000000b0000000a00000009000000ffffffff000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
       _Count: 25
-      _Version: 31
+      _Version: 35
       _FreeList: -1
       _FreeCount: 0
       _Keys:
+      - {x: 0, y: 0}
+      - {x: -1, y: -1}
+      - {x: -1, y: 0}
+      - {x: -1, y: 1}
+      - {x: 0, y: -1}
+      - {x: 0, y: 1}
+      - {x: 1, y: -1}
+      - {x: 1, y: 0}
+      - {x: 1, y: 1}
       - {x: -2, y: -2}
       - {x: -2, y: -1}
       - {x: -2, y: 0}
       - {x: -2, y: 1}
       - {x: -2, y: 2}
       - {x: -1, y: -2}
-      - {x: -1, y: -1}
-      - {x: -1, y: 0}
-      - {x: -1, y: 1}
       - {x: -1, y: 2}
       - {x: 0, y: -2}
-      - {x: 0, y: -1}
-      - {x: 0, y: 0}
-      - {x: 0, y: 1}
       - {x: 0, y: 2}
       - {x: 1, y: -2}
-      - {x: 1, y: -1}
-      - {x: 1, y: 0}
-      - {x: 1, y: 1}
       - {x: 1, y: 2}
       - {x: 2, y: -2}
       - {x: 2, y: -1}
@@ -97,13 +98,13 @@ MonoBehaviour:
       - {x: 0, y: 0}
       - {x: 0, y: 0}
       - {x: 0, y: 0}
-      _Values: 01000000020000000200000002000000010000000200000002000000020000000200000002000000020000000200000000000000020000000200000002000000020000000200000002000000020000000100000002000000020000000200000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+      _Values: 00000000020000000100000002000000010000000100000002000000010000000200000002000000020000000100000002000000020000000200000002000000010000000100000002000000020000000200000002000000010000000200000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   secondarySkill:
     isActive: 1
     baseDamage: 20
+    trajectory: 1
     targets: 2
     effect: {fileID: 11400000, guid: fd03fe2ee11644071b9ed89d7f92e85e, type: 2}
-    trajectory: 0
     straightRange: 1
     curveRange: 0
     pattern:

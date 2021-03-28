@@ -48,9 +48,9 @@ MonoBehaviour:
   primarySkill:
     isActive: 1
     baseDamage: 30
+    trajectory: 1
     targets: 4
     effect: {fileID: 11400000, guid: 7227d12e0d7ab40198ecdcd4a4394401, type: 2}
-    trajectory: 0
     straightRange: 1
     curveRange: 0
     pattern:
@@ -67,12 +67,12 @@ MonoBehaviour:
       - {x: 0, y: 0}
       _Values: 000000000000000000000000
   secondarySkill:
-    isActive: 0
+    isActive: 1
     baseDamage: 0
-    targets: 4
-    effect: {fileID: 11400000, guid: 7227d12e0d7ab40198ecdcd4a4394401, type: 2}
     trajectory: 0
-    straightRange: 0
+    targets: 5
+    effect: {fileID: 11400000, guid: bf088a242c58b482a8bbe85dc701ae1a, type: 2}
+    straightRange: 10
     curveRange: 0
     pattern:
       _Buckets: 00000000ffffffffffffffff

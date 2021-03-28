@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fc133265b13c46b0973e61462722dd7, type: 3}
   m_Name: Cannon
   m_EditorClassIdentifier: 
-  _type: 3
   icon: {fileID: 21300000, guid: 543c58a606fd44f0a82e14b1d3e7dd82, type: 3}
   portraits:
     _Buckets: 0000000001000000ffffffff
@@ -40,15 +39,17 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 4fdb6c87224a04413b26fa27528800a9, type: 3}
     - {fileID: 21300000, guid: c786e916e8f534370ad6f52fd8a7b6e0, type: 3}
     - {fileID: 0}
+  _type: 3
   _baseHealth: 100
   _movementRange: 2
   _swampedMovementRange: 1
+  resistances: []
   primarySkill:
     isActive: 1
     baseDamage: 20
+    trajectory: 2
     targets: 1
     effect: {fileID: 0}
-    trajectory: 1
     straightRange: 0
     curveRange: 0
     pattern:
@@ -153,9 +154,9 @@ MonoBehaviour:
   secondarySkill:
     isActive: 0
     baseDamage: 2
+    trajectory: 0
     targets: 0
     effect: {fileID: 0}
-    trajectory: 0
     straightRange: 0
     curveRange: 0
     pattern:
