@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "IgnitedStatus", menuName = "GDS/UnitStatuses/IgnitedStatus", order = 1)]
+[CreateAssetMenu(fileName = "IgnitedStatus", menuName = "GDS/Statuses/IgnitedStatus")]
 public class IgnitedStatus : UnitStatus
 {
     private Dictionary<Unit, int> activeStatuses = new Dictionary<Unit, int>();
@@ -25,11 +25,11 @@ public class IgnitedStatus : UnitStatus
 
     public override bool OnTick(Unit afflictedUnit)
     {
-        bool shouldRemoveStatus = false;
+        bool shouldRemoveStatus;
         if (activeStatuses.ContainsKey(afflictedUnit) && activeStatuses[afflictedUnit] > 0)
         {
             afflictedUnit.fxAnimator.SetTrigger("Fire");
-            afflictedUnit.ModifyHealth(new DamageValue(_damagePerTick, 1, DamageType.Fire));
+            afflictedUnit.ModifyHealth(new DamageValue(_damagePerTick, 1, DamageType.Fire, DamageTrajectory.SelfInflicted));
 
             activeStatuses[afflictedUnit]--;
             shouldRemoveStatus = activeStatuses[afflictedUnit] <= 0;

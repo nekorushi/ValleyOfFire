@@ -185,12 +185,14 @@ public class PlayerController : MonoBehaviour
         {
             AttackTargets allowedTargets = actingUnit.skillHandler.config.targets;
             bool isSkillAvailable = actingUnit.skillHandler.config.isActive;
+            bool canAttackSelf = allowedTargets == AttackTargets.Self;
             bool canAttackAllies = allowedTargets == AttackTargets.Allies;
             bool canAttackEnemies = allowedTargets == AttackTargets.Enemies;
             bool canAttackSameClassAlly = allowedTargets == AttackTargets.SameClassAlly;
             bool canAttackEnemiesAndSameClassAlly = allowedTargets == AttackTargets.EnemiesOrSameClassAlly;
 
-            bool clickedAlly = clickedUnit != actingUnit && Units.Contains(clickedUnit);
+            bool clickedSelf = clickedUnit == actingUnit;
+            bool clickedAlly = !clickedSelf && Units.Contains(clickedUnit);
             bool clickedEnemy = !Units.Contains(clickedUnit);
             bool clickedSameClassAlly = clickedAlly && clickedUnit.unitClass.Type == actingUnit.unitClass.Type;
             bool clickedEnemyOrSameClassAlly = clickedEnemy || clickedSameClassAlly;
@@ -201,6 +203,7 @@ public class PlayerController : MonoBehaviour
             bool canAttackUnit = clickedUnit != null
                 && (
                     allowedTargets == AttackTargets.Both
+                    || canAttackSelf && clickedSelf
                     || canAttackAllies && clickedAlly
                     || canAttackEnemies && clickedEnemy
                     || canAttackSameClassAlly && clickedSameClassAlly

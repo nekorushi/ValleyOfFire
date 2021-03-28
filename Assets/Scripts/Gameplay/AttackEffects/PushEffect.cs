@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PushEffect", menuName = "GDS/AttackEffects/PushEffect", order = 1)]
+[CreateAssetMenu(fileName = "PushEffect", menuName = "GDS/AttackEffects/PushEffect")]
 public class PushEffect : AttackEffect
 {
     [SerializeField]

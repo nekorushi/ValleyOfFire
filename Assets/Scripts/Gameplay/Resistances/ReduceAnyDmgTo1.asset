@@ -9,9 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 472d91256e51740b2b445ef4e0f7ba69, type: 3}
-  m_Name: Immunity_Permanent_Swamped
+  m_Script: {fileID: 11500000, guid: 0208a807529a743b191c8c575b038846, type: 3}
+  m_Name: ReduceAnyDmgTo1
   m_EditorClassIdentifier: 
-  _isPermanent: 1
-  _duration: 0
-  _preventedStatus: {fileID: 11400000, guid: ccc9d63215d7840e2b8725ddaa8c6402, type: 2}
+  isPermanent: 1
+  duration: 0
+  anyDamage: 1
+  shouldResistTypes: 0
+  damageType: 0
+  shouldResistTrajectories: 1
+  damageTrajectory: 2
+  resistanceEffect: 2
+  effectAmount: 1

@@ -25,15 +25,15 @@ public class ProjectileAnimator : MonoBehaviour
         projectile.gameObject.SetActive(false);
     }
 
-    public IEnumerator Play(Vector3Int cellStart, Vector3Int cellEnd, AttackTrajectory trajectory)
+    public IEnumerator Play(Vector3Int cellStart, Vector3Int cellEnd, DamageTrajectory trajectory)
     {
         TilemapNavigator navigator = TilemapNavigator.Instance;
         Vector3 startWorld = navigator.CellToWorldPos(cellStart);
         Vector3 endWorld = navigator.CellToWorldPos(cellEnd);
-        Vector3 midPoint = trajectory == AttackTrajectory.Straight ?
-            GetMiddlePoint(startWorld, endWorld) : GetArcMiddlePoint(startWorld, endWorld);
+        Vector3 midPoint = trajectory == DamageTrajectory.Curve ?
+            GetArcMiddlePoint(startWorld, endWorld) : GetMiddlePoint(startWorld, endWorld);
 
-        float movementSpeed = trajectory == AttackTrajectory.Straight ? 20f : 6f;
+        float movementSpeed = trajectory == DamageTrajectory.Curve ? 6f : 20f;
         float distance = Vector3.Distance(startWorld, endWorld);
 
         float duration = distance * 1 / movementSpeed;

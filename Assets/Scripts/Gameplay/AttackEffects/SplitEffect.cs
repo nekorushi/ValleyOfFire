@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SplitEffect", menuName = "GDS/AttackEffects/SplitEffect", order = 2)]
+[CreateAssetMenu(fileName = "SplitEffect", menuName = "GDS/AttackEffects/SplitEffect")]
 public class SplitEffect : AttackEffect
 {
     [SerializeField]

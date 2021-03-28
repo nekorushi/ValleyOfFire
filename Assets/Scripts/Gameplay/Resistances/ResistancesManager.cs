@@ -8,19 +8,19 @@ public class ResistancesManager
     {
         foreach (Resistance resistance in initialResistances)
         {
-            AddImmunity(resistance);
+            AddResistance(resistance);
         }
     }
 
-    public void AddImmunity(Resistance resistance)
+    public void AddResistance(Resistance resistance)
     {
-        if (!resistances.Contains(resistance))
+        if (resistance != null && !resistances.Contains(resistance))
         {
             resistances.Add(resistance);
         }
     }
 
-    public void RemoveImmunity(Resistance resistance)
+    private void RemoveResistance(Resistance resistance)
     {
         if (resistances.Contains(resistance))
         {
@@ -28,28 +28,73 @@ public class ResistancesManager
         }
     }
 
-    public bool TestAgainstStatus(Unit unit, UnitStatus status)
+    public bool CheckAgainstStatus(Unit unit, UnitStatus status)
     {
-        Resistance resistance = GetImmunity(status);
+        StatusResistance resistance = GetResistance(status);
 
         if (resistance != null)
         {
             bool shouldRemove = resistance.OnTick(unit);
-            if (shouldRemove) RemoveImmunity(resistance);
+            if (shouldRemove) RemoveResistance(resistance);
             return true;
         }
 
         return false;
     }
 
-    public void TestAgainstDamage()
+    public float CheckAgainstDamage(Unit unit, DamageValue damage)
     {
+        DamageResistance resistance = GetResistance(damage);
 
+        if (resistance != null)
+        {
+            bool shouldRemove = resistance.OnTick(unit);
+            if (shouldRemove) RemoveResistance(resistance);
+            return resistance.ProcessDamage(damage);
+        }
+
+        return damage.DamageAfterShield(unit);
     }
 
-    private Resistance GetImmunity(UnitStatus status)
+    private StatusResistance GetResistance(UnitStatus status)
     {
         return resistances
-            .Find(resistance => resistance.PreventedStatus.GetType() == status.GetType());
+            .Find(resistance => {
+                if (resistance.GetType() == typeof(StatusResistance))
+                {
+                    StatusResistance foundResistance = resistance as StatusResistance;
+                    return foundResistance.PreventedStatus.GetType() == status.GetType();
+                }
+                else return false;
+
+            }) as StatusResistance;
+    }
+
+    private DamageResistance GetResistance(DamageValue damage)
+    {
+        List<Resistance> matchingResistances = resistances
+            .FindAll(resistance =>
+            {
+                if (resistance.GetType() == typeof(DamageResistance))
+                {
+                    DamageResistance foundResistance = resistance as DamageResistance;
+                    return foundResistance.WillApplyTo(damage);
+                }
+                return false;
+            });
+
+        DamageResistance chosenResistance = null;
+        foreach(DamageResistance resistance in matchingResistances)
+        {
+            Dictionary<DamageResistanceEffect, int> priorities = DamageResistance.effectPriorities;
+
+            if (chosenResistance == null
+                || priorities[resistance.resistanceEffect] > priorities[chosenResistance.resistanceEffect]
+            ) {
+                chosenResistance = resistance;
+            }
+        }
+
+        return chosenResistance;
     }
 }

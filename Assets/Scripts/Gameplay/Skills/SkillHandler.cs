@@ -12,9 +12,11 @@ public class SkillHandler : MonoBehaviour
 
     public SerializableDictionary<Vector3Int, AttackPatternField> AttackArea {
         get {
-            return config.trajectory == AttackTrajectory.Straight
-                ? CalculateStraightRange()
-                : MapPatternToLevel();
+            return config.trajectory == DamageTrajectory.Curve
+                ? MapPatternToLevel()
+                : config.trajectory == DamageTrajectory.SelfInflicted
+                    ? new SerializableDictionary<Vector3Int, AttackPatternField>() { { attackerUnit.CellPosition, AttackPatternField.On } }
+                    : CalculateStraightRange();
         }
     }
 
@@ -33,7 +35,12 @@ public class SkillHandler : MonoBehaviour
                 targetUnit.unitClass.Type
             );
             yield return StartCoroutine(ProjectileAnimator.Instance.Play(attackerUnit.CellPosition, targetPos, config.trajectory));
-            targetUnit.ModifyHealth(new DamageValue(config.baseDamage, extraDamage, DamageType.Normal));
+            targetUnit.ModifyHealth(new DamageValue(
+                config.baseDamage,
+                extraDamage,
+                DamageType.Normal,
+                config.trajectory
+            ));
         }
 
         if (config.effect != null)

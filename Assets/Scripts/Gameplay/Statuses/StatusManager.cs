@@ -34,7 +34,7 @@ public class StatusManager
 
     public void InflictStatus(UnitStatus newStatus)
     {
-        bool wasBlockedByResistance = resistancesManager.TestAgainstStatus(owner, newStatus);
+        bool wasBlockedByResistance = resistancesManager.CheckAgainstStatus(owner, newStatus);
         if (!wasBlockedByResistance)
         {
             InflictedStatus = newStatus;

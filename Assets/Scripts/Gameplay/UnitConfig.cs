@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable] public class FactionSpriteDict : SerializableDictionary<PlayerFaction, Sprite> { }
 [Serializable] public class ClassSpriteDict : SerializableDictionary<UnitTypes, Sprite> { }
 
-[CreateAssetMenu(fileName = "UnitConfig", menuName = "GDS/Units/UnitConfig", order = 1)]
+[CreateAssetMenu(fileName = "UnitConfig", menuName = "GDS/Units/UnitConfig")]
 public class UnitConfig : ScriptableObject
 {
     [Header("Unit display settings")]

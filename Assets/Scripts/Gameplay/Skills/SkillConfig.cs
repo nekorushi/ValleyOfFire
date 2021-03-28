@@ -10,12 +10,6 @@ public enum AttackPatternField
     Off
 }
 
-[Serializable]
-public enum AttackTrajectory
-{
-    Straight,
-    Curve
-}
 
 [Serializable]
 public enum AttackTargets
@@ -24,7 +18,8 @@ public enum AttackTargets
     Enemies,
     Both,
     SameClassAlly,
-    EnemiesOrSameClassAlly
+    EnemiesOrSameClassAlly,
+    Self
 }
 
 [Serializable]
@@ -32,9 +27,10 @@ public class SkillConfig
 {
     public bool isActive = true;
     public float baseDamage = 2f;
+    public DamageTrajectory trajectory = DamageTrajectory.Straight;
+
     public AttackTargets targets = AttackTargets.Enemies;
     public AttackEffect effect;
-    public AttackTrajectory trajectory = AttackTrajectory.Straight;
 
     [HideInInspector]
     public int straightRange = 0;

@@ -9,7 +9,7 @@ public class UnitsConfig : MonoBehaviour
 
     public List<string> unitTypes;
     [HideInInspector]
-    public SerializableDictionary<UnitTypes, SerializableDictionary<UnitTypes, float>> damageMultipliers =
+    public SerializableDictionary<UnitTypes, SerializableDictionary<UnitTypes, float>> vsClassExtraDamages =
         new SerializableDictionary<UnitTypes, SerializableDictionary<UnitTypes, float>>();
 
     private void Start()
@@ -19,29 +19,29 @@ public class UnitsConfig : MonoBehaviour
 
     public float GetExtraDmgVsClass(UnitTypes attacker, UnitTypes defender)
     {
-        bool shouldApplyClassModifier = damageMultipliers.ContainsKey(attacker)
-            && damageMultipliers[attacker].ContainsKey(defender);
+        bool shouldApplyClassModifier = vsClassExtraDamages.ContainsKey(attacker)
+            && vsClassExtraDamages[attacker].ContainsKey(defender);
 
-        return shouldApplyClassModifier ? damageMultipliers[attacker][defender] : 1f;
+        return shouldApplyClassModifier ? vsClassExtraDamages[attacker][defender] : 1f;
     }
 
-    public float GetDamageMultiplier(UnitTypes attacker, UnitTypes defender)
+    public float GetExtraDamage(UnitTypes attacker, UnitTypes defender)
     {
-        if (damageMultipliers.ContainsKey(attacker))
+        if (vsClassExtraDamages.ContainsKey(attacker))
         {
-            if (damageMultipliers[attacker].ContainsKey(defender))
+            if (vsClassExtraDamages[attacker].ContainsKey(defender))
             {
-                return damageMultipliers[attacker][defender];
+                return vsClassExtraDamages[attacker][defender];
             }
         }
 
         return 1;
     }
 
-    public void SetDamageMultiplier(UnitTypes attacker, UnitTypes defender, float value)
+    public void SetExtraDamage(UnitTypes attacker, UnitTypes defender, float value)
     {
-        if (!damageMultipliers.ContainsKey(attacker)) damageMultipliers.Add(attacker, new SerializableDictionary<UnitTypes, float>());
+        if (!vsClassExtraDamages.ContainsKey(attacker)) vsClassExtraDamages.Add(attacker, new SerializableDictionary<UnitTypes, float>());
 
-        damageMultipliers[attacker][defender] = value;
+        vsClassExtraDamages[attacker][defender] = value;
     }
 }

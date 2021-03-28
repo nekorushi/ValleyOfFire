@@ -1,46 +1,43 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum ImmunityTypes
+public enum ResistanceType
 {
     Status,
-    Trajectory,
+    Damage,
 }
 
-[CreateAssetMenu(fileName = "Resistance", menuName = "GDS/Resistance", order = 1)]
-public class Resistance : ScriptableObject
+public abstract class Resistance : ScriptableObject
 {
-    private Dictionary<Unit, int> activeResistances = new Dictionary<Unit, int>();
+    private Dictionary<Unit, int> activeTimers = new Dictionary<Unit, int>();
 
-    [SerializeField] private bool _isPermanent;
-    [SerializeField] private int _duration;
-    [SerializeField] private UnitStatus _preventedStatus;
+    public bool isPermanent;
+    public int duration;
 
-
-    public UnitStatus PreventedStatus { get { return _preventedStatus; } }
+    protected ResistanceType type;
 
     public void OnAdd(Unit immuneUnit)
     {
-        if (!_isPermanent)
+        if (!isPermanent)
         {
-            if (activeResistances.ContainsKey(immuneUnit))
+            if (activeTimers.ContainsKey(immuneUnit))
             {
-                activeResistances[immuneUnit] = _duration;
+                activeTimers[immuneUnit] = duration;
             } else
             {
-                activeResistances.Add(immuneUnit, _duration);
+                activeTimers.Add(immuneUnit, duration);
             }
         }
     }
 
     public bool OnTick(Unit immuneUnit)
     {
-        if (!_isPermanent)
+        if (!isPermanent)
         {
-            if (activeResistances.ContainsKey(immuneUnit))
+            if (activeTimers.ContainsKey(immuneUnit))
             {
-                activeResistances[immuneUnit]--;
-                return activeResistances[immuneUnit] <= 0;
+                activeTimers[immuneUnit]--;
+                return activeTimers[immuneUnit] <= 0;
             } else
             {
                 return true;

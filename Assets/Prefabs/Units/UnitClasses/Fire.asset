@@ -44,8 +44,7 @@ MonoBehaviour:
   _movementRange: 1
   _swampedMovementRange: 1
   resistances:
-  - {fileID: 11400000, guid: 931f80db90acb4c6d9d547bc81b84e0a, type: 2}
-  - {fileID: 11400000, guid: df11acadef4cc4f499b7bdfcc9fe1c55, type: 2}
+  - {fileID: 11400000, guid: 3287b3fb1c8ad4c4f8a22c214d949d26, type: 2}
   primarySkill:
     isActive: 1
     baseDamage: 30

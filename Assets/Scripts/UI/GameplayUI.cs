@@ -179,7 +179,8 @@ public class GameplayUI : MonoBehaviour
                             new DamageValue(
                                 skillConfig.baseDamage,
                                 UnitsConfig.Instance.GetExtraDmgVsClass(attacker.unitClass.Type, defender.unitClass.Type),
-                                DamageType.Normal
+                                DamageType.Normal,
+                                DamageTrajectory.SelfInflicted
                             ),
                             defender.unitClass.Type
                         );

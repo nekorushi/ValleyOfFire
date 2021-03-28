@@ -49,7 +49,7 @@ public class Unit : MonoBehaviour
     public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
     public List<Vector3Int> AvailableMoves { get; private set; }
 
-    [HideInInspector] public ResistancesManager immunitiesManager;
+    [HideInInspector] public ResistancesManager resistancesManager;
     [HideInInspector] public StatusManager statusManager;
 
     private float _health;
@@ -82,8 +82,8 @@ public class Unit : MonoBehaviour
         // Initial setup
         Player.AddUnit(this);
         Health = unitClass.BaseHealth;
-        immunitiesManager = new ResistancesManager(unitClass.resistances);
-        statusManager = new StatusManager(this, immunitiesManager);
+        resistancesManager = new ResistancesManager(unitClass.resistances);
+        statusManager = new StatusManager(this, resistancesManager);
         spriteMaterial = sprite.material;
         GetComponentInChildren<ClassIcon>().SetValue(unitClass.Type);
         shieldBar.SetValue(Shield, baseShield);
@@ -185,17 +185,15 @@ public class Unit : MonoBehaviour
 
     public void ModifyHealth(DamageValue damageData)
     {
+        float damageDealt = damageData.DamageDealt(this);
         Health = Mathf.Clamp(
-            Health + damageData.DamageAfterShield(Shield),
+            Health + damageDealt,
             0,
             unitClass.BaseHealth
         );
-        StartCoroutine(AnimateHealthChange(damageData));
+        StartCoroutine(AnimateHealthChange(damageDealt, damageData));
 
-        if (Health == 0)
-        {
-            Kill();
-        }
+        if (Health == 0) Kill();
     }
     private void Kill()
     {
@@ -203,11 +201,11 @@ public class Unit : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private IEnumerator AnimateHealthChange(DamageValue damageData)
+    private IEnumerator AnimateHealthChange(float damageDealt, DamageValue damageData)
     {
         animator.SetTrigger(damageData.type == DamageType.Heal ? "Heal" : "Hit");
         damageText.color = damageData.Color;
-        damageText.text = damageData.DamageAfterShield(Shield).ToString();
+        damageText.text = Mathf.Abs(damageDealt).ToString();
         damageText.gameObject.SetActive(true);
 
         for (float current = 0; current < 1f; current += 0.1f)

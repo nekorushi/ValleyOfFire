@@ -101,9 +101,13 @@ public class SkillConfigDrawer : PropertyDrawer
             }
 
             // Trajectory field
-            AttackTrajectory trajectoryVal = _SkillConfig.trajectory;
+            DamageTrajectory trajectoryVal = _SkillConfig.trajectory;
             EditorGUI.BeginChangeCheck();
-            AttackTrajectory newTrajectoryVal = (AttackTrajectory)EditorGUI.EnumPopup(position, "Trajectory", (Enum)(object)trajectoryVal);
+            DamageTrajectory newTrajectoryVal = (DamageTrajectory)EditorGUI.EnumPopup(
+                position,
+                "Trajectory",
+                (Enum)(object)trajectoryVal
+            ); ;
             position.y += fieldHeight;
             if (EditorGUI.EndChangeCheck())
             {
@@ -117,7 +121,7 @@ public class SkillConfigDrawer : PropertyDrawer
                 }
             }
 
-            if (_SkillConfig.trajectory == AttackTrajectory.Straight)
+            if (_SkillConfig.trajectory == DamageTrajectory.Straight)
             {
                 // Straight range field
                 int straightRangeVal = _SkillConfig.straightRange;
@@ -137,7 +141,7 @@ public class SkillConfigDrawer : PropertyDrawer
                 }
             }
 
-            if (_SkillConfig.trajectory == AttackTrajectory.Curve)
+            if (_SkillConfig.trajectory == DamageTrajectory.Curve)
             {
                 position.y += fieldHeight;
                 // Curve range expand

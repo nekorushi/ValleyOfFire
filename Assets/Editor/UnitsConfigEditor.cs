@@ -136,10 +136,10 @@ public class UnitsConfigEditor : Editor
 
                 GUI.color = row == column ? new Color(.8f, .8f, .8f) : new Color(1f, 1f, 1f);
                 EditorGUI.BeginChangeCheck();
-                float cellValue = EditorGUI.FloatField(cellRect, unitsConfig.GetDamageMultiplier(attackerType, defenderType));
+                float cellValue = EditorGUI.FloatField(cellRect, unitsConfig.GetExtraDamage(attackerType, defenderType));
                 if (EditorGUI.EndChangeCheck())
                 {
-                    unitsConfig.SetDamageMultiplier(attackerType, defenderType, cellValue);
+                    unitsConfig.SetExtraDamage(attackerType, defenderType, cellValue);
                     EditorUtility.SetDirty(target);
                 }
             }
