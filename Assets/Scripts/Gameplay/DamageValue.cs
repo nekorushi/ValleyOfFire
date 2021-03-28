@@ -57,7 +57,7 @@ public struct DamageValue
 
     public float DamageAfterShield(Unit unit)
     {
-        return ShouldIgnoreShield  ? -totalFlatDmg : -totalFlatDmg * (1 + (100 - unit.Shield) / 100);
+        return ShouldIgnoreShield  ? totalFlatDmg : totalFlatDmg * (1 + (100 - unit.Shield) / 100);
     }
 
     public float DamageDealt(Unit unit)
