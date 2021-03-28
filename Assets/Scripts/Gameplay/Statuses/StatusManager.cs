@@ -37,6 +37,7 @@ public class StatusManager
         bool wasBlockedByResistance = resistancesManager.CheckAgainstStatus(owner, newStatus);
         if (!wasBlockedByResistance)
         {
+            RemoveStatus();
             InflictedStatus = newStatus;
             newStatus.OnAdd(owner);
         }
@@ -44,8 +45,11 @@ public class StatusManager
 
     public void RemoveStatus()
     {
-        InflictedStatus.OnRemove(owner);
-        InflictedStatus = null;
+        if (InflictedStatus != null)
+        {
+            InflictedStatus.OnRemove(owner);
+            InflictedStatus = null;
+        }
     }
 
     public bool HasStatus(System.Type statusType)
