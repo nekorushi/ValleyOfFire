@@ -49,7 +49,7 @@ MonoBehaviour:
     baseDamage: 20
     trajectory: 2
     targets: 1
-    effect: {fileID: 0}
+    effect: {fileID: 11400000, guid: f25236dfa0b3b495eaaa86a14e402a6b, type: 2}
     straightRange: 0
     curveRange: 0
     pattern:

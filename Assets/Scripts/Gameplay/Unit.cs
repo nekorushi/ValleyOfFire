@@ -58,6 +58,11 @@ public class Unit : MonoBehaviour
         private set {
             _health = value;
             healthBar.SetValue(value, unitClass.BaseHealth);
+
+            if (unitClass.Type == UnitTypes.Fire)
+            {
+                bgFxAnimator.SetBool("Burning", _health >= 2);
+            }
         }
     }
 
@@ -87,6 +92,11 @@ public class Unit : MonoBehaviour
         spriteMaterial = sprite.material;
         GetComponentInChildren<ClassIcon>().SetValue(unitClass.Type);
         shieldBar.SetValue(Shield, baseShield);
+
+        if (unitClass.Type == UnitTypes.Fire)
+        {
+            bgFxAnimator.SetBool("Burning", true);
+        }
 
         // Register listeners
         AddListeners();

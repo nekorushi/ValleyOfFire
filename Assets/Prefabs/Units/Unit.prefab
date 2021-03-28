@@ -754,9 +754,9 @@ MonoBehaviour:
   config:
     isActive: 1
     baseDamage: 2
+    trajectory: 0
     targets: 0
     effect: {fileID: 0}
-    trajectory: 0
     straightRange: 0
     curveRange: 0
     pattern:
