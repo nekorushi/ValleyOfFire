@@ -78,10 +78,10 @@ public class PlayerController : MonoBehaviour
         SelectUnit(null);
     }
 
-    public bool HasAliveUnits {
+    public bool HasAliveFireUnits {
         get {
             return Units
-                .Where(unit => unit.Health > 0)
+                .Where(unit => unit.unitClass.Type == UnitTypes.Fire && unit.Health > 0)
                 .ToList()
                 .Count > 0;
         }

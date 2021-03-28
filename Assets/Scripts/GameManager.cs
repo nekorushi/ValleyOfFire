@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        summaryWinner.text = players.FirstOrDefault(player => player.HasAliveUnits).name;
+        summaryWinner.text = players.FirstOrDefault(player => player.HasAliveFireUnits).name;
         summaryPanel.gameObject.SetActive(true);
     }
 
@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
 
     private bool CheckWinningConditions()
     {
-        int alivePlayers = players.Where(player => player.HasAliveUnits).ToList().Count;
+        int alivePlayers = players.Where(player => player.HasAliveFireUnits).ToList().Count;
         return alivePlayers <= 1;
     }
 }
