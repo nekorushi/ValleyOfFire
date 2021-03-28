@@ -20,11 +20,7 @@ public class IgnitedStatus : UnitStatus
             activeStatuses.Add(afflictedUnit, _duration);
         }
         afflictedUnit.fxAnimator.SetTrigger("Ignite");
-
-        if (afflictedUnit.unitClass.Type != UnitTypes.Fire)
-        {
-            afflictedUnit.bgFxAnimator.SetBool("Burning", true);
-        }
+        afflictedUnit.barFxAnimator.SetBool("Burning", true);
     }
 
     public override bool OnTick(Unit afflictedUnit)
@@ -41,8 +37,12 @@ public class IgnitedStatus : UnitStatus
         {
             shouldRemoveStatus = true;
         }
-
-        if (shouldRemoveStatus && afflictedUnit.unitClass.Type != UnitTypes.Fire) afflictedUnit.bgFxAnimator.SetBool("Burning", false);
+        
         return shouldRemoveStatus;
+    }
+
+    public override void OnRemove(Unit afflictedUnit)
+    {
+        afflictedUnit.barFxAnimator.SetBool("Burning", false);
     }
 }

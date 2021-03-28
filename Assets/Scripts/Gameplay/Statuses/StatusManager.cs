@@ -44,6 +44,7 @@ public class StatusManager
 
     public void RemoveStatus()
     {
+        InflictedStatus.OnRemove(owner);
         InflictedStatus = null;
     }
 

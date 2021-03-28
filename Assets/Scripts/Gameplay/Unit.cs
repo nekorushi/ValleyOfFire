@@ -39,6 +39,7 @@ public class Unit : MonoBehaviour
     public Animator animator;
     public Animator bgFxAnimator;
     public Animator fxAnimator;
+    public Animator barFxAnimator;
 
     [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private SpriteRenderer spriteBgFX;
