@@ -42,6 +42,11 @@ public class GameManager : MonoBehaviour
         StartCoroutine(BeginRound());
     }
 
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
     private IEnumerator BeginRound()
     {
         int currentPlayerIdx = 0;
