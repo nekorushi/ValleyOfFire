@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class GameManager : MonoBehaviour
             return _instance;
         }
     }
+
+    [SerializeField]
+    private TMP_Text screenResolutionText;
 
     [SerializeField]
     private PlayerController[] players;
@@ -40,6 +44,9 @@ public class GameManager : MonoBehaviour
     {
         summaryPanel.gameObject.SetActive(false);
         StartCoroutine(BeginRound());
+
+        Camera mainCamera = Camera.main;
+        screenResolutionText.text = string.Format("{0}x{1}", mainCamera.pixelWidth, mainCamera.pixelHeight);
     }
 
     public void ExitGame()
