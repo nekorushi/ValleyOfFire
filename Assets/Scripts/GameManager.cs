@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(player.PerformTurn());
     }
 
-    private bool CheckWinningConditions()
+    public bool CheckWinningConditions()
     {
         int alivePlayers = players.Where(player => player.HasAliveFireUnits).ToList().Count;
         return alivePlayers <= 1;

@@ -19,7 +19,8 @@ public class PlayerController : MonoBehaviour
     public UnityEvent TurnStarted;
 
     private Camera mainCamera;
-    private byte currentActionPoints = 0;
+
+    public PlayerTurnManager turnManager = new PlayerTurnManager();
 
     [Header("Player settings (for designers)")]
     [SerializeField]
@@ -44,9 +45,6 @@ public class PlayerController : MonoBehaviour
             ControlModeChanged.Invoke();
         }
     }
-
-    [SerializeField]
-    private byte maxActionPoints = 2;
 
     private List<Unit> _units = new List<Unit>();
     public List<Unit> Units { get { return _units; } }
@@ -94,10 +92,10 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator PerformTurn()
     {
+        turnManager.ResetTurn();
         TurnStarted.Invoke();
-        currentActionPoints = maxActionPoints;
 
-        while(currentActionPoints > 0)
+        while (!turnManager.TurnFinished)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -132,7 +130,10 @@ public class PlayerController : MonoBehaviour
 
     private void SelectUnit(Unit unit)
     {
-        CurrentUnit = unit;
+        bool clickedOwnUnit = unit != null && Units.Contains(unit);
+        bool shouldUnselect = unit == null || CurrentUnit == unit || !turnManager.CanBeSelected(unit);
+
+        CurrentUnit = shouldUnselect || !clickedOwnUnit ? null : unit;
     }
 
     private IEnumerator PerformUnitAction(Vector3Int clickedPos, Unit clickedUnit)
@@ -144,33 +145,26 @@ public class PlayerController : MonoBehaviour
                 yield return StartCoroutine(PerformMovementAction(clickedPos));
             } else
             {
-                yield return StartCoroutine(PerformUnitSelect(clickedUnit));
+                SelectUnit(clickedUnit);
             }
         } else
         {
             yield return StartCoroutine(PerformAttackAction(clickedPos, clickedUnit));
         }
-    }
 
-    private IEnumerator PerformUnitSelect(Unit clickedUnit)
-    {
-        bool clickedOwnUnit = clickedUnit != null && Units.Contains(clickedUnit);
-        bool shouldUnselect = CurrentUnit == clickedUnit;
-
-        SelectUnit(shouldUnselect || !clickedOwnUnit ? null : clickedUnit);
-        yield return new WaitForEndOfFrame();
+        if (GameManager.Instance.CheckWinningConditions()) turnManager.FinishTurn();
     }
 
     private IEnumerator PerformMovementAction(Vector3Int clickedPos)
     {
         bool isMovementClicked = CurrentUnit.AvailableMoves.Contains(clickedPos);
-        if (isMovementClicked)
+        bool usedAnActionPoint = turnManager.UseActionPoint(CurrentUnit);
+        if (isMovementClicked && usedAnActionPoint)
         {
             Unit actingUnit = CurrentUnit;
             SelectUnit(null);
             yield return StartCoroutine(actingUnit.Move(clickedPos));
-            SelectUnit(actingUnit);
-            currentActionPoints -= 1;
+            if (turnManager.CanPerformAction(actingUnit)) SelectUnit(actingUnit);
         } else
         {
             SelectUnit(null);
@@ -210,13 +204,13 @@ public class PlayerController : MonoBehaviour
                     || canAttackEnemiesAndSameClassAlly && clickedEnemyOrSameClassAlly
                 );
             bool canAttack = isSkillAvailable && (canAttackUnit || canAttackEnvironment);
+            bool usedAnActionPoint = turnManager.UseActionPoint(CurrentUnit, true);
 
-            if (canAttack)
+            if (canAttack && usedAnActionPoint)
             {
                 SelectUnit(null);
                 yield return StartCoroutine(actingUnit.Attack(clickedPos, clickedUnit));
-                SelectUnit(actingUnit);
-                currentActionPoints -= 1;
+                if (turnManager.CanPerformAction(actingUnit)) SelectUnit(actingUnit);
             }
         }
 
