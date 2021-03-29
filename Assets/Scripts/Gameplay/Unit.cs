@@ -278,11 +278,10 @@ public class Unit : MonoBehaviour
         {
             tilesetTraversalProvider.ReleaseNode(CellPosition);
             List<Vector3> waypoints = path.vectorPath.ConvertAll(node => navigator.CellToWorldPos(navigator.WorldToCellPos(node)));
+            navigator.GetTile(CellPosition).OnUnitLeave(this);
 
             for (int currentTarget = 1; currentTarget < waypoints.Count; currentTarget++)
             {
-                navigator.GetTile(CellPosition).OnUnitLeave(this);
-
                 Vector3 currentStart = currentTarget == 1 ? startingPos : waypoints[currentTarget - 1];
                 if (!skipTurning)
                 {
@@ -296,16 +295,9 @@ public class Unit : MonoBehaviour
                     elapsedTime += Time.deltaTime;
                     yield return null;
                 }
-
-                bool canGoFurther = navigator.GetTile(CellPosition).OnUnitEnter(this);
-                if (!canGoFurther)
-                {
-                    cellTargetPos = CellPosition;
-                    targetPos = targetPos = navigator.CellToWorldPos(CellPosition);
-                    break;
-                }
             }
 
+            navigator.GetTile(CellPosition).OnUnitEnter(this);
             tilesetTraversalProvider.ReserveNode(cellTargetPos);
             transform.position = targetPos;
             yield return AnimateFlip(Player.FacingLeft);

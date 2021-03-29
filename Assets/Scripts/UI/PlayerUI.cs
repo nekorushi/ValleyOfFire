@@ -15,6 +15,9 @@ public class PlayerUI : MonoBehaviour
     private TMP_Text playerNameLabel;
 
     [SerializeField]
+    private Button nextTurnButton;
+
+    [SerializeField]
     private List<ActiveUnitUI> unitUIs;
 
     private PlayerController currentPlayer;
@@ -23,6 +26,7 @@ public class PlayerUI : MonoBehaviour
     private void OnEnable()
     {
         gameplayUI.ActivePlayerChanged.AddListener(OnPlayerChange);
+        nextTurnButton.onClick.AddListener(OnEndTurnButtonClick);
     }
 
     private void OnPlayerChange()
