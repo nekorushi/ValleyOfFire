@@ -30,7 +30,7 @@ public class SkillHandler : MonoBehaviour
         bool shouldAttackTarget = targetUnit != null && targetUnit.Player.faction != attackerUnit.Player.faction && config.baseDamage > 0;
         if (shouldAttackTarget)
         {
-            float extraDamage = UnitsConfig.Instance.GetExtraDmgVsClass(
+            float extraDamage = UnitsConfig.Instance.GetExtraDamage(
                 attackerUnit.unitClass.Type,
                 targetUnit.unitClass.Type
             );

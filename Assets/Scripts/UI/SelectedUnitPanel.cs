@@ -78,7 +78,7 @@ public class SelectedUnitPanel : MonoBehaviour
     private void UpdateShield()
     {
         Unit unit = currentPlayer.CurrentUnit;
-        shieldText.text = unit.Shield.ToString();
+        shieldText.text = UIHelpers.FormatShield(unit.Shield);
     }
 
     private void UpdateSkills()

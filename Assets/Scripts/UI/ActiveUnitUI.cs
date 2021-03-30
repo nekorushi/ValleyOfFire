@@ -39,10 +39,14 @@ public class ActiveUnitUI : MonoBehaviour
 
     private void UpdateEnabled(bool enable)
     {
-        Color newColor = background.color;
-        newColor.a = enable ? 1f : .25f;
+        Color newBackgroundColor = background.color;
+        Color newPortraitColor = portrait.color;
+        Color newActionPointColor = actionPoints[0].color;
 
-        background.color = newColor;
+        float newOpacity = enable ? 1f : .25f;
+
+        portrait.color = newPortraitColor;
+        background.color = newBackgroundColor;
     }
 
     private void ClearPortrait()

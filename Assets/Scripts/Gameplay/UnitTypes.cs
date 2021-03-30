@@ -1,4 +1,4 @@
-public enum UnitTypes 
+public enum UnitType 
 {
 	Heavy = 0,
 	Rapid = 1,

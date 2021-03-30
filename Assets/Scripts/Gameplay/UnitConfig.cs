@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable] public class FactionSpriteDict : SerializableDictionary<PlayerFaction, Sprite> { }
-[Serializable] public class ClassSpriteDict : SerializableDictionary<UnitTypes, Sprite> { }
+[Serializable] public class ClassSpriteDict : SerializableDictionary<UnitType, Sprite> { }
 
 [CreateAssetMenu(fileName = "UnitConfig", menuName = "GDS/Units/UnitConfig")]
 public class UnitConfig : ScriptableObject
@@ -15,8 +15,8 @@ public class UnitConfig : ScriptableObject
 
     [Header("Unit stats"), Space(20)]
     [SerializeField]
-    private UnitTypes _type;
-    public UnitTypes Type { get { return _type; } }
+    private UnitType _type;
+    public UnitType Type { get { return _type; } }
 
     [SerializeField]
     private float _baseHealth = 5f;

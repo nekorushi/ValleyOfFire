@@ -43,6 +43,9 @@ public class GameplayUI : MonoBehaviour
     private SelectedUnitPanel selectedUnitPanel;
 
     [SerializeField]
+    private UnitTooltip unitTooltip;
+
+    [SerializeField]
     private List<PlayerController> allPlayers;
 
     private PlayerController _activePlayer;
@@ -178,7 +181,7 @@ public class GameplayUI : MonoBehaviour
                             defender.CellPosition,
                             new DamageValue(
                                 skillConfig.baseDamage,
-                                UnitsConfig.Instance.GetExtraDmgVsClass(attacker.unitClass.Type, defender.unitClass.Type),
+                                UnitsConfig.Instance.GetExtraDamage(attacker.unitClass.Type, defender.unitClass.Type),
                                 DamageType.Normal,
                                 DamageTrajectory.SelfInflicted
                             ),
@@ -225,7 +228,7 @@ public class GameplayUI : MonoBehaviour
         }
     }
 
-    private GameObject CreateDmgFormula(Vector3Int position, DamageValue damage, UnitTypes defenderClass)
+    private GameObject CreateDmgFormula(Vector3Int position, DamageValue damage, UnitType defenderClass)
     {
         Vector3 worldPos = TilemapNavigator.Instance.CellToWorldPos(position);
         Vector2 canvasPos = WorldToCanvasPos(worldPos);

@@ -38,7 +38,7 @@ public class UnitsConfigEditor : Editor
 
     private void DrawDamageMatrix()
     {
-        string[] typeList = System.Enum.GetNames(typeof(UnitTypes));
+        string[] typeList = System.Enum.GetNames(typeof(UnitType));
 
         int cellWidth = typeList.Length * targetCellWidth >= minMatrixWidth ? targetCellWidth : minMatrixWidth / typeList.Length;
         int cellHeight = typeList.Length * targetCellHeight >= minMatrixHeight ? targetCellHeight : minMatrixHeight / typeList.Length;
@@ -96,7 +96,7 @@ public class UnitsConfigEditor : Editor
 
         for (int row = 0; row < typeList.Length; row++)
         {
-            UnitTypes unitType = (UnitTypes)row;
+            UnitType unitType = (UnitType)row;
 
             Rect attackerLabelRect = new Rect(
                 matrixAreaRect.x + axisLabelHeight,
@@ -131,8 +131,8 @@ public class UnitsConfigEditor : Editor
                     cellHeight
                 );
 
-                UnitTypes attackerType = (UnitTypes)row;
-                UnitTypes defenderType = (UnitTypes)column;
+                UnitType attackerType = (UnitType)row;
+                UnitType defenderType = (UnitType)column;
 
                 GUI.color = row == column ? new Color(.8f, .8f, .8f) : new Color(1f, 1f, 1f);
                 EditorGUI.BeginChangeCheck();

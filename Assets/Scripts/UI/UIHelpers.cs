@@ -4,4 +4,9 @@
     {
         return health.ToString("N1");
     }
+
+    public static string FormatShield(float shield)
+    {
+        return shield.ToString();
+    }
 }

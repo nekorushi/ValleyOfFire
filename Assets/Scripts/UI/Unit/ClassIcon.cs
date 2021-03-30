@@ -8,7 +8,7 @@ public class ClassIcon : MonoBehaviour
 
     public ClassSpriteDict inGameSprites = new ClassSpriteDict();
 
-    public void SetValue(UnitTypes unitClass)
+    public void SetValue(UnitType unitClass)
     {
         if (inGameSprites.ContainsKey(unitClass))
         {

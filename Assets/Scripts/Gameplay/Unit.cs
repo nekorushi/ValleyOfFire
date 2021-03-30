@@ -21,7 +21,6 @@ public enum PlayerFaction
 [SelectionBase]
 public class Unit : MonoBehaviour
 {
-
     [Header("Unit settings (for designers)")]
     [SerializeField]
     private PlayerController _player;
@@ -60,7 +59,7 @@ public class Unit : MonoBehaviour
             _health = value;
             healthBar.SetValue(value, unitClass.BaseHealth);
 
-            if (unitClass.Type == UnitTypes.Fire)
+            if (unitClass.Type == UnitType.Fire)
             {
                 bgFxAnimator.SetBool("Burning", _health >= 2);
             }
@@ -94,7 +93,7 @@ public class Unit : MonoBehaviour
         GetComponentInChildren<ClassIcon>().SetValue(unitClass.Type);
         shieldBar.SetValue(Shield, baseShield);
 
-        if (unitClass.Type == UnitTypes.Fire)
+        if (unitClass.Type == UnitType.Fire)
         {
             bgFxAnimator.SetBool("Burning", true);
         }
@@ -364,5 +363,15 @@ public class Unit : MonoBehaviour
     {
         int range = statusManager.HasStatus(typeof(SwampedStatus)) && unitClass.SwampedMovementRange > 0 ? unitClass.SwampedMovementRange : unitClass.MovementRange;
         AvailableMoves = TilemapNavigator.Instance.CalculateMovementRange(CellPosition, range);
+    }
+
+    private void OnMouseEnter()
+    {
+        UnitTooltip.Instance.SetUnit(this);
+    }
+
+    private void OnMouseExit()
+    {
+        UnitTooltip.Instance.SetUnit(null);
     }
 }

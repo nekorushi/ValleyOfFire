@@ -186,10 +186,10 @@ public abstract class SerializableDictionaryDrawer<TK, TV> : PropertyDrawer
 }
 
 [CustomPropertyDrawer(typeof(ShieldRecutionDict))]
-public class ShieldRecutionDictDrawer : SerializableDictionaryDrawer<UnitTypes, int> { }
+public class ShieldRecutionDictDrawer : SerializableDictionaryDrawer<UnitType, int> { }
 
 [CustomPropertyDrawer(typeof(FactionSpriteDict))]
 public class UnitPortraitDictDrawer : SerializableDictionaryDrawer<PlayerFaction, Sprite> { }
 
 [CustomPropertyDrawer(typeof(ClassSpriteDict))]
-public class ClassSpriteDictDrawer : SerializableDictionaryDrawer<UnitTypes, Sprite> { }
+public class ClassSpriteDictDrawer : SerializableDictionaryDrawer<UnitType, Sprite> { }

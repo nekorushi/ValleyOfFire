@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-[Serializable] public class ShieldRecutionDict : SerializableDictionary<UnitTypes, int> { }
+[Serializable] public class ShieldRecutionDict : SerializableDictionary<UnitType, int> { }
 
 public abstract class UnitStatus : ScriptableObject
 {
@@ -16,7 +16,7 @@ public abstract class UnitStatus : ScriptableObject
         get { return this.GetType().ToString(); }
     }
 
-    public int GetShieldReduction(UnitTypes type)
+    public int GetShieldReduction(UnitType type)
     {
         return shieldReduction.ContainsKey(type) ? shieldReduction[type] : 0;
     }

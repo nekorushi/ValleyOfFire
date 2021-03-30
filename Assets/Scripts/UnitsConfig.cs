@@ -9,23 +9,15 @@ public class UnitsConfig : MonoBehaviour
 
     public List<string> unitTypes;
     [HideInInspector]
-    public SerializableDictionary<UnitTypes, SerializableDictionary<UnitTypes, float>> vsClassExtraDamages =
-        new SerializableDictionary<UnitTypes, SerializableDictionary<UnitTypes, float>>();
+    public SerializableDictionary<UnitType, SerializableDictionary<UnitType, float>> vsClassExtraDamages =
+        new SerializableDictionary<UnitType, SerializableDictionary<UnitType, float>>();
 
     private void Start()
     {
         Instance = this;
     }
 
-    public float GetExtraDmgVsClass(UnitTypes attacker, UnitTypes defender)
-    {
-        bool shouldApplyClassModifier = vsClassExtraDamages.ContainsKey(attacker)
-            && vsClassExtraDamages[attacker].ContainsKey(defender);
-
-        return shouldApplyClassModifier ? vsClassExtraDamages[attacker][defender] : 1f;
-    }
-
-    public float GetExtraDamage(UnitTypes attacker, UnitTypes defender)
+    public float GetExtraDamage(UnitType attacker, UnitType defender)
     {
         if (vsClassExtraDamages.ContainsKey(attacker))
         {
@@ -38,10 +30,12 @@ public class UnitsConfig : MonoBehaviour
         return 1;
     }
 
-    public void SetExtraDamage(UnitTypes attacker, UnitTypes defender, float value)
+    public void SetExtraDamage(UnitType attacker, UnitType defender, float value)
     {
-        if (!vsClassExtraDamages.ContainsKey(attacker)) vsClassExtraDamages.Add(attacker, new SerializableDictionary<UnitTypes, float>());
+        if (!vsClassExtraDamages.ContainsKey(attacker)) vsClassExtraDamages.Add(attacker, new SerializableDictionary<UnitType, float>());
 
         vsClassExtraDamages[attacker][defender] = value;
     }
+
+
 }
