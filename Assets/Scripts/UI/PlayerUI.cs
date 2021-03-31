@@ -37,7 +37,7 @@ public class PlayerUI : MonoBehaviour
             currentPlayer.UnitSelectionChanged.RemoveListener(DisplayActiveUnits);
         }
 
-        currentPlayer = gameplayUI.activePlayer;
+        currentPlayer = gameplayUI.ActivePlayer;
         currentPlayer.TurnStarted.AddListener(DisplayActiveUnits);
         currentPlayer.UnitSelectionChanged.AddListener(DisplayActiveUnits);
 

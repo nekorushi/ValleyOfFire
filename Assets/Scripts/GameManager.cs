@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator PerformPlayerTurn(PlayerController player)
     {
-        gameplayUI.activePlayer = player;
+        gameplayUI.ActivePlayer = player;
         yield return StartCoroutine(player.PerformTurn());
     }
 

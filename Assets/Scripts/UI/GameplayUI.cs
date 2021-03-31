@@ -9,11 +9,22 @@ enum MarkerTypes
 {
     Default,
     Movement,
+    MovementPreview,
     Attack,
 }
 
 public class GameplayUI : MonoBehaviour
 {
+    private static GameplayUI _instance;
+    public static GameplayUI Instance
+    {
+        get
+        {
+            if (_instance == null) _instance = FindObjectOfType<GameplayUI>();
+            return _instance;
+        }
+    }
+
     public UnityEvent ActivePlayerChanged;
 
     private Camera mainCamera;
@@ -33,6 +44,8 @@ public class GameplayUI : MonoBehaviour
     [SerializeField]
     private Color movementTileTint = Color.green;
     [SerializeField]
+    private Color movementPreviewTileTint = Color.cyan;
+    [SerializeField]
     private Color attackTileTint = Color.red;
 
     [SerializeField]
@@ -48,8 +61,19 @@ public class GameplayUI : MonoBehaviour
     [SerializeField]
     private List<PlayerController> allPlayers;
 
+    private Unit _hoveredUnit;
+    public Unit HoveredUnit
+    {
+        get { return _hoveredUnit; }
+        set
+        {
+            _hoveredUnit = value;
+            UpdateAvailableActions();
+        }
+    }
+
     private PlayerController _activePlayer;
-    public PlayerController activePlayer {
+    public PlayerController ActivePlayer {
         get { return _activePlayer; }
         set
         {
@@ -69,21 +93,21 @@ public class GameplayUI : MonoBehaviour
 
     void ConnectPlayer()
     {
-        if (activePlayer != null)
+        if (ActivePlayer != null)
         {
-            activePlayer.UnitSelectionChanged.AddListener(UpdateUnitSelection);
-            activePlayer.ControlModeChanged.AddListener(UpdateAvailableActions);
-            activePlayer.AvailableActionsChanged.AddListener(UpdateAvailableActions);
+            ActivePlayer.UnitSelectionChanged.AddListener(UpdateUnitSelection);
+            ActivePlayer.ControlModeChanged.AddListener(UpdateAvailableActions);
+            ActivePlayer.AvailableActionsChanged.AddListener(UpdateAvailableActions);
         }
     }
 
     void DisconnectPlayer()
     {
-        if (activePlayer != null)
+        if (ActivePlayer != null)
         {
-            activePlayer.UnitSelectionChanged.RemoveListener(UpdateUnitSelection);
-            activePlayer.ControlModeChanged.RemoveListener(UpdateAvailableActions);
-            activePlayer.AvailableActionsChanged.RemoveListener(UpdateAvailableActions);
+            ActivePlayer.UnitSelectionChanged.RemoveListener(UpdateUnitSelection);
+            ActivePlayer.ControlModeChanged.RemoveListener(UpdateAvailableActions);
+            ActivePlayer.AvailableActionsChanged.RemoveListener(UpdateAvailableActions);
         }
     }
 
@@ -99,19 +123,22 @@ public class GameplayUI : MonoBehaviour
         ClearAvailableAttacks();
         ClearDamageFormulas();
 
-        if (activePlayer.AttackMode == AttackModes.None)
+        if (HoveredUnit != null && HoveredUnit != ActivePlayer.CurrentUnit)
         {
-            RenderAvailableMoves();
+            RenderAvailableMoves(HoveredUnit);
+        } else if (ActivePlayer.AttackMode == AttackModes.None)
+        {
+            RenderAvailableMoves(ActivePlayer.CurrentUnit);
         } else
         {
-            RenderAvailableAttacks();
-            RenderDmgFormulas();
+            RenderAvailableAttacks(ActivePlayer.CurrentUnit);
+            RenderDmgFormulas(ActivePlayer.CurrentUnit);
         }
     }
 
     void UpdateUnitPanel()
     {
-        selectedUnitPanel.UpdateUnit(activePlayer);
+        selectedUnitPanel.UpdateUnit(ActivePlayer);
     }
 
     void ClearAvailableMoves()
@@ -120,14 +147,14 @@ public class GameplayUI : MonoBehaviour
         availableMoves.Clear();
     }
 
-    void RenderAvailableMoves()
+    void RenderAvailableMoves(Unit unit)
     {
-        List<Vector3Int> moves = activePlayer.CurrentUnit?.AvailableMoves;
-        if (moves != null)
+        if (unit != null)
         {
-            moves.ForEach(position =>
+            if (unit.AvailableMoves == null) unit.UpdateAvailableMoves();
+            unit.AvailableMoves.ForEach(position =>
             {
-                TintMarker(position, MarkerTypes.Movement);
+                TintMarker(position, unit == ActivePlayer.CurrentUnit ? MarkerTypes.Movement : MarkerTypes.MovementPreview);
                 availableMoves.Add(position);
             });
         }
@@ -145,10 +172,10 @@ public class GameplayUI : MonoBehaviour
         dmgFormulas.Clear();
     }
 
-    void RenderAvailableAttacks()
+    void RenderAvailableAttacks(Unit unit)
     {
-        if (activePlayer.CurrentUnit == null) return;
-        SerializableDictionary<Vector3Int, AttackPatternField> pattern = activePlayer.CurrentUnit.skillHandler.AttackArea;
+        if (unit == null) return;
+        SerializableDictionary<Vector3Int, AttackPatternField> pattern = unit.skillHandler.AttackArea;
 
         if (pattern != null)
         {
@@ -163,20 +190,20 @@ public class GameplayUI : MonoBehaviour
         }
     }
 
-    void RenderDmgFormulas()
+    void RenderDmgFormulas(Unit unit)
     {
-        if (activePlayer.CurrentUnit == null) return;
+        if (unit == null) return;
 
         foreach(PlayerController player in allPlayers)
         {
-            if (player != activePlayer)
+            if (player != unit.Player)
             {
                 foreach(Unit defender in player.Units)
                 {
-                    Unit attacker = activePlayer.CurrentUnit;
-                    if (defender != null && defender.Player != activePlayer && defender.Health > 0)
+                    Unit attacker = unit;
+                    if (defender != null && defender.Player != unit.Player && defender.Health > 0)
                     {
-                        SkillConfig skillConfig = activePlayer.CurrentUnit.GetSkillConfig(activePlayer.AttackMode);
+                        SkillConfig skillConfig = unit.GetSkillConfig(unit.Player.AttackMode);
                         GameObject formula = CreateDmgFormula(
                             defender.CellPosition,
                             new DamageValue(
@@ -200,7 +227,8 @@ public class GameplayUI : MonoBehaviour
         {
             {MarkerTypes.Default, defaultTileTint },
             {MarkerTypes.Attack, attackTileTint },
-            {MarkerTypes.Movement, movementTileTint }
+            {MarkerTypes.Movement, movementTileTint },
+            {MarkerTypes.MovementPreview, movementPreviewTileTint }
         };
 
         Color tintColor = markerColors[type];

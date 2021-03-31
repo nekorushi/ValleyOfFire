@@ -368,10 +368,12 @@ public class Unit : MonoBehaviour
     private void OnMouseEnter()
     {
         UnitTooltip.Instance.SetUnit(this);
+        GameplayUI.Instance.HoveredUnit = this;
     }
 
     private void OnMouseExit()
     {
         UnitTooltip.Instance.SetUnit(null);
+        GameplayUI.Instance.HoveredUnit = null;
     }
 }
