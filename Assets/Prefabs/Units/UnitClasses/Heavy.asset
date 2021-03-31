@@ -44,7 +44,7 @@ MonoBehaviour:
   _movementRange: 4
   _swampedMovementRange: 1
   resistances: []
-  primarySkill:
+  baseAttack:
     isActive: 1
     baseDamage: 30
     trajectory: 1
@@ -53,39 +53,46 @@ MonoBehaviour:
     straightRange: 1
     curveRange: 0
     pattern:
-      _Buckets: 0000000007000000ffffffff01000000050000000800000006000000ffffffff02000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-      _HashCodes: 0000000003000000ffffff7ffbffff7ffcffff7f04000000fdffff7f01000000050000000000000000000000000000000000000000000000000000000000000000000000
-      _Next: ffffffffffffffffffffffffffffffffffffffff03000000ffffffffffffffff040000000000000000000000000000000000000000000000000000000000000000000000
-      _Count: 9
-      _Version: 13
+      _Buckets: 00000000ffffffffffffffff
+      _HashCodes: 000000000000000000000000
+      _Next: ffffffff0000000000000000
+      _Count: 1
+      _Version: 1
       _FreeList: -1
       _FreeCount: 0
       _Keys:
       - {x: 0, y: 0}
-      - {x: -1, y: -1}
-      - {x: -1, y: 0}
-      - {x: -1, y: 1}
-      - {x: 0, y: -1}
-      - {x: 0, y: 1}
-      - {x: 1, y: -1}
-      - {x: 1, y: 0}
-      - {x: 1, y: 1}
       - {x: 0, y: 0}
       - {x: 0, y: 0}
-      - {x: 0, y: 0}
-      - {x: 0, y: 0}
-      - {x: 0, y: 0}
-      - {x: 0, y: 0}
-      - {x: 0, y: 0}
-      - {x: 0, y: 0}
-      _Values: 0000000002000000010000000200000001000000010000000200000001000000020000000000000000000000000000000000000000000000000000000000000000000000
-  secondarySkill:
+      _Values: 000000000000000000000000
+  mainAbility:
     isActive: 1
-    baseDamage: 20
+    baseDamage: 15
     trajectory: 1
     targets: 1
     effect: {fileID: 11400000, guid: 6d40139cc2c7944af9a1a419795c0dfa, type: 2}
     straightRange: 1
+    curveRange: 0
+    pattern:
+      _Buckets: 00000000ffffffffffffffff
+      _HashCodes: 000000000000000000000000
+      _Next: ffffffff0000000000000000
+      _Count: 1
+      _Version: 1
+      _FreeList: -1
+      _FreeCount: 0
+      _Keys:
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      _Values: 000000000000000000000000
+  secondaryAbility:
+    isActive: 0
+    baseDamage: 2
+    trajectory: 1
+    targets: 1
+    effect: {fileID: 0}
+    straightRange: 0
     curveRange: 0
     pattern:
       _Buckets: 00000000ffffffffffffffff

@@ -34,6 +34,7 @@ public class UnitConfig : ScriptableObject
     public List<Resistance> resistances;
 
     [Header("Skills settings"), Space(20)]
-    public SkillConfig primarySkill;
-    public SkillConfig secondarySkill;
+    public SkillConfig baseAttack;
+    public SkillConfig mainAbility;
+    public SkillConfig secondaryAbility;
 }

@@ -186,8 +186,9 @@ public class Unit : MonoBehaviour
         Dictionary<AttackModes, SkillConfig> configsDict = new Dictionary<AttackModes, SkillConfig>()
         {
             { AttackModes.None, null },
-            { AttackModes.Primary, unitClass.primarySkill },
-            { AttackModes.Secondary, unitClass.secondarySkill },
+            { AttackModes.Attack, unitClass.baseAttack },
+            { AttackModes.MainAbility, unitClass.mainAbility },
+            { AttackModes.SecondaryAbility, unitClass.secondaryAbility },
         };
 
         return configsDict[mode];

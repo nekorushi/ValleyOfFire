@@ -22,15 +22,19 @@ public class SelectedUnitPanel : MonoBehaviour
     private TMP_Text shieldText;
 
     [SerializeField]
-    private Button primaryAttack;
+    private Button baseAttack;
 
     [SerializeField]
-    private Button secondaryAttack;
+    private Button mainAbility;
+
+    [SerializeField]
+    private Button secondaryAbility;
 
     private void Awake()
     {
-        primaryAttack.onClick.AddListener(OnPrimaryAttackClick);
-        secondaryAttack.onClick.AddListener(OnSecondaryAttackClick);
+        baseAttack.onClick.AddListener(OnBaseAttackClick);
+        mainAbility.onClick.AddListener(OnMainAbilityClick);
+        mainAbility.onClick.AddListener(OnSecondaryAbilityClick);
         wrapper.SetActive(false);
     }
 
@@ -84,29 +88,37 @@ public class SelectedUnitPanel : MonoBehaviour
     private void UpdateSkills()
     {
         Unit unit = currentPlayer.CurrentUnit;
-        primaryAttack.gameObject.SetActive(unit.unitClass.primarySkill.isActive);
-        secondaryAttack.gameObject.SetActive(unit.unitClass.secondarySkill.isActive);
+        baseAttack.gameObject.SetActive(unit.unitClass.baseAttack.isActive);
+        mainAbility.gameObject.SetActive(unit.unitClass.mainAbility.isActive);
     }
 
-    private void OnPrimaryAttackClick()
+    private void OnBaseAttackClick()
     {
         if (currentPlayer != null)
-            currentPlayer.ChangeAttackMode(AttackModes.Primary);
+            currentPlayer.ChangeAttackMode(AttackModes.Attack);
     }
 
-    private void OnSecondaryAttackClick()
+    private void OnMainAbilityClick()
     {
         if (currentPlayer != null)
-            currentPlayer.ChangeAttackMode(AttackModes.Secondary);
+            currentPlayer.ChangeAttackMode(AttackModes.MainAbility);
+    }
+
+    private void OnSecondaryAbilityClick()
+    {
+        if (currentPlayer != null)
+            currentPlayer.ChangeAttackMode(AttackModes.SecondaryAbility);
     }
 
     void UpdateControlMode()
     {
-        ChangeButtonColor(primaryAttack, Color.white);
-        ChangeButtonColor(secondaryAttack, Color.white);
+        ChangeButtonColor(baseAttack, Color.white);
+        ChangeButtonColor(mainAbility, Color.white);
+        ChangeButtonColor(secondaryAbility, Color.white);
 
-        if (currentPlayer.AttackMode == AttackModes.Primary) ChangeButtonColor(primaryAttack, Color.green);
-        if (currentPlayer.AttackMode == AttackModes.Secondary) ChangeButtonColor(secondaryAttack, Color.green);
+        if (currentPlayer.AttackMode == AttackModes.Attack) ChangeButtonColor(baseAttack, Color.green);
+        if (currentPlayer.AttackMode == AttackModes.MainAbility) ChangeButtonColor(mainAbility, Color.green);
+        if (currentPlayer.AttackMode == AttackModes.SecondaryAbility) ChangeButtonColor(secondaryAbility, Color.green);
     }
 
     private void ChangeButtonColor(Button button, Color color)

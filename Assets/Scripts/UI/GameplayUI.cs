@@ -123,12 +123,9 @@ public class GameplayUI : MonoBehaviour
         ClearAvailableAttacks();
         ClearDamageFormulas();
 
-        if (HoveredUnit != null && HoveredUnit != ActivePlayer.CurrentUnit)
-        {
-            RenderAvailableMoves(HoveredUnit);
-        } else if (ActivePlayer.AttackMode == AttackModes.None)
-        {
-            RenderAvailableMoves(ActivePlayer.CurrentUnit);
+        if (ActivePlayer.AttackMode == AttackModes.None)
+        {            
+            RenderAvailableMoves(HoveredUnit != null ? HoveredUnit : ActivePlayer.CurrentUnit);
         } else
         {
             RenderAvailableAttacks(ActivePlayer.CurrentUnit);

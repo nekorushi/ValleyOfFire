@@ -7,8 +7,9 @@ using UnityEngine.Events;
 public enum AttackModes
 {
     None,
-    Primary,
-    Secondary
+    Attack,
+    MainAbility,
+    SecondaryAbility
 }
 
 public class PlayerController : MonoBehaviour

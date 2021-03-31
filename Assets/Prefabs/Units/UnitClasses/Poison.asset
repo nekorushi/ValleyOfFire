@@ -44,7 +44,7 @@ MonoBehaviour:
   _movementRange: 3
   _swampedMovementRange: 1
   resistances: []
-  primarySkill:
+  baseAttack:
     isActive: 1
     baseDamage: 20
     trajectory: 2
@@ -99,13 +99,34 @@ MonoBehaviour:
       - {x: 0, y: 0}
       - {x: 0, y: 0}
       _Values: 00000000020000000100000002000000010000000100000002000000010000000200000002000000020000000100000002000000020000000200000002000000010000000100000002000000020000000200000002000000010000000200000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  secondarySkill:
+  mainAbility:
     isActive: 1
-    baseDamage: 20
+    baseDamage: 0
     trajectory: 1
     targets: 2
     effect: {fileID: 11400000, guid: fd03fe2ee11644071b9ed89d7f92e85e, type: 2}
     straightRange: 1
+    curveRange: 0
+    pattern:
+      _Buckets: 00000000ffffffffffffffff
+      _HashCodes: 000000000000000000000000
+      _Next: ffffffff0000000000000000
+      _Count: 1
+      _Version: 1
+      _FreeList: -1
+      _FreeCount: 0
+      _Keys:
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      _Values: 000000000000000000000000
+  secondaryAbility:
+    isActive: 0
+    baseDamage: 2
+    trajectory: 1
+    targets: 1
+    effect: {fileID: 0}
+    straightRange: 0
     curveRange: 0
     pattern:
       _Buckets: 00000000ffffffffffffffff
