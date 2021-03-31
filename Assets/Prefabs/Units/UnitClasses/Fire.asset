@@ -41,15 +41,15 @@ MonoBehaviour:
     - {fileID: 0}
   _type: 4
   _baseHealth: 2
-  _movementRange: 1
-  _swampedMovementRange: 1
+  _movementRange: 5
+  _swampedMovementRange: 2
   resistances:
   - {fileID: 11400000, guid: 3287b3fb1c8ad4c4f8a22c214d949d26, type: 2}
   - {fileID: 11400000, guid: 174f018b52b794817b617435df801a5f, type: 2}
   - {fileID: 11400000, guid: 5ffc8e9deb70241e48d2e9e757947fa6, type: 2}
   primarySkill:
     isActive: 1
-    baseDamage: 30
+    baseDamage: 20
     trajectory: 1
     targets: 4
     effect: {fileID: 11400000, guid: 7227d12e0d7ab40198ecdcd4a4394401, type: 2}
