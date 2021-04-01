@@ -51,7 +51,7 @@ MonoBehaviour:
     isActive: 1
     baseDamage: 20
     trajectory: 1
-    targets: 1
+    targets: 4
     effect: {fileID: 11400000, guid: 7227d12e0d7ab40198ecdcd4a4394401, type: 2}
     straightRange: 1
     curveRange: 0
