@@ -1868,7 +1868,7 @@ MonoBehaviour:
   availableAttacks: []
   defaultTileTint: {r: 1, g: 1, b: 1, a: 0.19607843}
   movementTileTint: {r: 0, g: 1, b: 0, a: 0.19607843}
-  movementPreviewTileTint: {r: 0, g: 1, b: 1, a: 1}
+  movementPreviewTileTint: {r: 0.22881661, g: 0.7735849, b: 0, a: 0.14901961}
   attackTileTint: {r: 1, g: 0, b: 0, a: 0.19607843}
   dmgFormulaPrefab: {fileID: 5790592968965403949, guid: 194d897e8fc871c4ab77567a78459b40, type: 3}
   selectedUnitPanel: {fileID: 1578989431}
@@ -6065,6 +6065,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 87040134316150347, guid: 543334375693c4c28b7f1740cc6266c2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 593824712045471826, guid: 543334375693c4c28b7f1740cc6266c2, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 593824712045471826, guid: 543334375693c4c28b7f1740cc6266c2, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 593824712045471826, guid: 543334375693c4c28b7f1740cc6266c2, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 593824712045471826, guid: 543334375693c4c28b7f1740cc6266c2, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 593824712045471826, guid: 543334375693c4c28b7f1740cc6266c2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 593824712045471826, guid: 543334375693c4c28b7f1740cc6266c2, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 721481143603860758, guid: 543334375693c4c28b7f1740cc6266c2, type: 3}

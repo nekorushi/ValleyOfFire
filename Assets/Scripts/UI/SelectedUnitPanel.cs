@@ -34,7 +34,7 @@ public class SelectedUnitPanel : MonoBehaviour
     {
         baseAttack.onClick.AddListener(OnBaseAttackClick);
         mainAbility.onClick.AddListener(OnMainAbilityClick);
-        mainAbility.onClick.AddListener(OnSecondaryAbilityClick);
+        secondaryAbility.onClick.AddListener(OnSecondaryAbilityClick);
         wrapper.SetActive(false);
     }
 
@@ -90,6 +90,7 @@ public class SelectedUnitPanel : MonoBehaviour
         Unit unit = currentPlayer.CurrentUnit;
         baseAttack.gameObject.SetActive(unit.unitClass.baseAttack.isActive);
         mainAbility.gameObject.SetActive(unit.unitClass.mainAbility.isActive);
+        secondaryAbility.gameObject.SetActive(unit.unitClass.secondaryAbility.isActive);
     }
 
     private void OnBaseAttackClick()
