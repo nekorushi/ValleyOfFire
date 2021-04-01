@@ -2,10 +2,12 @@
 
 public class ResistancesManager
 {
+    private Unit owner;
     private List<Resistance> resistances = new List<Resistance>();
 
-    public ResistancesManager(List<Resistance> initialResistances)
+    public ResistancesManager(Unit unit, List<Resistance> initialResistances)
     {
+        owner = unit;
         foreach (Resistance resistance in initialResistances)
         {
             AddResistance(resistance);
@@ -17,6 +19,7 @@ public class ResistancesManager
         if (resistance != null && !resistances.Contains(resistance))
         {
             resistances.Add(resistance);
+            resistance.OnAdd(owner);
         }
     }
 

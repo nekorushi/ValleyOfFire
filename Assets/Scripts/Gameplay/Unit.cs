@@ -29,7 +29,6 @@ public class Unit : MonoBehaviour
 
     [Header("Technical settings (for programmers)")]
     [HideInInspector] public SkillHandler skillHandler;
-    [HideInInspector] private StatusIcon statusIcon;
 
     [SerializeField] private ValueBar healthBar;
     [SerializeField] private ValueBar shieldBar;
@@ -82,12 +81,11 @@ public class Unit : MonoBehaviour
     {
         // Assign references
         skillHandler = GetComponent<SkillHandler>();
-        statusIcon = GetComponentInChildren<StatusIcon>();
 
         // Initial setup
         Player.AddUnit(this);
         Health = unitClass.BaseHealth;
-        resistancesManager = new ResistancesManager(unitClass.resistances);
+        resistancesManager = new ResistancesManager(this, unitClass.resistances);
         statusManager = new StatusManager(this, resistancesManager);
         spriteMaterial = sprite.material;
         GetComponentInChildren<ClassIcon>().SetValue(unitClass.Type);
@@ -164,7 +162,6 @@ public class Unit : MonoBehaviour
 
     private void OnStatusChange()
     {
-        statusIcon.SetValue(statusManager.InflictedStatus);
         shieldBar.SetValue(Shield, baseShield);
     }
 

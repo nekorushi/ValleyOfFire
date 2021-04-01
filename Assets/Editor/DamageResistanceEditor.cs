@@ -9,6 +9,7 @@ public class DamageResistanceEditor : Editor
     SerializedProperty isPermanent;
     SerializedProperty duration;
 
+    SerializedProperty fx;
     SerializedProperty anyDamage;
     SerializedProperty shouldResistTypes;
     SerializedProperty damageType;
@@ -22,6 +23,7 @@ public class DamageResistanceEditor : Editor
         isPermanent = serializedObject.FindProperty("isPermanent");
         duration = serializedObject.FindProperty("duration");
 
+        fx = serializedObject.FindProperty("fx");
         anyDamage = serializedObject.FindProperty("anyDamage");
         shouldResistTypes = serializedObject.FindProperty("shouldResistTypes");
         damageType = serializedObject.FindProperty("damageType");
@@ -34,6 +36,9 @@ public class DamageResistanceEditor : Editor
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
+
+        EditorGUILayout.LabelField("What FX should be played when resistance is active?");
+        EditorGUILayout.PropertyField(fx);
 
         EditorGUILayout.LabelField("Resistance duration?");
         EditorGUI.indentLevel++;

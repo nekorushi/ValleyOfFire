@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0208a807529a743b191c8c575b038846, type: 3}
   m_Name: CancelStraightDmgOnce
   m_EditorClassIdentifier: 
+  fx: 2
   isPermanent: 0
   duration: 1
   anyDamage: 0
