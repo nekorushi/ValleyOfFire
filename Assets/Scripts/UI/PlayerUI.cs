@@ -16,6 +16,11 @@ public class PlayerUI : MonoBehaviour
 
     private PlayerController currentPlayer;
 
+    [SerializeField]
+    private Image teamNameBackground;
+
+    [SerializeField]
+    private Text teamName;
 
     private void OnEnable()
     {
@@ -34,6 +39,9 @@ public class PlayerUI : MonoBehaviour
         currentPlayer = gameplayUI.ActivePlayer;
         currentPlayer.TurnStarted.AddListener(DisplayActiveUnits);
         currentPlayer.UnitSelectionChanged.AddListener(DisplayActiveUnits);
+
+        teamNameBackground.color = currentPlayer.PlayerColor;
+        teamName.text = currentPlayer.PlayerName;
 
         DisplayActiveUnits();
     }

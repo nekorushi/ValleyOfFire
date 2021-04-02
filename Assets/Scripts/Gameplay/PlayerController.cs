@@ -167,7 +167,8 @@ public class PlayerController : MonoBehaviour
                 Unit actingUnit = CurrentUnit;
                 SelectUnit(null);
                 yield return StartCoroutine(actingUnit.Move(clickedPos));
-                if (turnManager.CanPerformMovement(actingUnit)) SelectUnit(actingUnit);
+                if (turnManager.CanPerformMovement(actingUnit) || turnManager.CanPerformAction(actingUnit))
+                    SelectUnit(actingUnit);
             } else
             {
                 SelectUnit(null);
@@ -219,7 +220,8 @@ public class PlayerController : MonoBehaviour
                 {
                     SelectUnit(null);
                     yield return StartCoroutine(actingUnit.Attack(clickedPos, clickedUnit));
-                    if (turnManager.CanPerformAction(actingUnit)) SelectUnit(actingUnit);
+                    if (turnManager.CanPerformMovement(actingUnit) || turnManager.CanPerformAction(actingUnit))
+                        SelectUnit(actingUnit);
                 }
             }
         }
