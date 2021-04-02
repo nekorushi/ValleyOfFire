@@ -41,8 +41,11 @@ public class Unit : MonoBehaviour
 
     [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private SpriteRenderer spriteBgFX;
+
+    [SerializeField] private Sprite designerModeSprite;
     [SerializeField] private float spriteInGameYOffset;
     [SerializeField] private float spriteDesignerYOffset;
+
     private Material spriteMaterial;
 
     private readonly float UNIT_Z_POSITION = -0.5f;
@@ -131,8 +134,15 @@ public class Unit : MonoBehaviour
         if (unitClass != null)
         {
             Sprite newSprite = GraphicsToggle.Instance.DesignerMode
-                ? unitClass.designerModeSprites[Player.faction]
+                ? designerModeSprite
                 : unitClass.inGameSprites[Player.faction];
+
+            Color newColor = GraphicsToggle.Instance.DesignerMode
+                ? unitClass.designerModeColors[Player.faction]
+                : Color.white;
+            newColor.a = 1;
+
+            sprite.color = newColor;
 
             float newYPosition = GraphicsToggle.Instance.DesignerMode
                 ? spriteDesignerYOffset

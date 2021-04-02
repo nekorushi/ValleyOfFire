@@ -359,7 +359,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61be9336f10ae014982024b950d656e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenResolutionText: {fileID: 861068928}
   players:
   - {fileID: 1433011477}
   - {fileID: 850460526}
@@ -823,11 +822,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8907512749714802914, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.47
+      value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 8907512749714802914, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.22
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 8907512749714802914, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1041,11 +1040,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8907512749714802914, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.5
+      value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 8907512749714802914, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.74
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8907512749714802914, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.z

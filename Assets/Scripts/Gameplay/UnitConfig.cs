@@ -4,6 +4,7 @@ using UnityEngine;
 
 [Serializable] public class FactionSpriteDict : SerializableDictionary<PlayerFaction, Sprite> { }
 [Serializable] public class ClassSpriteDict : SerializableDictionary<UnitType, Sprite> { }
+[Serializable] public class FactionColorDict : SerializableDictionary<PlayerFaction, Color> { }
 
 [CreateAssetMenu(fileName = "UnitConfig", menuName = "GDS/Units/UnitConfig")]
 public class UnitConfig : ScriptableObject
@@ -12,7 +13,7 @@ public class UnitConfig : ScriptableObject
     public Sprite icon;
     public FactionSpriteDict portraits = new FactionSpriteDict();
     public FactionSpriteDict inGameSprites = new FactionSpriteDict();
-    public FactionSpriteDict designerModeSprites = new FactionSpriteDict();
+    public FactionColorDict designerModeColors = new FactionColorDict();
 
     [Header("Unit stats"), Space(20)]
     [SerializeField]

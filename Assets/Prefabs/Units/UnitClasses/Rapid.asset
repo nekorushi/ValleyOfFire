@@ -39,19 +39,19 @@ MonoBehaviour:
     - {fileID: 21300000, guid: ed41af8897e2eec409771097d28331aa, type: 3}
     - {fileID: 21300000, guid: f73be0205502941c1a28f31e18253c37, type: 3}
     - {fileID: 0}
-  designerModeSprites:
+  designerModeColors:
     _Buckets: 0000000001000000ffffffff
     _HashCodes: 000000000100000000000000
     _Next: ffffffffffffffff00000000
     _Count: 2
-    _Version: 4
+    _Version: 63
     _FreeList: -1
     _FreeCount: 0
     _Keys: 000000000100000000000000
     _Values:
-    - {fileID: 21300000, guid: ed68fd28b52d61b4994bdded0d073464, type: 3}
-    - {fileID: 21300000, guid: ed68fd28b52d61b4994bdded0d073464, type: 3}
-    - {fileID: 0}
+    - {r: 0, g: 1, b: 0.004989147, a: 0}
+    - {r: 0, g: 0.5188679, b: 0.0020347452, a: 0}
+    - {r: 0, g: 0, b: 0, a: 0}
   _type: 1
   _baseHealth: 100
   _movementRange: 3

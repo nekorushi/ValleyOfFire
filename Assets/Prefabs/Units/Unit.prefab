@@ -926,6 +926,9 @@ MonoBehaviour:
   barFxAnimator: {fileID: 132398716412349176}
   sprite: {fileID: 264290421417698826}
   spriteBgFX: {fileID: 5745582899514556783}
+  designerModeSprite: {fileID: 21300000, guid: 4b40fc0f65c85f14fbc9c7c5f40ca686, type: 3}
+  spriteInGameYOffset: 0
+  spriteDesignerYOffset: 0
 --- !u!114 &4568019237020550758
 MonoBehaviour:
   m_ObjectHideFlags: 0

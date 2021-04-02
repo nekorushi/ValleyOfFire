@@ -138,6 +138,7 @@ public abstract class SerializableDictionaryDrawer<TK, TV> : PropertyDrawer
             { typeof(Vector3), (rect, value) => EditorGUI.Vector3Field(rect, GUIContent.none, (Vector3)value) },
             { typeof(Bounds), (rect, value) => EditorGUI.BoundsField(rect, (Bounds)value) },
             { typeof(Rect), (rect, value) => EditorGUI.RectField(rect, (Rect)value) },
+            { typeof(Color), (rect, value) => EditorGUI.ColorField(rect, (Color)value) },
         };
 
     private static T DoField<T>(Rect rect, Type type, T value)
@@ -193,3 +194,6 @@ public class UnitPortraitDictDrawer : SerializableDictionaryDrawer<PlayerFaction
 
 [CustomPropertyDrawer(typeof(ClassSpriteDict))]
 public class ClassSpriteDictDrawer : SerializableDictionaryDrawer<UnitType, Sprite> { }
+
+[CustomPropertyDrawer(typeof(FactionColorDict))]
+public class FactionColorDictDrawer : SerializableDictionaryDrawer<PlayerFaction, Color> { }
