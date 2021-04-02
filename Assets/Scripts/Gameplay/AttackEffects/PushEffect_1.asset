@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e195f327a90f146ec98e6869d60e012b, type: 3}
   m_Name: PushEffect_1
   m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: c522cf6c24b2d4a7cbbbc1ae9aba5b40, type: 3}
   distance: 1

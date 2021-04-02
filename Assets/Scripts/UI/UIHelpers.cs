@@ -1,8 +1,8 @@
 ﻿public static class UIHelpers
 {
-    public static string FormatHealth(float health)
+    public static string FormatHealth(float health, bool round = false)
     {
-        return health.ToString("N1");
+        return round ? health.ToString() : health.ToString("N1");
     }
 
     public static string FormatShield(float shield)

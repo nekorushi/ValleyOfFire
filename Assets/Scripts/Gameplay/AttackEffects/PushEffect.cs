@@ -9,6 +9,9 @@ public class PushEffect : AttackEffect
 
     public override IEnumerator Execute(Unit attackerUnit, Unit targetUnit, Vector3Int targetPos, LevelTile targetTile)
     {
-        yield return targetUnit.Push(WorldUtils.DirectionToTarget(attackerUnit.CellPosition, targetUnit.CellPosition), distance);
+        if (targetUnit != null)
+        {
+            yield return targetUnit.Push(WorldUtils.DirectionToTarget(attackerUnit.CellPosition, targetUnit.CellPosition), distance);
+        }
     }
 }

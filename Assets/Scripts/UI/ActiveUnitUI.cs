@@ -1,11 +1,13 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ActiveUnitUI : MonoBehaviour
 {
     [SerializeField]
-    List<Image> actionPoints;
+    Image movePoint;
+
+    [SerializeField]
+    Image actionPoint;
 
     [SerializeField]
     private Image background;
@@ -17,36 +19,42 @@ public class ActiveUnitUI : MonoBehaviour
     private Sprite emptyPortrait;
 
     [SerializeField]
-    private Sprite pointOn;
+    private Color pointOn;
 
     [SerializeField]
-    private Sprite pointOff;
+    private Color pointOff;
 
 
     private void UpdatePortrait(PlayerController player, Unit unit)
     {
         portrait.sprite = unit.unitClass.portraits[player.faction];
     }
-    private void UpdateValue(int value)
+    private void UpdateValue(ActionPoints value)
     {
         ClearValue();
 
-        for (int i = 0; i < value; i++)
-        {
-            actionPoints[i].sprite = pointOn;
-        }
+        movePoint.color = value.canMove ? pointOff : pointOn;
+        actionPoint.color = value.canAttack ? pointOff : pointOn;
     }
 
     private void UpdateEnabled(bool enable)
     {
         Color newBackgroundColor = background.color;
         Color newPortraitColor = portrait.color;
-        Color newActionPointColor = actionPoints[0].color;
+        Color newMovePointColor = movePoint.color;
+        Color newActionPointColor = actionPoint.color;
 
         float newOpacity = enable ? 1f : .25f;
 
+        newBackgroundColor.a = newOpacity;
+        newPortraitColor.a = newOpacity;
+        newMovePointColor.a = newOpacity;
+        newActionPointColor.a = newOpacity;
+
         portrait.color = newPortraitColor;
         background.color = newBackgroundColor;
+        movePoint.color = newMovePointColor;
+        actionPoint.color = newActionPointColor;
     }
 
     private void ClearPortrait()
@@ -56,16 +64,14 @@ public class ActiveUnitUI : MonoBehaviour
 
     private void ClearValue()
     {
-        foreach (Image point in actionPoints)
-        {
-            point.sprite = pointOff;
-        }
+        movePoint.color = pointOff;
+        actionPoint.color = pointOff;
     }
 
     public void SetUnit(
         PlayerController player,
         Unit unit,
-        int actionPoints,
+        ActionPoints actionPoints,
         bool enabled
     ) {
         UpdatePortrait(player, unit);

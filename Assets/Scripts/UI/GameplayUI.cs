@@ -151,7 +151,10 @@ public class GameplayUI : MonoBehaviour
             if (unit.AvailableMoves == null) unit.UpdateAvailableMoves();
             unit.AvailableMoves.ForEach(position =>
             {
-                TintMarker(position, unit == ActivePlayer.CurrentUnit ? MarkerTypes.Movement : MarkerTypes.MovementPreview);
+                MarkerTypes markerType = unit == ActivePlayer.CurrentUnit && ActivePlayer.turnManager.CanPerformMovement(unit)
+                    ? MarkerTypes.Movement
+                    : MarkerTypes.MovementPreview;
+                TintMarker(position, markerType);
                 availableMoves.Add(position);
             });
         }

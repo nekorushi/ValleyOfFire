@@ -12,6 +12,7 @@ public class UnitConfig : ScriptableObject
     public Sprite icon;
     public FactionSpriteDict portraits = new FactionSpriteDict();
     public FactionSpriteDict inGameSprites = new FactionSpriteDict();
+    public FactionSpriteDict designerModeSprites = new FactionSpriteDict();
 
     [Header("Unit stats"), Space(20)]
     [SerializeField]

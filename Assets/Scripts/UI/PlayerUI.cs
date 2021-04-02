@@ -9,12 +9,6 @@ public class PlayerUI : MonoBehaviour
     private GameplayUI gameplayUI;
 
     [SerializeField]
-    private Image background;
-
-    [SerializeField]
-    private TMP_Text playerNameLabel;
-
-    [SerializeField]
     private Button nextTurnButton;
 
     [SerializeField]
@@ -41,15 +35,7 @@ public class PlayerUI : MonoBehaviour
         currentPlayer.TurnStarted.AddListener(DisplayActiveUnits);
         currentPlayer.UnitSelectionChanged.AddListener(DisplayActiveUnits);
 
-        UpdatePlayerInfo();
-
         DisplayActiveUnits();
-    }
-
-    private void UpdatePlayerInfo()
-    {
-        playerNameLabel.text = currentPlayer.PlayerName;
-        background.color = currentPlayer.PlayerColor;
     }
 
     private void DisplayActiveUnits()
@@ -62,7 +48,7 @@ public class PlayerUI : MonoBehaviour
         }
 
         int idx = 0;
-        foreach(KeyValuePair<Unit, int> activeUnit in turnManager.ActiveUnits)
+        foreach(KeyValuePair<Unit, ActionPoints> activeUnit in turnManager.ActiveUnits)
         {
             ActiveUnitUI unitUI = unitUIs[idx];
             unitUI.SetUnit(currentPlayer, activeUnit.Key, activeUnit.Value, true);
@@ -75,7 +61,7 @@ public class PlayerUI : MonoBehaviour
         if (hasSelectedNonActiveUnit && hasFreeSlots)
         {
             ActiveUnitUI unitUI = unitUIs[turnManager.ActiveUnits.Count];
-            unitUI.SetUnit(currentPlayer, currentPlayer.CurrentUnit, 2, false);
+            unitUI.SetUnit(currentPlayer, currentPlayer.CurrentUnit, new ActionPoints(true, true), false);
         }
     }
 

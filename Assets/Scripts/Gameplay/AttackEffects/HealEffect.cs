@@ -13,7 +13,10 @@ public class HealEffect : AttackEffect
         Vector3Int targetPos,
         LevelTile targetTile
     ) {
-        targetUnit.ModifyHealth(new DamageValue(healAmount, 1, DamageType.Heal, DamageTrajectory.SelfInflicted));
+        if (targetUnit != null)
+        {
+            targetUnit.ModifyHealth(new DamageValue(healAmount, 1, DamageType.Heal, DamageTrajectory.SelfInflicted));
+        }
 
         yield return new WaitForEndOfFrame();
     }

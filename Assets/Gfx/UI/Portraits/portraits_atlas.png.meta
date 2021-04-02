@@ -1,0 +1,438 @@
+fileFormatVersion: 2
+guid: eafdc39ca73e442b195e75d559b75cb1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2628861599778213592
+    second: portraits_minotaur
+  - first:
+      213: 60749739570039363
+    second: portraits_atlas_1
+  - first:
+      213: -1301926831747005614
+    second: portraits_rock
+  - first:
+      213: -7362748556099928028
+    second: portraits_atlas_3
+  - first:
+      213: -7197008098237390218
+    second: portraits_atlas_4
+  - first:
+      213: -5646013120211095405
+    second: portraits_atlas_5
+  - first:
+      213: 7534674194242172840
+    second: portraits_atlas_6
+  - first:
+      213: -940905665870994964
+    second: portraits_atlas_7
+  - first:
+      213: -6953473653418091893
+    second: portraits_zombie
+  - first:
+      213: 4014159357206153371
+    second: portraits_atlas_9
+  - first:
+      213: 3384853208122306756
+    second: portraits_soldier
+  - first:
+      213: 962896197638449750
+    second: portraits_atlas_11
+  - first:
+      213: -1491626160321368999
+    second: portraits_atlas_12
+  - first:
+      213: -5684791449811482301
+    second: portraits_atlas_13
+  - first:
+      213: 2126406621679827529
+    second: portraits_atlas_14
+  - first:
+      213: -69966909539348657
+    second: portraits_atlas_15
+  - first:
+      213: -5421035911462839521
+    second: portraits_giant
+  - first:
+      213: -5135567502196624409
+    second: portraits_atlas_17
+  - first:
+      213: 1429063096559443880
+    second: portraits_ninja
+  - first:
+      213: 6350929389180216837
+    second: portraits_atlas_19
+  - first:
+      213: -842751094824897424
+    second: portraits_atlas_20
+  - first:
+      213: -4578987638087175805
+    second: portraits_atlas_21
+  - first:
+      213: -5980806300923408112
+    second: portraits_atlas_22
+  - first:
+      213: 6638662403128103628
+    second: portraits_atlas_23
+  - first:
+      213: 672970411048891912
+    second: portraits_devil
+  - first:
+      213: 6499909756218151366
+    second: portraits_atlas_25
+  - first:
+      213: 1210770151652712748
+    second: portraits_fire
+  - first:
+      213: -5249179783052589262
+    second: portraits_atlas_27
+  - first:
+      213: -6581151664512164896
+    second: portraits_atlas_28
+  - first:
+      213: -7092870032318596449
+    second: portraits_atlas_29
+  - first:
+      213: -483009760316198927
+    second: portraits_atlas_30
+  - first:
+      213: 3400202195009940280
+    second: portraits_atlas_31
+  - first:
+      213: 5625125805620905362
+    second: portraits_witch
+  - first:
+      213: 1759224394368411452
+    second: portraits_atlas_33
+  - first:
+      213: 1344500803957464296
+    second: portraits_amazon
+  - first:
+      213: -7413140376155430371
+    second: portraits_atlas_35
+  - first:
+      213: -1981264901609916175
+    second: portraits_atlas_36
+  - first:
+      213: 2928725559629999071
+    second: portraits_atlas_37
+  - first:
+      213: 4561056355070178457
+    second: portraits_atlas_38
+  - first:
+      213: -4731364485827570760
+    second: portraits_atlas_39
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: portraits_minotaur
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 601
+        width: 137
+        height: 137
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 821fd85ad48648bd0800000000000000
+      internalID: -2628861599778213592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: portraits_rock
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 606
+        width: 137
+        height: 137
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2538b26c170aeede0800000000000000
+      internalID: -1301926831747005614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: portraits_zombie
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 458
+        width: 137
+        height: 137
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8a1af4ad8c408f90800000000000000
+      internalID: -6953473653418091893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: portraits_soldier
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 467
+        width: 137
+        height: 137
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c0b8fe1f0a69fe20800000000000000
+      internalID: 3384853208122306756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: portraits_giant
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 317
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1b1f967f8c94c4b0800000000000000
+      internalID: -5421035911462839521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: portraits_ninja
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 330
+        width: 135
+        height: 135
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8af9b08905d05d310800000000000000
+      internalID: 1429063096559443880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: portraits_devil
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 177
+        width: 134
+        height: 134
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 806fae6f50fd65900800000000000000
+      internalID: 672970411048891912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: portraits_fire
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 193
+        width: 137
+        height: 137
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c21e7e9b9058dc010800000000000000
+      internalID: 1210770151652712748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: portraits_witch
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 18
+        width: 130
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 295cae4fd16701e40800000000000000
+      internalID: 5625125805620905362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: portraits_amazon
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 37
+        width: 137
+        height: 137
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ec9c149b50a8a210800000000000000
+      internalID: 1344500803957464296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

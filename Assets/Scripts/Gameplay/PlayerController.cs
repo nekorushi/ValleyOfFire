@@ -161,13 +161,13 @@ public class PlayerController : MonoBehaviour
         bool isMovementClicked = CurrentUnit.AvailableMoves.Contains(clickedPos);
         if (isMovementClicked)
         {
-            bool usedAnActionPoint = turnManager.UseActionPoint(CurrentUnit);
+            bool usedAnActionPoint = turnManager.UseMovementPoint(CurrentUnit);
             if (usedAnActionPoint)
             {
                 Unit actingUnit = CurrentUnit;
                 SelectUnit(null);
                 yield return StartCoroutine(actingUnit.Move(clickedPos));
-                if (turnManager.CanPerformAction(actingUnit)) SelectUnit(actingUnit);
+                if (turnManager.CanPerformMovement(actingUnit)) SelectUnit(actingUnit);
             } else
             {
                 SelectUnit(null);
@@ -211,13 +211,16 @@ public class PlayerController : MonoBehaviour
                     || canAttackEnemiesAndSameClassAlly && clickedEnemyOrSameClassAlly
                 );
             bool canAttack = isSkillAvailable && (canAttackUnit || canAttackEnvironment);
-            bool usedAnActionPoint = turnManager.UseActionPoint(CurrentUnit, true);
 
-            if (canAttack && usedAnActionPoint)
+            if (canAttack)
             {
-                SelectUnit(null);
-                yield return StartCoroutine(actingUnit.Attack(clickedPos, clickedUnit));
-                if (turnManager.CanPerformAction(actingUnit)) SelectUnit(actingUnit);
+                bool usedAnActionPoint = turnManager.UseActionPoint(CurrentUnit);
+                if (usedAnActionPoint)
+                {
+                    SelectUnit(null);
+                    yield return StartCoroutine(actingUnit.Attack(clickedPos, clickedUnit));
+                    if (turnManager.CanPerformAction(actingUnit)) SelectUnit(actingUnit);
+                }
             }
         }
 

@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac5d7ab2d1a2145de8d5b1185e23fc1c, type: 3}
   m_Name: AddStraightShieldEffect
   m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: bb48cde8931544c4ebfc1779af4dd71e, type: 3}
   resistance: {fileID: 11400000, guid: 1bf76f3925259403f8b06544650ef002, type: 2}

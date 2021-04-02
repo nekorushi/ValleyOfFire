@@ -1,11 +1,21 @@
 using System.Collections.Generic;
-using UnityEngine.Events;
+
+public class ActionPoints
+{
+    public ActionPoints(bool _didMove, bool _didAttack)
+    {
+        canMove = _didMove;
+        canAttack = _didAttack;
+    }
+
+    public bool canMove;
+    public bool canAttack;
+}
 
 public class PlayerTurnManager
 {
     private int _maxUnitsPerTurn = 2;
     public int MaxUnitsPerTurn { get { return _maxUnitsPerTurn; } }
-    private int _actionPointsPerUnit = 2;
 
     private bool _turnFinished = false;
     public bool TurnFinished
@@ -13,40 +23,68 @@ public class PlayerTurnManager
         get { return _turnFinished; }
     }
 
-    private Dictionary<Unit, int> _activeUnits = new Dictionary<Unit, int>();
-    public Dictionary<Unit, int> ActiveUnits { get { return _activeUnits; } }
+    private Dictionary<Unit, ActionPoints> _activeUnits = new Dictionary<Unit, ActionPoints>();
+    public Dictionary<Unit, ActionPoints> ActiveUnits { get { return _activeUnits; } }
 
     private void ActivateUnit(Unit unit)
     {
-        if (!_activeUnits.ContainsKey(unit) && _activeUnits.Count < _maxUnitsPerTurn)
+        if (!IsActive(unit) && _activeUnits.Count < _maxUnitsPerTurn)
         {
-            _activeUnits.Add(unit, _actionPointsPerUnit);
+            _activeUnits.Add(unit, new ActionPoints(true, true));
+        }
+    }
+
+    public bool CanPerformMovement(Unit unit)
+    {
+        if (IsActive(unit))
+        {
+            return _activeUnits[unit].canMove;
+        } else {
+            return CanBeSelected(unit);
         }
     }
 
     public bool CanPerformAction(Unit unit)
     {
-        return _activeUnits[unit] > 0;
+        if (IsActive(unit))
+        {
+            return _activeUnits[unit].canAttack;
+        }
+        else
+        {
+            return CanBeSelected(unit);
+        }
     }
 
     public bool CanBeSelected(Unit unit)
     {
-        return _activeUnits.ContainsKey(unit) || _activeUnits.Count < _maxUnitsPerTurn;
+        return IsActive(unit) || _activeUnits.Count < _maxUnitsPerTurn;
     }
 
-    public bool UseActionPoint(Unit unit, bool useAll = false)
+    public bool IsActive(Unit unit)
+    {
+        return _activeUnits.ContainsKey(unit);
+    }
+
+    public bool UseMovementPoint(Unit unit)
+    {
+        ActivateUnit(unit);
+        if (CanPerformMovement(unit))
+        {
+            _activeUnits[unit].canMove = false;
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool UseActionPoint(Unit unit)
     {
         ActivateUnit(unit);
         if (CanPerformAction(unit))
         {
-            if (useAll)
-            {
-                _activeUnits[unit] = 0;
-            } else
-            {
-                _activeUnits[unit]--;
-            }
-
+            _activeUnits[unit].canAttack = false;
+            _activeUnits[unit].canMove = false;
             return true;
         }
 

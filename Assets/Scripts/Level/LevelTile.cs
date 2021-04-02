@@ -32,9 +32,25 @@ public class LevelTile : Tile
         get { return _canBeAttacked; }
     }
 
+    [SerializeField]
+    private Sprite designerSprite;
+
+    [SerializeField]
+    private Sprite originalSprite;
+
     private void OnEnable()
     {
         flags = TileFlags.LockTransform;
+    }
+
+    public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData)
+    {
+        base.GetTileData(position, tilemap, ref tileData);
+
+        if (originalSprite == null) originalSprite = tileData.sprite;
+
+        bool shouldUseDesignerSprite = GraphicsToggle.Instance.DesignerMode && designerSprite != null;
+        tileData.sprite = shouldUseDesignerSprite ? designerSprite : originalSprite;
     }
 
     public virtual bool OnUnitEnter(Unit unitEntered) { return true; }

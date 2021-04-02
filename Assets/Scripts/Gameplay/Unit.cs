@@ -41,6 +41,8 @@ public class Unit : MonoBehaviour
 
     [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private SpriteRenderer spriteBgFX;
+    [SerializeField] private float spriteInGameYOffset;
+    [SerializeField] private float spriteDesignerYOffset;
     private Material spriteMaterial;
 
     private readonly float UNIT_Z_POSITION = -0.5f;
@@ -90,6 +92,7 @@ public class Unit : MonoBehaviour
         spriteMaterial = sprite.material;
         GetComponentInChildren<ClassIcon>().SetValue(unitClass.Type);
         shieldBar.SetValue(Shield, baseShield);
+        GraphicsToggle.Instance.DesignerModeChanged.AddListener(UpdateSprite);
 
         if (unitClass.Type == UnitType.Fire)
         {
@@ -116,23 +119,34 @@ public class Unit : MonoBehaviour
             string teamName = Player != null ? Player.PlayerName : "NoTeam";
             string unitName = unitClass != null ? unitClass.name : "NoClass";
 
-            if (unitClass != null)
-            {
-                SetSprite(unitClass.inGameSprites[Player.faction]);
-            }
-            if (Player != null)
-            {
-                FlipSprite(Player.FacingLeft);
-            }
+            UpdateSprite();
+            if (Player != null) FlipSprite(Player.FacingLeft);
 
             name = string.Format("{0}_{1}", teamName, unitName);
         }
     }
 
-    private void SetSprite(Sprite newSprite)
+    private void UpdateSprite()
     {
-        sprite.sprite = newSprite;
-        spriteBgFX.sprite = newSprite;
+        if (unitClass != null)
+        {
+            Sprite newSprite = GraphicsToggle.Instance.DesignerMode
+                ? unitClass.designerModeSprites[Player.faction]
+                : unitClass.inGameSprites[Player.faction];
+
+            float newYPosition = GraphicsToggle.Instance.DesignerMode
+                ? spriteDesignerYOffset
+                : spriteInGameYOffset;
+
+            sprite.transform.localPosition = new Vector3(
+                sprite.transform.localPosition.x,
+                newYPosition,
+                sprite.transform.localPosition.z
+            );
+
+            sprite.sprite = newSprite;
+            spriteBgFX.sprite = newSprite;
+        }
     }
 
     private bool IsSpriteFlipped()

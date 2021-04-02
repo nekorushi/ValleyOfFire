@@ -30,6 +30,15 @@ public class SelectedUnitPanel : MonoBehaviour
     [SerializeField]
     private Button secondaryAbility;
 
+    [SerializeField]
+    private UnitAction baseAttackPanel;
+
+    [SerializeField]
+    private UnitAction mainAbilityPanel;
+
+    [SerializeField]
+    private UnitAction secondaryAbilityPanel;
+
     private void Awake()
     {
         baseAttack.onClick.AddListener(OnBaseAttackClick);
@@ -46,6 +55,7 @@ public class SelectedUnitPanel : MonoBehaviour
 
         Unit unit = currentPlayer.CurrentUnit;
 
+        ClearSkills();
         if (unit != null)
         {
             UpdateBackground();
@@ -76,7 +86,7 @@ public class SelectedUnitPanel : MonoBehaviour
     private void UpdateHealth()
     {
         Unit unit = currentPlayer.CurrentUnit;
-        healthText.text = UIHelpers.FormatHealth(unit.Health);
+        healthText.text = UIHelpers.FormatHealth(unit.Health, true);
     }
 
     private void UpdateShield()
@@ -88,9 +98,39 @@ public class SelectedUnitPanel : MonoBehaviour
     private void UpdateSkills()
     {
         Unit unit = currentPlayer.CurrentUnit;
-        baseAttack.gameObject.SetActive(unit.unitClass.baseAttack.isActive);
-        mainAbility.gameObject.SetActive(unit.unitClass.mainAbility.isActive);
-        secondaryAbility.gameObject.SetActive(unit.unitClass.secondaryAbility.isActive);
+        UnitConfig unitClass = unit.unitClass;
+
+        if (unitClass.baseAttack.isActive)
+        {
+            baseAttack.GetComponent<Image>().color = currentPlayer.PlayerColor;
+            baseAttackPanel.SetActions(unitClass.baseAttack);
+            baseAttackPanel.gameObject.SetActive(true);
+        }
+
+        if (unitClass.mainAbility.isActive)
+        {
+            mainAbility.GetComponent<Image>().color = currentPlayer.PlayerColor;
+            mainAbilityPanel.SetActions(unitClass.mainAbility);
+            mainAbilityPanel.gameObject.SetActive(true);
+        }
+
+        if (unitClass.secondaryAbility.isActive)
+        {
+            secondaryAbility.GetComponent<Image>().color = currentPlayer.PlayerColor;
+            secondaryAbilityPanel.SetActions(unitClass.secondaryAbility);
+            secondaryAbilityPanel.gameObject.SetActive(true);
+        }
+    }
+
+    private void ClearSkills()
+    {
+        baseAttackPanel.SetActions(null);
+        mainAbilityPanel.SetActions(null);
+        secondaryAbilityPanel.SetActions(null);
+
+        baseAttackPanel.gameObject.SetActive(false);
+        mainAbilityPanel.gameObject.SetActive(false);
+        secondaryAbilityPanel.gameObject.SetActive(false);
     }
 
     private void OnBaseAttackClick()
@@ -120,7 +160,7 @@ public class SelectedUnitPanel : MonoBehaviour
         if (currentPlayer.AttackMode == AttackModes.Attack) ChangeButtonColor(baseAttack, Color.green);
         if (currentPlayer.AttackMode == AttackModes.MainAbility) ChangeButtonColor(mainAbility, Color.green);
         if (currentPlayer.AttackMode == AttackModes.SecondaryAbility) ChangeButtonColor(secondaryAbility, Color.green);
-    }
+    }   
 
     private void ChangeButtonColor(Button button, Color color)
     {

@@ -18,13 +18,13 @@ MonoBehaviour:
     _HashCodes: 000000000100000000000000
     _Next: ffffffffffffffff00000000
     _Count: 2
-    _Version: 6
+    _Version: 8
     _FreeList: -1
     _FreeCount: 0
     _Keys: 000000000100000000000000
     _Values:
-    - {fileID: 21300000, guid: f595f3b4277804927a6eade40d78de28, type: 3}
-    - {fileID: 21300000, guid: aab9ea5d0edde4e2497dacf7ac3e437d, type: 3}
+    - {fileID: -1301926831747005614, guid: eafdc39ca73e442b195e75d559b75cb1, type: 3}
+    - {fileID: -5421035911462839521, guid: eafdc39ca73e442b195e75d559b75cb1, type: 3}
     - {fileID: 0}
   inGameSprites:
     _Buckets: 0000000001000000ffffffff
@@ -38,6 +38,19 @@ MonoBehaviour:
     _Values:
     - {fileID: 21300000, guid: 4fdb6c87224a04413b26fa27528800a9, type: 3}
     - {fileID: 21300000, guid: c786e916e8f534370ad6f52fd8a7b6e0, type: 3}
+    - {fileID: 0}
+  designerModeSprites:
+    _Buckets: 0000000001000000ffffffff
+    _HashCodes: 000000000100000000000000
+    _Next: ffffffffffffffff00000000
+    _Count: 2
+    _Version: 9
+    _FreeList: -1
+    _FreeCount: 0
+    _Keys: 000000000100000000000000
+    _Values:
+    - {fileID: 21300000, guid: 309e9a64e3e798b45b14f937249a6c2d, type: 3}
+    - {fileID: 21300000, guid: 309e9a64e3e798b45b14f937249a6c2d, type: 3}
     - {fileID: 0}
   _type: 3
   _baseHealth: 100

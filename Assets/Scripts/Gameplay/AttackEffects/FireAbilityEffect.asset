@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7216ff95dd4724cb5a70236f5eaf2952, type: 3}
   m_Name: FireAbilityEffect
   m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: ec7f559c190ee4fdab086b81c5311500, type: 3}
   allyAttackEffect: {fileID: 11400000, guid: 7560675793d9545f5b39820c16b6d28e, type: 2}
   enemyAttackEffect: {fileID: 11400000, guid: 2c332323cc158425ea538b7625f1cdf7, type: 2}

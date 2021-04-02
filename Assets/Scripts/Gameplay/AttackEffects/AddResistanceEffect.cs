@@ -9,7 +9,10 @@ public class AddResistanceEffect : AttackEffect
 
     public override IEnumerator Execute(Unit attackerUnit, Unit targetUnit, Vector3Int targetPos, LevelTile targetTile)
     {
-        targetUnit.resistancesManager.AddResistance(resistance);
+        if (targetUnit != null)
+        {
+            targetUnit.resistancesManager.AddResistance(resistance);
+        }
         yield return new WaitForEndOfFrame();
     }
 }

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7216ff95dd4724cb5a70236f5eaf2952, type: 3}
   m_Name: PoisonAbilityEffect
   m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: b7a3a2dabe8d24d84a322c8eae34b2a8, type: 3}
   allyAttackEffect: {fileID: 11400000, guid: ddc07d7b594454049a79d1573c6d4b23, type: 2}
   enemyAttackEffect: {fileID: 11400000, guid: f25236dfa0b3b495eaaa86a14e402a6b, type: 2}
