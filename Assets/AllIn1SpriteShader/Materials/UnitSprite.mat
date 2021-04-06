@@ -9,8 +9,9 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: UnitSprite
   m_Shader: {fileID: 4800000, guid: a36b7719ff0465b42ab1407d67672c5f, type: 3}
-  m_ShaderKeywords: ALPHACUTOFF_ON ALPHAROUND_ON ETC1_EXTERNAL_ALPHA FISHEYE_ON HITEFFECT_ON
-    OUTBASE8DIR_ON OUTBASEPIXELPERF_ON WIND_ON _OUTLINE8DIRECTIONS_ON _OUTLINEISPIXEL_ON
+  m_ShaderKeywords: ALPHACUTOFF_ON ALPHAROUND_ON ETC1_EXTERNAL_ALPHA FISHEYE_ON GREYSCALEOUTLINE_ON
+    HITEFFECT_ON OUTBASE8DIR_ON OUTBASEPIXELPERF_ON WIND_ON _GREYSCALEOUTLINE_ON
+    _OUTLINE8DIRECTIONS_ON _OUTLINEISPIXEL_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -111,7 +112,7 @@ Material:
     - _GrassSpeed: 5
     - _GrassWind: 0.5
     - _GreyscaleLuminosity: 0
-    - _GreyscaleOutline: 0
+    - _GreyscaleOutline: 1
     - _HandDrawnAmount: 10
     - _HandDrawnSpeed: 5
     - _HitEffectBlend: 0
@@ -205,7 +206,7 @@ Material:
     - _GradBotRightCol: {r: 0, g: 0, b: 1, a: 1}
     - _GradTopLeftCol: {r: 1, g: 0, b: 0, a: 1}
     - _GradTopRightCol: {r: 1, g: 0, b: 0, a: 1}
-    - _GreyscaleTintColor: {r: 1, g: 1, b: 1, a: 1}
+    - _GreyscaleTintColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
     - _HitEffectColor: {r: 1, g: 1, b: 1, a: 1}
     - _HologramStripeColor: {r: 0, g: 1, b: 1, a: 1}
     - _InnerOutlineColor: {r: 1, g: 0, b: 0, a: 1}

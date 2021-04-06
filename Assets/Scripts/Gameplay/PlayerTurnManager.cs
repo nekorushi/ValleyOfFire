@@ -38,7 +38,7 @@ public class PlayerTurnManager
     {
         if (IsActive(unit))
         {
-            return _activeUnits[unit].canMove;
+            return HasMoves(unit);
         } else {
             return CanBeSelected(unit);
         }
@@ -48,7 +48,7 @@ public class PlayerTurnManager
     {
         if (IsActive(unit))
         {
-            return _activeUnits[unit].canAttack;
+            return HasAttacks(unit);
         }
         else
         {
@@ -58,10 +58,21 @@ public class PlayerTurnManager
 
     public bool CanBeSelected(Unit unit)
     {
-        return IsActive(unit) || _activeUnits.Count < _maxUnitsPerTurn;
+        return _activeUnits.Count < _maxUnitsPerTurn 
+            || (IsActive(unit) && (HasMoves(unit) || HasAttacks(unit)));
     }
 
-    public bool IsActive(Unit unit)
+    private bool HasMoves(Unit unit)
+    {
+        return _activeUnits[unit].canMove;
+    }
+
+    private bool HasAttacks(Unit unit)
+    {
+        return _activeUnits[unit].canAttack;
+    }
+
+    private bool IsActive(Unit unit)
     {
         return _activeUnits.ContainsKey(unit);
     }

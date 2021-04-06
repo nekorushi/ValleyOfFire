@@ -202,6 +202,17 @@ public class Unit : MonoBehaviour
         spriteMaterial.DisableKeyword("OUTBASE_ON");
     }
 
+    public void SetDisabled(bool disabled)
+    {
+        if (disabled)
+        {
+            spriteMaterial.EnableKeyword("GREYSCALE_ON");
+        } else
+        {
+            spriteMaterial.DisableKeyword("GREYSCALE_ON");
+        }
+    }
+
     public SkillConfig GetSkillConfig(AttackModes mode)
     {
         Dictionary<AttackModes, SkillConfig> configsDict = new Dictionary<AttackModes, SkillConfig>()

@@ -74,6 +74,7 @@ public class PlayerController : MonoBehaviour
     private void Reset()
     {
         SelectUnit(null);
+        UpdateDisabledUnits(true);
     }
 
     public bool HasAliveFireUnits {
@@ -136,6 +137,15 @@ public class PlayerController : MonoBehaviour
         CurrentUnit = shouldUnselect || !clickedOwnUnit ? null : unit;
     }
 
+    private void UpdateDisabledUnits(bool reset = false)
+    {
+        foreach(Unit unit in Units)
+        {
+            bool shouldDisable = (!turnManager.CanPerformAction(unit) && !turnManager.CanPerformAction(unit));
+            unit.SetDisabled(!reset && shouldDisable);
+        }
+    }
+
     private IEnumerator PerformUnitAction(Vector3Int clickedPos, Unit clickedUnit)
     {
         if (AttackMode == AttackModes.None)
@@ -163,6 +173,7 @@ public class PlayerController : MonoBehaviour
             bool usedAnActionPoint = turnManager.UseMovementPoint(CurrentUnit);
             if (usedAnActionPoint)
             {
+                UpdateDisabledUnits();
                 Unit actingUnit = CurrentUnit;
                 SelectUnit(null);
                 yield return StartCoroutine(actingUnit.Move(clickedPos));
@@ -186,7 +197,6 @@ public class PlayerController : MonoBehaviour
         bool isAttackClicked = actingUnit.skillHandler.Contains(skillConfig, clickedPos);
         if (isAttackClicked)
         {
-
             LevelTile clickedTile = TilemapNavigator.Instance.GetTile(clickedPos);
             bool canAttack = skillConfig.CanPerformAttack(actingUnit, clickedUnit, clickedTile);
             if (canAttack)
@@ -194,6 +204,7 @@ public class PlayerController : MonoBehaviour
                 bool usedAnActionPoint = turnManager.UseActionPoint(CurrentUnit);
                 if (usedAnActionPoint)
                 {
+                    UpdateDisabledUnits();
                     SelectUnit(null);
                     yield return StartCoroutine(actingUnit.Attack(skillConfig, clickedPos, clickedUnit));
                     if (turnManager.CanPerformMovement(actingUnit) || turnManager.CanPerformAction(actingUnit))
