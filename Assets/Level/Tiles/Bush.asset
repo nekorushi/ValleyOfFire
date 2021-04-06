@@ -33,7 +33,7 @@ MonoBehaviour:
     e33: 1
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 2
-  m_ColliderType: 1
+  m_ColliderType: 2
   _type: 0
   _cost: 10
   _canBeAttacked: 1

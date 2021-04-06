@@ -30,23 +30,16 @@ public class GameplayUI : MonoBehaviour
     private Camera mainCamera;
     private RectTransform canvasRect;
 
-    [SerializeField]
-    private Tilemap areaTilemap;
+    [SerializeField] private Tilemap movementAreaTilemap;
+    [SerializeField]  private Tilemap attackAreaTilemap;
 
-    [SerializeField]
-    private List<Vector3Int> availableMoves = new List<Vector3Int>();
+    [HideInInspector] private List<Vector3Int> availableMoves = new List<Vector3Int>();
+    [HideInInspector] private List<Vector3Int> availableAttacks = new List<Vector3Int>();
 
-    [SerializeField]
-    private List<Vector3Int> availableAttacks = new List<Vector3Int>();
-
-    [SerializeField]
-    private Color defaultTileTint = Color.white;
-    [SerializeField]
-    private Color movementTileTint = Color.green;
-    [SerializeField]
-    private Color movementPreviewTileTint = Color.cyan;
-    [SerializeField]
-    private Color attackTileTint = Color.red;
+    [SerializeField] private Color defaultTileTint = Color.white;
+    [SerializeField] private Color movementTileTint = Color.green;
+    [SerializeField] private Color movementPreviewTileTint = Color.cyan;
+    [SerializeField] private Color attackTileTint = Color.red;
 
     [SerializeField]
     private GameObject dmgFormulaPrefab;
@@ -88,7 +81,8 @@ public class GameplayUI : MonoBehaviour
     {
         mainCamera = Camera.main;
         canvasRect = GetComponent<RectTransform>();
-        ResetTint();
+        ResetTint(movementAreaTilemap);
+        ResetTint(attackAreaTilemap);
     }
 
     void ConnectPlayer()
@@ -140,7 +134,7 @@ public class GameplayUI : MonoBehaviour
 
     void ClearAvailableMoves()
     {
-        availableMoves.ForEach(position => TintMarker(position, MarkerTypes.Default));
+        availableMoves.ForEach(position => TintMarker(movementAreaTilemap, position, MarkerTypes.Default));
         availableMoves.Clear();
     }
 
@@ -154,7 +148,7 @@ public class GameplayUI : MonoBehaviour
                 MarkerTypes markerType = unit == ActivePlayer.CurrentUnit && ActivePlayer.turnManager.CanPerformMovement(unit)
                     ? MarkerTypes.Movement
                     : MarkerTypes.MovementPreview;
-                TintMarker(position, markerType);
+                TintMarker(movementAreaTilemap, position, markerType);
                 availableMoves.Add(position);
             });
         }
@@ -162,7 +156,7 @@ public class GameplayUI : MonoBehaviour
 
     void ClearAvailableAttacks()
     {
-        availableAttacks.ForEach(position => TintMarker(position, MarkerTypes.Default));
+        availableAttacks.ForEach(position => TintMarker(attackAreaTilemap, position, MarkerTypes.Default));
         availableAttacks.Clear();
     }
 
@@ -183,8 +177,8 @@ public class GameplayUI : MonoBehaviour
             {
                 if (field.Value == AttackPatternField.On && TilemapNavigator.Instance.HasTile(field.Key))
                 {
-                    TintMarker(field.Key, MarkerTypes.Attack);
-                    availableMoves.Add(field.Key);
+                    TintMarker(attackAreaTilemap, field.Key, MarkerTypes.Attack);
+                    availableAttacks.Add(field.Key);
                 }
             }
         }
@@ -221,7 +215,7 @@ public class GameplayUI : MonoBehaviour
         }
     }
 
-    private void TintMarker(Vector3Int position, MarkerTypes type)
+    private void TintMarker(Tilemap tilemap, Vector3Int position, MarkerTypes type)
     {
         Dictionary<MarkerTypes, Color> markerColors = new Dictionary<MarkerTypes, Color>()
         {
@@ -232,12 +226,12 @@ public class GameplayUI : MonoBehaviour
         };
 
         Color tintColor = markerColors[type];
-        areaTilemap.SetColor(position, tintColor);
+        tilemap.SetColor(position, tintColor);
     }
 
-    private void ResetTint()
+    private void ResetTint(Tilemap tilemap)
     {
-        BoundsInt bounds = areaTilemap.cellBounds;
+        BoundsInt bounds = tilemap.cellBounds;
 
         for (int x = bounds.min.x; x < bounds.max.x; x++)
         {
@@ -246,9 +240,9 @@ public class GameplayUI : MonoBehaviour
                 for (int z = bounds.min.z; z < bounds.max.z; z++)
                 {
                     Vector3Int cellPos = new Vector3Int(x, y, z);
-                    if (areaTilemap.HasTile(cellPos))
+                    if (tilemap.HasTile(cellPos))
                     {
-                        TintMarker(cellPos, MarkerTypes.Default);
+                        TintMarker(tilemap, cellPos, MarkerTypes.Default);
                     }
                 }
             }
