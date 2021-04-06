@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Tilemaps;
 
@@ -111,25 +110,65 @@ public class GameplayUI : MonoBehaviour
         UpdateAvailableActions();
     }
 
+    void UpdateUnitPanel()
+    {
+        selectedUnitPanel.UpdateUnit(ActivePlayer);
+    }
+
     void UpdateAvailableActions()
     {
         ClearAvailableMoves();
         ClearAvailableAttacks();
         ClearDamageFormulas();
 
-        if (ActivePlayer.AttackMode == AttackModes.None)
-        {            
-            RenderAvailableMoves(HoveredUnit != null ? HoveredUnit : ActivePlayer.CurrentUnit);
-        } else
+
+        Unit unit = HoveredUnit != null ? HoveredUnit : ActivePlayer.CurrentUnit;
+        if (unit != null)
         {
-            RenderAvailableAttacks(ActivePlayer.CurrentUnit);
-            RenderDmgFormulas(ActivePlayer.CurrentUnit);
+            if (ShouldShowMovementRange(unit)) RenderAvailableMoves(unit);
+            if (ShouldShowAttackRange(unit)) RenderAvailableAttacks(unit);
+            if (ShouldShowDmgFormulas(unit)) RenderDmgFormulas(unit);
         }
     }
 
-    void UpdateUnitPanel()
+    bool ShouldShowMovementRange(Unit unit)
     {
-        selectedUnitPanel.UpdateUnit(ActivePlayer);
+        bool selectedUnitRange = 
+            ActivePlayer.AttackMode == AttackModes.None
+            && unit == ActivePlayer.CurrentUnit 
+            && ActivePlayer.turnManager.CanPerformMovement(unit);
+        if (selectedUnitRange) return true;
+
+        bool alliedUnit = unit.Player == ActivePlayer && ActivePlayer.turnManager.CanPerformMovement(unit);
+        if (alliedUnit) return true;
+
+        bool enemyUnit = unit.Player != ActivePlayer;
+        return enemyUnit;
+    }
+
+    bool ShouldShowAttackRange(Unit unit)
+    {
+        bool selectedUnitRange =
+            ActivePlayer.AttackMode != AttackModes.None
+            && unit == ActivePlayer.CurrentUnit
+            && ActivePlayer.turnManager.CanPerformAction(unit);
+        if (selectedUnitRange) return true;
+
+        bool alliedUnit = unit.Player == ActivePlayer && ActivePlayer.turnManager.CanPerformAction(unit);
+        if (alliedUnit) return true;
+
+        bool enemyUnit = unit.Player != ActivePlayer;
+        return enemyUnit;
+    }
+
+    bool ShouldShowDmgFormulas(Unit unit)
+    {
+        bool selectedUnitRange =
+            ActivePlayer.AttackMode != AttackModes.None
+            && unit == ActivePlayer.CurrentUnit
+            && ActivePlayer.turnManager.CanPerformAction(unit);
+        
+        return selectedUnitRange;
     }
 
     void ClearAvailableMoves()
@@ -160,28 +199,37 @@ public class GameplayUI : MonoBehaviour
         availableAttacks.Clear();
     }
 
-    void ClearDamageFormulas()
-    {
-        dmgFormulas.ForEach(image => Destroy(image));
-        dmgFormulas.Clear();
-    }
-
     void RenderAvailableAttacks(Unit unit)
     {
         if (unit == null) return;
-        SerializableDictionary<Vector3Int, AttackPatternField> pattern = unit.skillHandler.AttackArea;
 
+        SkillConfig skillConfig = unit.GetSkillConfig(unit == ActivePlayer.CurrentUnit 
+            ? ActivePlayer.AttackMode 
+            : AttackModes.Attack
+        );
+        if (skillConfig == null) return;
+
+        SerializableDictionary<Vector3Int, AttackPatternField> pattern = unit.skillHandler.AttackArea(skillConfig);
         if (pattern != null)
         {
             foreach (KeyValuePair<Vector3Int, AttackPatternField> field in pattern)
             {
-                if (field.Value == AttackPatternField.On && TilemapNavigator.Instance.HasTile(field.Key))
+                bool hasTile = TilemapNavigator.Instance.HasTile(field.Key);
+                Unit targetUnit = TilemapNavigator.Instance.GetUnit(field.Key);
+                bool isAlly = targetUnit != null && targetUnit.Player == unit.Player;
+                if (field.Value == AttackPatternField.On && hasTile && !isAlly)
                 {
                     TintMarker(attackAreaTilemap, field.Key, MarkerTypes.Attack);
                     availableAttacks.Add(field.Key);
                 }
             }
         }
+    }
+
+    void ClearDamageFormulas()
+    {
+        dmgFormulas.ForEach(image => Destroy(image));
+        dmgFormulas.Clear();
     }
 
     void RenderDmgFormulas(Unit unit)

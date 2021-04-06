@@ -362,14 +362,14 @@ public class Unit : MonoBehaviour
         sprite.transform.localScale = new Vector3(to, 1f, 1f);
     }
 
-    public IEnumerator Attack(Vector3Int clickedPos, Unit clickedUnit)
+    public IEnumerator Attack(SkillConfig config, Vector3Int clickedPos, Unit clickedUnit)
     {
-        SerializableDictionary<Vector3Int, AttackPatternField> fields = skillHandler.AttackArea;
+        SerializableDictionary<Vector3Int, AttackPatternField> fields = skillHandler.AttackArea(config);
 
         bool isAttackClicked = fields.ContainsKey(clickedPos) && fields[clickedPos] == AttackPatternField.On;
         if (isAttackClicked)
         {
-            yield return StartCoroutine(skillHandler.ExecuteAttack(clickedPos, clickedUnit));
+            yield return StartCoroutine(skillHandler.ExecuteAttack(config, clickedPos, clickedUnit));
         }
     }
 

@@ -7,17 +7,13 @@ using UnityEngine;
 public class SkillHandler : MonoBehaviour
 {
     private Unit attackerUnit;
-    [HideInInspector]
-    public SkillConfig config;
 
-    public SerializableDictionary<Vector3Int, AttackPatternField> AttackArea {
-        get {
-            return config.trajectory == DamageTrajectory.Curve
-                ? MapPatternToLevel()
-                : config.trajectory == DamageTrajectory.SelfInflicted
-                    ? new SerializableDictionary<Vector3Int, AttackPatternField>() { { attackerUnit.CellPosition, AttackPatternField.On } }
-                    : CalculateStraightRange();
-        }
+    public SerializableDictionary<Vector3Int, AttackPatternField> AttackArea(SkillConfig config) {
+        return config.trajectory == DamageTrajectory.Curve
+            ? MapPatternToLevel(config)
+            : config.trajectory == DamageTrajectory.SelfInflicted
+                ? new SerializableDictionary<Vector3Int, AttackPatternField>() { { attackerUnit.CellPosition, AttackPatternField.On } }
+                : CalculateStraightRange(config);
     }
 
     private void Awake()
@@ -25,7 +21,7 @@ public class SkillHandler : MonoBehaviour
         attackerUnit = GetComponent<Unit>();  
     }
 
-    public IEnumerator ExecuteAttack(Vector3Int targetPos, Unit targetUnit)
+    public IEnumerator ExecuteAttack(SkillConfig config, Vector3Int targetPos, Unit targetUnit)
     {
         bool shouldAttackTarget = targetUnit != null && targetUnit.Player.faction != attackerUnit.Player.faction && config.baseDamage > 0;
         if (shouldAttackTarget)
@@ -56,18 +52,20 @@ public class SkillHandler : MonoBehaviour
         }
     }
 
-    public bool Contains(Vector3Int cellPos)
+    public bool Contains(SkillConfig config, Vector3Int cellPos)
     {
-        return GetField(cellPos) != null;
+        return GetField(config, cellPos) != null;
     }
 
-    private AttackPatternField? GetField(Vector3Int pos)
+    private AttackPatternField? GetField(SkillConfig config, Vector3Int pos)
     {
-        if (AttackArea.ContainsKey(pos)) return AttackArea[pos];
+        SerializableDictionary<Vector3Int, AttackPatternField> attackArea = AttackArea(config);
+
+        if (attackArea.ContainsKey(pos)) return attackArea[pos];
         return null;
     }
 
-    private SerializableDictionary<Vector3Int, AttackPatternField> MapPatternToLevel()
+    private SerializableDictionary<Vector3Int, AttackPatternField> MapPatternToLevel(SkillConfig config)
     {
         SerializableDictionary<Vector3Int, AttackPatternField> result = new SerializableDictionary<Vector3Int, AttackPatternField>();
         foreach(KeyValuePair<Vector2Int, AttackPatternField> field in config.pattern)
@@ -79,7 +77,7 @@ public class SkillHandler : MonoBehaviour
         return result;
     }
 
-    private SerializableDictionary<Vector3Int, AttackPatternField> CalculateStraightRange()
+    private SerializableDictionary<Vector3Int, AttackPatternField> CalculateStraightRange(SkillConfig config)
     {
         TilemapNavigator navigator = TilemapNavigator.Instance;
 

@@ -42,7 +42,6 @@ public class PlayerController : MonoBehaviour
         private set
         {
             _attackMode = value;
-            if (CurrentUnit) CurrentUnit.skillHandler.config = CurrentUnit.GetSkillConfig(AttackMode);
             ControlModeChanged.Invoke();
         }
     }
@@ -181,45 +180,22 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator PerformAttackAction(Vector3Int clickedPos, Unit clickedUnit)
     {
+        SkillConfig skillConfig = CurrentUnit.GetSkillConfig(AttackMode);
+
         Unit actingUnit = CurrentUnit;
-        bool isAttackClicked = actingUnit.skillHandler.Contains(clickedPos);
+        bool isAttackClicked = actingUnit.skillHandler.Contains(skillConfig, clickedPos);
         if (isAttackClicked)
         {
-            AttackTargets allowedTargets = actingUnit.skillHandler.config.targets;
-            bool isSkillAvailable = actingUnit.skillHandler.config.isActive;
-            bool canAttackSelf = allowedTargets == AttackTargets.Self;
-            bool canAttackAllies = allowedTargets == AttackTargets.Allies;
-            bool canAttackEnemies = allowedTargets == AttackTargets.Enemies;
-            bool canAttackSameClassAlly = allowedTargets == AttackTargets.SameClassAlly;
-            bool canAttackEnemiesAndSameClassAlly = allowedTargets == AttackTargets.EnemiesOrSameClassAlly;
-
-            bool clickedSelf = clickedUnit == actingUnit;
-            bool clickedAlly = !clickedSelf && Units.Contains(clickedUnit);
-            bool clickedEnemy = !Units.Contains(clickedUnit);
-            bool clickedSameClassAlly = clickedAlly && clickedUnit.unitClass.Type == actingUnit.unitClass.Type;
-            bool clickedEnemyOrSameClassAlly = clickedEnemy || clickedSameClassAlly;
 
             LevelTile clickedTile = TilemapNavigator.Instance.GetTile(clickedPos);
-
-            bool canAttackEnvironment = clickedTile != null && clickedTile.CanBeAttacked;
-            bool canAttackUnit = clickedUnit != null
-                && (
-                    allowedTargets == AttackTargets.Both
-                    || canAttackSelf && clickedSelf
-                    || canAttackAllies && clickedAlly
-                    || canAttackEnemies && clickedEnemy
-                    || canAttackSameClassAlly && clickedSameClassAlly
-                    || canAttackEnemiesAndSameClassAlly && clickedEnemyOrSameClassAlly
-                );
-            bool canAttack = isSkillAvailable && (canAttackUnit || canAttackEnvironment);
-
+            bool canAttack = skillConfig.CanPerformAttack(actingUnit, clickedUnit, clickedTile);
             if (canAttack)
             {
                 bool usedAnActionPoint = turnManager.UseActionPoint(CurrentUnit);
                 if (usedAnActionPoint)
                 {
                     SelectUnit(null);
-                    yield return StartCoroutine(actingUnit.Attack(clickedPos, clickedUnit));
+                    yield return StartCoroutine(actingUnit.Attack(skillConfig, clickedPos, clickedUnit));
                     if (turnManager.CanPerformMovement(actingUnit) || turnManager.CanPerformAction(actingUnit))
                         SelectUnit(actingUnit);
                 }

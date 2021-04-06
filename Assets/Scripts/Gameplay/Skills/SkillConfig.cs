@@ -63,4 +63,36 @@ public class SkillConfig
 
         }
     }
+
+    public bool CanPerformAttack(Unit attackerUnit, Unit targetUnit, LevelTile targetTile)
+    {
+        if (!isActive) return false;
+        AttackTargets allowedTargets = targets;
+
+        bool canAttackSelf = allowedTargets == AttackTargets.Self;
+        bool canAttackAllies = allowedTargets == AttackTargets.Allies;
+        bool canAttackEnemies = allowedTargets == AttackTargets.Enemies;
+        bool canAttackSameClassAlly = allowedTargets == AttackTargets.SameClassAlly;
+        bool canAttackEnemiesAndSameClassAlly = allowedTargets == AttackTargets.EnemiesOrSameClassAlly;
+
+        List<Unit> attackerAllies = attackerUnit.Player.Units;
+        bool clickedSelf = targetUnit == attackerUnit;
+        bool clickedEnemy = !attackerAllies.Contains(targetUnit);
+        bool clickedAlly = !clickedSelf && !clickedEnemy;
+        bool clickedSameClassAlly = clickedAlly && targetUnit.unitClass.Type == attackerUnit.unitClass.Type;
+        bool clickedEnemyOrSameClassAlly = clickedEnemy || clickedSameClassAlly;
+
+        bool canAttackEnvironment = targetTile != null && targetTile.CanBeAttacked;
+        bool canAttackUnit = targetUnit != null
+            && (
+                allowedTargets == AttackTargets.Both
+                || canAttackSelf && clickedSelf
+                || canAttackAllies && clickedAlly
+                || canAttackEnemies && clickedEnemy
+                || canAttackSameClassAlly && clickedSameClassAlly
+                || canAttackEnemiesAndSameClassAlly && clickedEnemyOrSameClassAlly
+            );
+
+        return canAttackUnit || canAttackEnvironment;
+    }
 }
