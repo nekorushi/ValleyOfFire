@@ -129,6 +129,18 @@ public class Unit : MonoBehaviour
         }
     }
 
+    public void Focus()
+    {
+        UpdateAvailableMoves();
+        spriteMaterial.EnableKeyword("OUTBASE_ON");
+    }
+
+    public void Blur()
+    {
+        AvailableMoves = null;
+        spriteMaterial.DisableKeyword("OUTBASE_ON");
+    }
+
     private void UpdateSprite()
     {
         if (unitClass != null)
@@ -187,19 +199,6 @@ public class Unit : MonoBehaviour
     private void OnStatusChange()
     {
         shieldBar.SetValue(Shield, baseShield);
-    }
-
-    public void Focus() {
-        UpdateAvailableMoves();
-
-        spriteMaterial.EnableKeyword("OUTBASE_ON");
-    }
-
-    public void Blur()
-    {
-        AvailableMoves = null;
-
-        spriteMaterial.DisableKeyword("OUTBASE_ON");
     }
 
     public void SetDisabled(bool disabled)
@@ -396,17 +395,5 @@ public class Unit : MonoBehaviour
     {
         int range = statusManager.HasStatus(typeof(SwampedStatus)) && unitClass.SwampedMovementRange > 0 ? unitClass.SwampedMovementRange : unitClass.MovementRange;
         AvailableMoves = TilemapNavigator.Instance.CalculateMovementRange(CellPosition, range);
-    }
-
-    private void OnMouseEnter()
-    {
-        UnitTooltip.Instance.SetUnit(this);
-        GameplayUI.Instance.HoveredUnit = this;
-    }
-
-    private void OnMouseExit()
-    {
-        UnitTooltip.Instance.SetUnit(null);
-        GameplayUI.Instance.HoveredUnit = null;
     }
 }

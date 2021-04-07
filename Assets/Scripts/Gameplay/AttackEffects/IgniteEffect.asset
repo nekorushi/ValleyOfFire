@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: IgniteEffect
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: ec7f559c190ee4fdab086b81c5311500, type: 3}
+  label: Ignite
+  description: Set dry bushes on fire.

@@ -1,26 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class UnitAction : MonoBehaviour
+public class UnitAction : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField]
-    private Sprite curveTrajectoryIcon;
+    [SerializeField] private Sprite curveTrajectoryIcon;
+    [SerializeField] private Sprite straightTrajectoryIcon;
 
-    [SerializeField]
-    private Sprite straightTrajectoryIcon;
+    [Header("Components references")]
+    [SerializeField] private SelectedUnitPanel owner;
+    [SerializeField] private Image trajectoryImage;
+    [SerializeField] private Image effectImage;
 
-    [Header("Elements references")]
-    [SerializeField]
-    private Image trajectoryImage;
-
-    [SerializeField]
-    private Image effectImage;
+    private SkillConfig currentConfig;
 
     public void SetActions(
         SkillConfig skillConfig
     ) {
 
+        currentConfig = skillConfig;
         RenderInfo(skillConfig);
     }
 
@@ -36,18 +35,25 @@ public class UnitAction : MonoBehaviour
         }
     }
 
-    private void RenderTrajectoryIcon(DamageTrajectory trajectory)
+    public Sprite GetTrajectoryIcon(DamageTrajectory trajectory)
     {
-
         Dictionary<DamageTrajectory, Sprite> trajectoryIcons = new Dictionary<DamageTrajectory, Sprite>()
         {
             { DamageTrajectory.Curve, curveTrajectoryIcon },
             { DamageTrajectory.Straight, straightTrajectoryIcon }
         };
 
-        if (trajectoryIcons.ContainsKey(trajectory))
+        return trajectoryIcons.ContainsKey(trajectory)
+            ? trajectoryIcons[trajectory]
+            : null;
+    }
+
+    private void RenderTrajectoryIcon(DamageTrajectory trajectory)
+    {
+        Sprite trajectoryIcon = GetTrajectoryIcon(trajectory);
+        if (trajectoryIcon != null)
         {
-            trajectoryImage.sprite = trajectoryIcons[trajectory];
+            trajectoryImage.sprite = trajectoryIcon;
             trajectoryImage.gameObject.SetActive(true);
         }
     }
@@ -69,5 +75,15 @@ public class UnitAction : MonoBehaviour
     private void HideEffectIcon()
     {
         effectImage.gameObject.SetActive(false);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        owner.ShowTooltip(currentConfig, this);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        owner.HideTooltip();
     }
 }

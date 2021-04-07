@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: FireAbilityEffect
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: ec7f559c190ee4fdab086b81c5311500, type: 3}
+  label: Reignite/Ignite
+  description: Either heal allied Fire units or set dry bushes on fire.
   allyAttackEffect: {fileID: 11400000, guid: 7560675793d9545f5b39820c16b6d28e, type: 2}
   enemyAttackEffect: {fileID: 11400000, guid: 2c332323cc158425ea538b7625f1cdf7, type: 2}

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.Tilemaps;
+using UnityEngine.EventSystems;
 
 enum MarkerTypes
 {
@@ -28,6 +29,8 @@ public class GameplayUI : MonoBehaviour
 
     private Camera mainCamera;
     private RectTransform canvasRect;
+
+    TilemapNavigator navigator;
 
     [SerializeField] private Tilemap movementAreaTilemap;
     [SerializeField]  private Tilemap attackAreaTilemap;
@@ -60,6 +63,7 @@ public class GameplayUI : MonoBehaviour
         set
         {
             _hoveredUnit = value;
+            unitTooltip.SetUnit(value);
             UpdateAvailableActions();
         }
     }
@@ -80,8 +84,36 @@ public class GameplayUI : MonoBehaviour
     {
         mainCamera = Camera.main;
         canvasRect = GetComponent<RectTransform>();
+        navigator = TilemapNavigator.Instance;
         ResetTint(movementAreaTilemap);
         ResetTint(attackAreaTilemap);
+
+        InvokeRepeating("HandleMouseHover", 0f, .1f);
+    }
+
+    private Vector3Int _hoveredCell;
+    public Vector3Int HoveredCell
+    {
+        get { return _hoveredCell; }
+        set
+        {
+            _hoveredCell = value;
+            UpdateAvailableActions();
+
+            Unit unit = navigator.GetUnit(value);
+            if (HoveredUnit != unit) HoveredUnit = unit;
+        }
+    }
+    private void HandleMouseHover()
+    {
+        Vector3Int hoveredPosition = navigator.WorldToCellPos(
+            mainCamera.ScreenToWorldPoint(Input.mousePosition)
+        );
+
+        if (HoveredCell == null || HoveredCell != hoveredPosition)
+        {
+            HoveredCell = hoveredPosition;
+        }
     }
 
     void ConnectPlayer()
@@ -139,7 +171,9 @@ public class GameplayUI : MonoBehaviour
             && ActivePlayer.turnManager.CanPerformMovement(unit);
         if (selectedUnitRange) return true;
 
-        bool alliedUnit = unit.Player == ActivePlayer && ActivePlayer.turnManager.CanPerformMovement(unit);
+        bool alliedUnit = unit != ActivePlayer.CurrentUnit 
+            && unit.Player == ActivePlayer 
+            && ActivePlayer.turnManager.CanPerformMovement(unit);
         if (alliedUnit) return true;
 
         bool enemyUnit = unit.Player != ActivePlayer;
@@ -274,6 +308,9 @@ public class GameplayUI : MonoBehaviour
         };
 
         Color tintColor = markerColors[type];
+
+        if (type != MarkerTypes.Default && position == HoveredCell) tintColor.a = 180; 
+
         tilemap.SetColor(position, tintColor);
     }
 

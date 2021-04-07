@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: PoisonAbilityEffect
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: b7a3a2dabe8d24d84a322c8eae34b2a8, type: 3}
+  label: Push/Heal
+  description: Either damage and push enemy units or heal allies for 30 health.
   allyAttackEffect: {fileID: 11400000, guid: ddc07d7b594454049a79d1573c6d4b23, type: 2}
   enemyAttackEffect: {fileID: 11400000, guid: f25236dfa0b3b495eaaa86a14e402a6b, type: 2}

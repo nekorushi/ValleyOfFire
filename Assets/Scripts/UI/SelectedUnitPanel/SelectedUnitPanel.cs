@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,45 +7,31 @@ public class SelectedUnitPanel : MonoBehaviour
 {
     private PlayerController currentPlayer;
 
-    [SerializeField]
-    private GameObject wrapper;
+    [SerializeField] private GameObject wrapper;
+    [SerializeField] private List<Image> teamColors;
+    [SerializeField] private Image portrait;
 
-    [SerializeField]
-    private Image background;
+    [SerializeField] private TMP_Text healthText;
+    [SerializeField] private TMP_Text shieldText;
 
-    [SerializeField]
-    private Image portrait;
+    [SerializeField] private Button baseAttack;
+    [SerializeField] private Button mainAbility;
+    [SerializeField] private Button secondaryAbility;
 
-    [SerializeField]
-    private TMP_Text healthText;
+    [SerializeField] private UnitAction baseAttackPanel;
+    [SerializeField] private UnitAction mainAbilityPanel;
+    [SerializeField] private UnitAction secondaryAbilityPanel;
 
-    [SerializeField]
-    private TMP_Text shieldText;
-
-    [SerializeField]
-    private Button baseAttack;
-
-    [SerializeField]
-    private Button mainAbility;
-
-    [SerializeField]
-    private Button secondaryAbility;
-
-    [SerializeField]
-    private UnitAction baseAttackPanel;
-
-    [SerializeField]
-    private UnitAction mainAbilityPanel;
-
-    [SerializeField]
-    private UnitAction secondaryAbilityPanel;
+    [SerializeField] private SkillTooltip skillTooltip;
 
     private void Awake()
     {
         baseAttack.onClick.AddListener(OnBaseAttackClick);
         mainAbility.onClick.AddListener(OnMainAbilityClick);
         secondaryAbility.onClick.AddListener(OnSecondaryAbilityClick);
+
         wrapper.SetActive(false);
+        skillTooltip.gameObject.SetActive(false);
     }
 
     public void UpdateUnit(PlayerController player)
@@ -58,7 +45,7 @@ public class SelectedUnitPanel : MonoBehaviour
         ClearSkills();
         if (unit != null)
         {
-            UpdateBackground();
+            UpdateTeamColors();
             UpdatePortrait();
             UpdateHealth();
             UpdateShield();
@@ -71,9 +58,24 @@ public class SelectedUnitPanel : MonoBehaviour
         }
     }
 
-    private void UpdateBackground()
+    public void ShowTooltip(SkillConfig config, UnitAction action)
     {
-        background.color = currentPlayer.PlayerColor;
+        skillTooltip.SetValue(config, action);
+        skillTooltip.gameObject.SetActive(true);
+    }
+
+    public void HideTooltip()
+    {
+        skillTooltip.gameObject.SetActive(false);
+        skillTooltip.SetValue(null, null);
+    }
+
+    private void UpdateTeamColors()
+    {
+        foreach(Image sprite in teamColors)
+        {
+            sprite.color = currentPlayer.PlayerColor;
+        }
     }
 
     private void UpdatePortrait()
@@ -102,21 +104,18 @@ public class SelectedUnitPanel : MonoBehaviour
 
         if (unitClass.baseAttack.isActive)
         {
-            baseAttack.GetComponent<Image>().color = currentPlayer.PlayerColor;
             baseAttackPanel.SetActions(unitClass.baseAttack);
             baseAttackPanel.gameObject.SetActive(true);
         }
 
         if (unitClass.mainAbility.isActive)
         {
-            mainAbility.GetComponent<Image>().color = currentPlayer.PlayerColor;
             mainAbilityPanel.SetActions(unitClass.mainAbility);
             mainAbilityPanel.gameObject.SetActive(true);
         }
 
         if (unitClass.secondaryAbility.isActive)
         {
-            secondaryAbility.GetComponent<Image>().color = currentPlayer.PlayerColor;
             secondaryAbilityPanel.SetActions(unitClass.secondaryAbility);
             secondaryAbilityPanel.gameObject.SetActive(true);
         }

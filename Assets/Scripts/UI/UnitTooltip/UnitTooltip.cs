@@ -28,6 +28,11 @@ public class UnitTooltip : MonoBehaviour
 
     [SerializeField] private List<UnitConfig> unitClasses;
 
+    private void Awake()
+    {
+        wrapper.SetActive(false);
+    }
+
     public void SetUnit(Unit unit)
     {
         if (unit != null)

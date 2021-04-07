@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: HealEffect_30
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 046d00004df9a2d4dacc0b45243cc502, type: 3}
+  label: 
+  description: 
   healAmount: 30

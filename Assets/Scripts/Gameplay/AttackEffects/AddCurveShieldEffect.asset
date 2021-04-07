@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: AddCurveShieldEffect
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 0fe96d30fc9904d90917b33b4a8c70d1, type: 3}
+  label: Curve Shield
+  description: Prevents next attack of "Curve" trajectory.
   resistance: {fileID: 11400000, guid: 9340ab5fba0f9423daa5d97efe3f9534, type: 2}
