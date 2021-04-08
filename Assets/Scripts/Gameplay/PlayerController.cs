@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public UnityEvent ControlModeChanged;
     public UnityEvent AvailableActionsChanged;
     public UnityEvent TurnStarted;
+    public UnityEvent UnitsHealthChanged;
 
     private Camera mainCamera;
 
@@ -86,9 +87,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public float AllUnitsHealth
+    {
+        get
+        {
+            return Units.Sum(unit => unit.Health);
+        }
+    }
+
     public void ChangeAttackMode(AttackModes mode)
     {
         AttackMode = AttackMode == mode ? AttackModes.None : mode;
+    }
+
+    public void NotifyHealthChange()
+    {
+        UnitsHealthChanged.Invoke();
     }
 
     public IEnumerator PerformTurn()

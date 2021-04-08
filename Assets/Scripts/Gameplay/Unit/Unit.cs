@@ -236,6 +236,7 @@ public class Unit : MonoBehaviour
         StartCoroutine(AnimateHealthChange(damageDealt, damageData));
 
         if (Health == 0) Kill();
+        if (Player != null) Player.NotifyHealthChange();
     }
     private void Kill()
     {

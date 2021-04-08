@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.Tilemaps;
-using UnityEngine.EventSystems;
 
 enum MarkerTypes
 {
@@ -11,6 +10,7 @@ enum MarkerTypes
     Movement,
     MovementPreview,
     Attack,
+    AttackPreview,
 }
 
 public class GameplayUI : MonoBehaviour
@@ -39,9 +39,10 @@ public class GameplayUI : MonoBehaviour
     [HideInInspector] private List<Vector3Int> availableAttacks = new List<Vector3Int>();
 
     [SerializeField] private Color defaultTileTint = Color.white;
-    [SerializeField] private Color movementTileTint = Color.green;
+    [SerializeField] private Color movementTileTint = Color.blue;
     [SerializeField] private Color movementPreviewTileTint = Color.cyan;
     [SerializeField] private Color attackTileTint = Color.red;
+    [SerializeField] private Color attackPreviewTileTint = Color.magenta;
 
     [SerializeField]
     private GameObject dmgFormulaPrefab;
@@ -62,9 +63,27 @@ public class GameplayUI : MonoBehaviour
         get { return _hoveredUnit; }
         set
         {
-            _hoveredUnit = value;
             unitTooltip.SetUnit(value);
+
+            if (ActivePlayer.AttackMode == AttackModes.None)
+            {
+                _hoveredUnit = value;
+                UpdateAvailableActions();
+            }
+        }
+    }
+
+    private Vector3Int _hoveredCell;
+    public Vector3Int HoveredCell
+    {
+        get { return _hoveredCell; }
+        set
+        {
+            _hoveredCell = value;
             UpdateAvailableActions();
+
+            Unit unit = navigator.GetUnit(value);
+            if (HoveredUnit != unit) HoveredUnit = unit;
         }
     }
 
@@ -89,20 +108,6 @@ public class GameplayUI : MonoBehaviour
         ResetTint(attackAreaTilemap);
 
         InvokeRepeating("HandleMouseHover", 0f, .1f);
-    }
-
-    private Vector3Int _hoveredCell;
-    public Vector3Int HoveredCell
-    {
-        get { return _hoveredCell; }
-        set
-        {
-            _hoveredCell = value;
-            UpdateAvailableActions();
-
-            Unit unit = navigator.GetUnit(value);
-            if (HoveredUnit != unit) HoveredUnit = unit;
-        }
     }
     private void HandleMouseHover()
     {
@@ -243,17 +248,20 @@ public class GameplayUI : MonoBehaviour
         );
         if (skillConfig == null) return;
 
+        TilemapNavigator navigator = TilemapNavigator.Instance;
         SerializableDictionary<Vector3Int, AttackPatternField> pattern = unit.skillHandler.AttackArea(skillConfig);
         if (pattern != null)
         {
             foreach (KeyValuePair<Vector3Int, AttackPatternField> field in pattern)
             {
-                bool hasTile = TilemapNavigator.Instance.HasTile(field.Key);
-                Unit targetUnit = TilemapNavigator.Instance.GetUnit(field.Key);
-                bool isAlly = targetUnit != null && targetUnit.Player == unit.Player;
-                if (field.Value == AttackPatternField.On && hasTile && !isAlly)
+                LevelTile targetTile = navigator.GetTile(field.Key);
+                bool hasTile = targetTile != null;
+                Unit targetUnit = navigator.GetUnit(field.Key);
+
+                if (field.Value == AttackPatternField.On && hasTile)
                 {
-                    TintMarker(attackAreaTilemap, field.Key, MarkerTypes.Attack);
+                    bool canAttack = skillConfig.CanPerformAttack(unit, targetUnit, targetTile);
+                    TintMarker(attackAreaTilemap, field.Key, canAttack && unit != HoveredUnit ? MarkerTypes.Attack : MarkerTypes.AttackPreview);
                     availableAttacks.Add(field.Key);
                 }
             }
@@ -303,13 +311,15 @@ public class GameplayUI : MonoBehaviour
         {
             {MarkerTypes.Default, defaultTileTint },
             {MarkerTypes.Attack, attackTileTint },
+            {MarkerTypes.AttackPreview, attackPreviewTileTint },
             {MarkerTypes.Movement, movementTileTint },
             {MarkerTypes.MovementPreview, movementPreviewTileTint }
         };
 
         Color tintColor = markerColors[type];
 
-        if (type != MarkerTypes.Default && position == HoveredCell) tintColor.a = 180; 
+        bool shouldHighlight = position == HoveredCell && (type == MarkerTypes.Attack || type == MarkerTypes.Movement);
+        if (shouldHighlight) tintColor.a = 180; 
 
         tilemap.SetColor(position, tintColor);
     }
