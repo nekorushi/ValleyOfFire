@@ -20,6 +20,12 @@ TextureImporter:
   - first:
       213: 7980853219166280902
     second: ui_atlas_5
+  - first:
+      213: 3303189428467558304
+    second: ui_atlas_6
+  - first:
+      213: 8060847166058842764
+    second: ui_atlas_7
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -230,6 +236,48 @@ TextureImporter:
       bones: []
       spriteID: 6cc50fce7bfa1ce60800000000000000
       internalID: 7980853219166280902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_atlas_6
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 18
+        width: 93
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a762adb84947dd20800000000000000
+      internalID: 3303189428467558304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_atlas_7
+      rect:
+        serializedVersion: 2
+        x: 405
+        y: 88
+        width: 54
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8ac6a11ac1eddf60800000000000000
+      internalID: 8060847166058842764
       vertices: []
       indices: 
       edges: []

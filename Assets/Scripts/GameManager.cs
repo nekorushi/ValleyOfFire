@@ -35,6 +35,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private List<LevelTile> tickingTiles;
 
+    [SerializeField]
+    private TurnsCounter turnsCounter;
+
     private void Start()
     {
         summaryPanel.gameObject.SetActive(false);
@@ -51,12 +54,14 @@ public class GameManager : MonoBehaviour
         int currentPlayerIdx = 0;
         while (!CheckWinningConditions())
         {
-            if (currentPlayerIdx == 0)
+            bool isNewTurn = currentPlayerIdx == 0;
+            if (isNewTurn)
             {
-                foreach(LevelTile tile in tickingTiles)
-                {
+                foreach(LevelTile tile in tickingTiles) { 
                     tile.OnTick();
                 }
+
+                turnsCounter.TriggerNewTurn();
             }
 
             PlayerController currentPlayer = players[currentPlayerIdx];
@@ -65,7 +70,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        summaryWinner.text = players.FirstOrDefault(player => player.HasAliveFireUnits).name;
+        summaryWinner.text = GetStrongestPlayer().PlayerName;
         summaryPanel.gameObject.SetActive(true);
     }
 
@@ -84,6 +89,23 @@ public class GameManager : MonoBehaviour
     public bool CheckWinningConditions()
     {
         int alivePlayers = players.Where(player => player.HasAliveFireUnits).ToList().Count;
-        return alivePlayers <= 1;
+        if (alivePlayers <= 1) return true;
+
+        bool turnsLimitReached = turnsCounter.TurnsLeft <= 0;
+        if (turnsLimitReached)
+        {
+            return GetStrongestPlayer() != null;
+        }
+
+        return false;
+    }
+
+    private PlayerController GetStrongestPlayer()
+    {
+        float strongestPlayerHealth = players.Max(player => player.AllUnitsHealth);
+        bool strongestPlayerExists = players.Count(players => players.AllUnitsHealth == strongestPlayerHealth) < 2;
+
+        if (strongestPlayerExists) return players.First(players => players.AllUnitsHealth == strongestPlayerHealth);
+        return null;
     }
 }
