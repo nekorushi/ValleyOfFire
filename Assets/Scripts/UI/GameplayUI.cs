@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.Tilemaps;
+using System.Collections;
 
 enum MarkerTypes
 {
@@ -43,6 +44,9 @@ public class GameplayUI : MonoBehaviour
     [SerializeField] private Color movementPreviewTileTint = Color.cyan;
     [SerializeField] private Color attackTileTint = Color.red;
     [SerializeField] private Color attackPreviewTileTint = Color.magenta;
+
+    [SerializeField] private AudioSource musicPlayer;
+    [SerializeField] private Material overlay;
 
     [SerializeField]
     private GameObject dmgFormulaPrefab;
@@ -107,8 +111,12 @@ public class GameplayUI : MonoBehaviour
         ResetTint(movementAreaTilemap);
         ResetTint(attackAreaTilemap);
 
+        musicPlayer.volume = 0;
+        overlay.SetFloat("_Alpha", 1);
+
         InvokeRepeating("HandleMouseHover", 0f, .1f);
     }
+
     private void HandleMouseHover()
     {
         Vector3Int hoveredPosition = navigator.WorldToCellPos(
@@ -141,6 +149,25 @@ public class GameplayUI : MonoBehaviour
         }
     }
 
+    public IEnumerator PlayIntro()
+    {
+        float elapsedTime = 0f;
+        float transitionDuration = 1f;
+
+        while (elapsedTime <= transitionDuration)
+        {
+            float progress = elapsedTime / transitionDuration;
+
+            musicPlayer.volume = progress;
+            overlay.SetFloat("_Alpha", 1 - progress);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(.5f);
+    }
+
     void UpdateUnitSelection()
     {
         UpdateUnitPanel();
@@ -158,8 +185,9 @@ public class GameplayUI : MonoBehaviour
         ClearAvailableAttacks();
         ClearDamageFormulas();
 
-
-        Unit unit = HoveredUnit != null ? HoveredUnit : ActivePlayer.CurrentUnit;
+        Unit unit = HoveredUnit != null 
+            ? HoveredUnit 
+            : ActivePlayer != null ? ActivePlayer.CurrentUnit : null;
         if (unit != null)
         {
             if (ShouldShowMovementRange(unit)) RenderAvailableMoves(unit);

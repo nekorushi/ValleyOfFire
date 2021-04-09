@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         summaryPanel.gameObject.SetActive(false);
+
         StartCoroutine(BeginRound());
     }
 
@@ -51,6 +52,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator BeginRound()
     {
+        yield return StartCoroutine(gameplayUI.PlayIntro());
+
         int currentPlayerIdx = 0;
         while (!CheckWinningConditions())
         {

@@ -53,3 +53,6 @@ TagManager:
   - name: GameplayUI
     uniqueID: 4122503069
     locked: 0
+  - name: Overlay
+    uniqueID: 147363201
+    locked: 0
