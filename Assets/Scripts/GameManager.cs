@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator BeginRound()
     {
-        yield return StartCoroutine(gameplayUI.PlayIntro());
+        StartCoroutine(gameplayUI.PlayIntro());
 
         int currentPlayerIdx = 0;
         while (!CheckWinningConditions())
