@@ -11,13 +11,18 @@ public class SplitEffect : AttackEffect
 
     public override AudioClip GetSound(Unit attackerUnit, Unit targetUnit)
     {
-        if (attackerUnit.Player.faction == targetUnit.Player.faction)
+        if (targetUnit != null)
         {
-            return allyAttackEffect.GetSound(attackerUnit, targetUnit);
-        } else
-        {
-            return enemyAttackEffect.GetSound(attackerUnit, targetUnit);
+            if (attackerUnit.Player.faction == targetUnit.Player.faction)
+            {
+                return allyAttackEffect.GetSound(attackerUnit, targetUnit);
+            } else
+            {
+                return enemyAttackEffect.GetSound(attackerUnit, targetUnit);
+            }
         }
+
+        return null;
     }
 
     public override IEnumerator Execute(Unit attackerUnit, Unit targetUnit, Vector3Int targetPos, LevelTile targetTile)

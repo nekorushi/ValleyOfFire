@@ -3,7 +3,10 @@ guid: c3834704b9cc04ceeb028b976ae80d2e
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - icon: {instanceID: 0}
+  - sound: {instanceID: 0}
+  - tileIgniteSound: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
