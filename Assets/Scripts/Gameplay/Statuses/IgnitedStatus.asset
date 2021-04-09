@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: ec7f559c190ee4fdab086b81c5311500, type: 3}
   iconColor: {r: 1, g: 0.41020912, b: 0, a: 1}
-  inflictSound: {fileID: 0}
+  inflictSound: {fileID: 8300000, guid: 7f019600b74772d4a96c3504522f8717, type: 3}
   deflectSound: {fileID: 0}
   tickSound: {fileID: 8300000, guid: 7f019600b74772d4a96c3504522f8717, type: 3}
   shieldReduction:
