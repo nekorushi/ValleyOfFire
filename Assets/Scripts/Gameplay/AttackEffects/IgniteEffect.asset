@@ -16,3 +16,4 @@ MonoBehaviour:
   label: Ignite
   description: Set dry bushes on fire.
   sound: {fileID: 0}
+  tileIgniteSound: {fileID: 8300000, guid: 7f019600b74772d4a96c3504522f8717, type: 3}
