@@ -139,6 +139,7 @@ public abstract class SerializableDictionaryDrawer<TK, TV> : PropertyDrawer
             { typeof(Bounds), (rect, value) => EditorGUI.BoundsField(rect, (Bounds)value) },
             { typeof(Rect), (rect, value) => EditorGUI.RectField(rect, (Rect)value) },
             { typeof(Color), (rect, value) => EditorGUI.ColorField(rect, (Color)value) },
+            { typeof(AudioClip), (rect, value) => EditorGUI.ObjectField(rect, (AudioClip)value, typeof(AudioClip), true) },
         };
 
     private static T DoField<T>(Rect rect, Type type, T value)
@@ -197,3 +198,6 @@ public class ClassSpriteDictDrawer : SerializableDictionaryDrawer<UnitType, Spri
 
 [CustomPropertyDrawer(typeof(FactionColorDict))]
 public class FactionColorDictDrawer : SerializableDictionaryDrawer<PlayerFaction, Color> { }
+
+[CustomPropertyDrawer(typeof(FactionSoundDict))]
+public class FactionSoundDictDrawer : SerializableDictionaryDrawer<PlayerFaction, AudioClip> { }

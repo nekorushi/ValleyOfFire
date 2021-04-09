@@ -30,6 +30,7 @@ public class SkillHandler : MonoBehaviour
                 attackerUnit.unitClass.Type,
                 targetUnit.unitClass.Type
             );
+
             yield return StartCoroutine(ProjectileAnimator.Instance.Play(attackerUnit.CellPosition, targetPos, config.trajectory));
             targetUnit.ModifyHealth(new DamageValue(
                 config.baseDamage,
@@ -38,6 +39,14 @@ public class SkillHandler : MonoBehaviour
                 config.trajectory
             ));
         }
+
+        AudioClip effectSound = config.effect != null ? config.effect.GetSound(attackerUnit, targetUnit) : null;
+        AudioClip attackSound = attackerUnit.unitClass.baseAttackSound[attackerUnit.Player.faction];
+
+        AudioClip playedSound = effectSound != null
+            ? effectSound
+            : shouldAttackTarget ? attackSound : null;
+        if (playedSound != null) attackerUnit.PlaySound(playedSound);
 
         if (config.effect != null)
         {

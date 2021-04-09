@@ -15,4 +15,5 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: c522cf6c24b2d4a7cbbbc1ae9aba5b40, type: 3}
   label: Push
   description: Push enemy unit by 1 field.
+  sound: {fileID: 8300000, guid: 6a9fef4370b6a7140b6ef14e83d303c2, type: 3}
   distance: 1

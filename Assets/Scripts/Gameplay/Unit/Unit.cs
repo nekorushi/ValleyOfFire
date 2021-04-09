@@ -47,6 +47,7 @@ public class Unit : MonoBehaviour
     [SerializeField] private float spriteDesignerYOffset;
 
     private Material spriteMaterial;
+    private AudioSource audioPlayer;
 
     private readonly float UNIT_Z_POSITION = -0.5f;
     private TilesetTraversalProvider tilesetTraversalProvider;
@@ -86,6 +87,7 @@ public class Unit : MonoBehaviour
     {
         // Assign references
         skillHandler = GetComponent<SkillHandler>();
+        audioPlayer = GetComponent<AudioSource>();
 
         // Initial setup
         Player.AddUnit(this);
@@ -225,9 +227,17 @@ public class Unit : MonoBehaviour
         return configsDict[mode];
     }
 
+    public void PlaySound(AudioClip clip)
+    {
+        audioPlayer.PlayOneShot(clip);
+    }
+
     public void ModifyHealth(DamageValue damageData)
     {
         float damageDealt = damageData.DamageDealt(this);
+
+        if (damageDealt < 0) PlaySound(unitClass.damageTakenSound[Player.faction]);
+
         Health = Mathf.Clamp(
             Health + damageDealt,
             0,

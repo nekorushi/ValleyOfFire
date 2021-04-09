@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 public class StatusManager
 {
@@ -27,6 +28,9 @@ public class StatusManager
     {
         if (InflictedStatus != null)
         {
+            AudioClip sound = InflictedStatus.tickSound;
+            if (sound != null) owner.PlaySound(sound);
+
             bool shouldRemoveStatus = InflictedStatus.OnTick(owner);
             if (shouldRemoveStatus) RemoveStatus();
         }
@@ -35,11 +39,17 @@ public class StatusManager
     public void InflictStatus(UnitStatus newStatus)
     {
         bool wasBlockedByResistance = resistancesManager.CheckAgainstStatus(owner, newStatus);
-        if (!wasBlockedByResistance)
+        if (wasBlockedByResistance)
         {
+            AudioClip sound = newStatus.deflectSound;
+            if (sound != null) owner.PlaySound(sound);
+        } else {
             RemoveStatus();
             InflictedStatus = newStatus;
             newStatus.OnAdd(owner);
+
+            AudioClip sound = newStatus.inflictSound;
+            if (sound != null) owner.PlaySound(sound);
         }
     }
 

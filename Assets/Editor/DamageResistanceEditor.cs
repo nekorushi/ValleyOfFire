@@ -10,6 +10,7 @@ public class DamageResistanceEditor : Editor
     SerializedProperty duration;
 
     SerializedProperty fx;
+    SerializedProperty tickSound;
     SerializedProperty anyDamage;
     SerializedProperty shouldResistTypes;
     SerializedProperty damageType;
@@ -24,6 +25,7 @@ public class DamageResistanceEditor : Editor
         duration = serializedObject.FindProperty("duration");
 
         fx = serializedObject.FindProperty("fx");
+        tickSound = serializedObject.FindProperty("tickSound");
         anyDamage = serializedObject.FindProperty("anyDamage");
         shouldResistTypes = serializedObject.FindProperty("shouldResistTypes");
         damageType = serializedObject.FindProperty("damageType");
@@ -39,6 +41,9 @@ public class DamageResistanceEditor : Editor
 
         EditorGUILayout.LabelField("What FX should be played when resistance is active?");
         EditorGUILayout.PropertyField(fx);
+
+        EditorGUILayout.LabelField("What sound should be played when resistance takes effect?");
+        EditorGUILayout.PropertyField(tickSound);
 
         EditorGUILayout.LabelField("Resistance duration?");
         EditorGUI.indentLevel++;

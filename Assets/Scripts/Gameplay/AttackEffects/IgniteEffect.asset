@@ -15,3 +15,4 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: ec7f559c190ee4fdab086b81c5311500, type: 3}
   label: Ignite
   description: Set dry bushes on fire.
+  sound: {fileID: 8300000, guid: 7f019600b74772d4a96c3504522f8717, type: 3}

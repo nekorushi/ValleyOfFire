@@ -7,6 +7,9 @@ public abstract class UnitStatus : ScriptableObject
 {
     public Sprite icon;
     public Color iconColor;
+    public AudioClip inflictSound;
+    public AudioClip deflectSound;
+    public AudioClip tickSound;
 
     [SerializeField]
     private ShieldRecutionDict shieldReduction = new ShieldRecutionDict();

@@ -15,4 +15,5 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 046d00004df9a2d4dacc0b45243cc502, type: 3}
   label: 
   description: 
+  sound: {fileID: 8300000, guid: c6dadf71ee748f6459a5e4de1efbb357, type: 3}
   healAmount: 30

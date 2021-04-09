@@ -15,6 +15,7 @@ MonoBehaviour:
   fx: 2
   isPermanent: 0
   duration: 1
+  tickSound: {fileID: 8300000, guid: bb00af36a932e8947b64349cedeba2dd, type: 3}
   anyDamage: 0
   shouldResistTypes: 0
   damageType: 0

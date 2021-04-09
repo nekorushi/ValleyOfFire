@@ -21,6 +21,7 @@ public abstract class Resistance : ScriptableObject
     public ResistanceFX fx;
     public bool isPermanent;
     public int duration;
+    public AudioClip tickSound;
 
     protected ResistanceType type;
 
@@ -48,6 +49,7 @@ public abstract class Resistance : ScriptableObject
 
     public bool OnTick(Unit immuneUnit)
     {
+        if (tickSound != null) immuneUnit.PlaySound(tickSound);
         bool shouldRemoveResistance = false;
 
         if (!isPermanent)

@@ -5,6 +5,7 @@ using UnityEngine;
 [Serializable] public class FactionSpriteDict : SerializableDictionary<PlayerFaction, Sprite> { }
 [Serializable] public class ClassSpriteDict : SerializableDictionary<UnitType, Sprite> { }
 [Serializable] public class FactionColorDict : SerializableDictionary<PlayerFaction, Color> { }
+[Serializable] public class FactionSoundDict : SerializableDictionary<PlayerFaction, AudioClip> { }
 
 [CreateAssetMenu(fileName = "UnitConfig", menuName = "GDS/Units/UnitConfig")]
 public class UnitConfig : ScriptableObject
@@ -14,6 +15,10 @@ public class UnitConfig : ScriptableObject
     public FactionSpriteDict portraits = new FactionSpriteDict();
     public FactionSpriteDict inGameSprites = new FactionSpriteDict();
     public FactionColorDict designerModeColors = new FactionColorDict();
+
+    [Header("Unit sounds")]
+    public FactionSoundDict baseAttackSound;
+    public FactionSoundDict damageTakenSound;
 
     [Header("Unit stats"), Space(20)]
     [SerializeField]

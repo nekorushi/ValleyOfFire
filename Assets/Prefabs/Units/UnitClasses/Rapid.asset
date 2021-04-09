@@ -52,6 +52,32 @@ MonoBehaviour:
     - {r: 0, g: 1, b: 0.004989147, a: 0}
     - {r: 0, g: 0.5188679, b: 0.0020347452, a: 0}
     - {r: 0, g: 0, b: 0, a: 0}
+  baseAttackSound:
+    _Buckets: 0000000001000000ffffffff
+    _HashCodes: 000000000100000000000000
+    _Next: ffffffffffffffff00000000
+    _Count: 2
+    _Version: 4
+    _FreeList: -1
+    _FreeCount: 0
+    _Keys: 000000000100000000000000
+    _Values:
+    - {fileID: 8300000, guid: e9fcfd5e58e7b86408b24068966d2d49, type: 3}
+    - {fileID: 8300000, guid: e5b77ff0ebdba6249b947067f7c557c2, type: 3}
+    - {fileID: 0}
+  damageTakenSound:
+    _Buckets: 0000000001000000ffffffff
+    _HashCodes: 000000000100000000000000
+    _Next: ffffffffffffffff00000000
+    _Count: 2
+    _Version: 5
+    _FreeList: -1
+    _FreeCount: 0
+    _Keys: 000000000100000000000000
+    _Values:
+    - {fileID: 8300000, guid: eda4a9362ae4f8a4b872b5e686879ebf, type: 3}
+    - {fileID: 8300000, guid: ec5a328eed2618c43966c768486032f6, type: 3}
+    - {fileID: 0}
   _type: 1
   _baseHealth: 100
   _movementRange: 3

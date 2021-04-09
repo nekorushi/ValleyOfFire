@@ -9,6 +9,17 @@ public class SplitEffect : AttackEffect
     [SerializeField]
     private AttackEffect enemyAttackEffect;
 
+    public override AudioClip GetSound(Unit attackerUnit, Unit targetUnit)
+    {
+        if (attackerUnit.Player.faction == targetUnit.Player.faction)
+        {
+            return allyAttackEffect.GetSound(attackerUnit, targetUnit);
+        } else
+        {
+            return enemyAttackEffect.GetSound(attackerUnit, targetUnit);
+        }
+    }
+
     public override IEnumerator Execute(Unit attackerUnit, Unit targetUnit, Vector3Int targetPos, LevelTile targetTile)
     {
         bool isAttackingAlly = targetUnit != null && attackerUnit.Player.faction == targetUnit.Player.faction;
