@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class ValueBar : MonoBehaviour
+public class ValueBar : MonoBehaviour, IValueBar
 {
     [SerializeField]
     private RectTransform barFill;

@@ -31,8 +31,11 @@ public class Unit : MonoBehaviour
     [HideInInspector] public SkillHandler skillHandler;
 
     [SerializeField] private ValueBar healthBar;
+    [SerializeField] private SegmentedBar segmentedHealthBar;
     [SerializeField] private ValueBar shieldBar;
     [SerializeField] private TMP_Text damageText;
+
+    private IValueBar activeHealthBar;
 
     public Animator animator;
     public Animator bgFxAnimator;
@@ -62,7 +65,7 @@ public class Unit : MonoBehaviour
         get { return _health; }
         private set {
             _health = value;
-            healthBar.SetValue(value, unitClass.BaseHealth);
+            activeHealthBar.SetValue(value, unitClass.BaseHealth);
 
             if (unitClass.Type == UnitType.Fire)
             {
@@ -88,6 +91,20 @@ public class Unit : MonoBehaviour
         // Assign references
         skillHandler = GetComponent<SkillHandler>();
         audioPlayer = GetComponent<AudioSource>();
+
+        healthBar.gameObject.SetActive(false);
+
+        if (unitClass.Type == UnitType.Fire)
+        {
+            activeHealthBar = segmentedHealthBar;
+            segmentedHealthBar.gameObject.SetActive(true);
+            healthBar.gameObject.SetActive(false);
+        } else
+        {
+            activeHealthBar = healthBar;
+            segmentedHealthBar.gameObject.SetActive(false);
+            healthBar.gameObject.SetActive(true);
+        }
 
         // Initial setup
         Player.AddUnit(this);
