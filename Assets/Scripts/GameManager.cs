@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour
 
     public bool CheckWinningConditions()
     {
-        int alivePlayers = players.Where(player => player.HasAliveFireUnits).ToList().Count;
+        int alivePlayers = players.Where(player => player.HasAliveGuardianUnits).ToList().Count;
         if (alivePlayers <= 1) return true;
 
         bool turnsLimitReached = turnsCounter.TurnsLeft <= 0;

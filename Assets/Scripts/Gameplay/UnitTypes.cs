@@ -1,9 +1,9 @@
 public enum UnitType 
 {
-	Heavy = 0,
-	Rapid = 1,
-	Poison = 2,
-	Cannon = 3,
-	Fire = 4,
+	Brute = 0,
+	Javelineer = 1,
+	Crook = 2,
+	Thrower = 3,
+	Guardian = 4,
 
 }

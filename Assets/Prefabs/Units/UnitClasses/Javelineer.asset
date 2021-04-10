@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4fc133265b13c46b0973e61462722dd7, type: 3}
-  m_Name: Rapid
+  m_Name: Javelineer
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: fc0847cb537cd4598a9a35e6a06982a6, type: 3}
   portraits:

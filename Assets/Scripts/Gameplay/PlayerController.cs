@@ -80,10 +80,10 @@ public class PlayerController : MonoBehaviour
         UpdateDisabledUnits(true);
     }
 
-    public bool HasAliveFireUnits {
+    public bool HasAliveGuardianUnits {
         get {
             return Units
-                .Where(unit => unit.unitClass.Type == UnitType.Fire && unit.Health > 0)
+                .Where(unit => unit.unitClass.Type == UnitType.Guardian && unit.Health > 0)
                 .ToList()
                 .Count > 0;
         }

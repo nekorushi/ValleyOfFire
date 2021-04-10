@@ -248,7 +248,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
-      value: Demons_Fire
+      value: Demons_Guardian
       objectReference: {fileID: 0}
     - target: {fileID: 4074105457893682666, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
@@ -833,7 +833,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
-      value: Humans_Fire
+      value: Humans_Guardian
       objectReference: {fileID: 0}
     - target: {fileID: 4074105457893682666, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1203,7 +1203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
-      value: Demons_Heavy
+      value: Demons_Brute
       objectReference: {fileID: 0}
     - target: {fileID: 4074105457893682666, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1373,7 +1373,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
-      value: Humans_Rapid
+      value: Humans_Javelineer
       objectReference: {fileID: 0}
     - target: {fileID: 4074105457893682666, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1643,7 +1643,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
-      value: Humans_Heavy
+      value: Humans_Brute
       objectReference: {fileID: 0}
     - target: {fileID: 4074105457893682666, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1858,7 +1858,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
-      value: Demons_Cannon
+      value: Demons_Thrower
       objectReference: {fileID: 0}
     - target: {fileID: 4074105457893682666, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2508,6 +2508,7 @@ GameObject:
   - component: {fileID: 1081348069}
   - component: {fileID: 1081348068}
   - component: {fileID: 1081348067}
+  - component: {fileID: 1081348072}
   m_Layer: 5
   m_Name: GameplayUI
   m_TagString: Untagged
@@ -2631,6 +2632,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!225 &1081348072
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081348066}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1089195876
 GameObject:
   m_ObjectHideFlags: 0
@@ -2938,7 +2951,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
-      value: Demons_Poison
+      value: Demons_Crook
       objectReference: {fileID: 0}
     - target: {fileID: 4074105457893682666, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6178,7 +6191,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
-      value: Demons_Fire
+      value: Demons_Guardian
       objectReference: {fileID: 0}
     - target: {fileID: 4074105457893682666, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6495,7 +6508,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
-      value: Demons_Rapid
+      value: Demons_Javelineer
       objectReference: {fileID: 0}
     - target: {fileID: 4074105457893682666, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6694,6 +6707,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e237bc07b2b3684c9e595f417368939, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameplayUI: {fileID: 1081348067}
   animator: {fileID: 1645050222}
   audioPlayer: {fileID: 1561465514}
   newTurnSound: {fileID: 8300000, guid: fc72d4ba350be05419e1f6d7d7546e92, type: 3}
@@ -6835,7 +6849,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
-      value: Humans_Fire
+      value: Humans_Guardian
       objectReference: {fileID: 0}
     - target: {fileID: 4074105457893682666, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7001,7 +7015,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
-      value: Humans_Cannon
+      value: Humans_Thrower
       objectReference: {fileID: 0}
     - target: {fileID: 4074105457893682666, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7330,7 +7344,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726289083473766081, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_Name
-      value: Humans_Poison
+      value: Humans_Crook
       objectReference: {fileID: 0}
     - target: {fileID: 4074105457893682666, guid: 33d5387491ab61d429a283b61f0b6112, type: 3}
       propertyPath: m_LocalPosition.y
@@ -12250,7 +12264,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8094088959473570464, guid: a84b31a9f251547f5b01e320f437b71e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 60
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8094088959473570464, guid: a84b31a9f251547f5b01e320f437b71e, type: 3}
       propertyPath: m_SizeDelta.y
@@ -12493,6 +12507,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1081348071}
     m_Modifications:
+    - target: {fileID: 6257997051979515768, guid: f8a1befe8a8872e4ea94500c2b909949, type: 3}
+      propertyPath: turnsLimit
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6257997051979515768, guid: f8a1befe8a8872e4ea94500c2b909949, type: 3}
       propertyPath: fullColor.a
       value: 1

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4fc133265b13c46b0973e61462722dd7, type: 3}
-  m_Name: Cannon
+  m_Name: Thrower
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 543c58a606fd44f0a82e14b1d3e7dd82, type: 3}
   portraits:

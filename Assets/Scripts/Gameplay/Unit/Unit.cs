@@ -67,7 +67,7 @@ public class Unit : MonoBehaviour
             _health = value;
             activeHealthBar.SetValue(value, unitClass.BaseHealth);
 
-            if (unitClass.Type == UnitType.Fire)
+            if (unitClass.Type == UnitType.Guardian)
             {
                 bgFxAnimator.SetBool("Burning", _health >= 2);
             }
@@ -94,7 +94,7 @@ public class Unit : MonoBehaviour
 
         healthBar.gameObject.SetActive(false);
 
-        if (unitClass.Type == UnitType.Fire)
+        if (unitClass.Type == UnitType.Guardian)
         {
             activeHealthBar = segmentedHealthBar;
             segmentedHealthBar.gameObject.SetActive(true);
@@ -116,7 +116,7 @@ public class Unit : MonoBehaviour
         shieldBar.SetValue(Shield, baseShield);
         GraphicsToggle.Instance.DesignerModeChanged.AddListener(UpdateSprite);
 
-        if (unitClass.Type == UnitType.Fire)
+        if (unitClass.Type == UnitType.Guardian)
         {
             bgFxAnimator.SetBool("Burning", true);
         }
