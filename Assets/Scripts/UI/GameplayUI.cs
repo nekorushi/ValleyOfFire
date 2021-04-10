@@ -30,6 +30,9 @@ public class GameplayUI : MonoBehaviour
 
     private Camera mainCamera;
     private RectTransform canvasRect;
+    private CanvasGroup canvasGroup;
+
+    bool isActive = true;
 
     TilemapNavigator navigator;
 
@@ -107,6 +110,7 @@ public class GameplayUI : MonoBehaviour
     {
         mainCamera = Camera.main;
         canvasRect = GetComponent<RectTransform>();
+        canvasGroup = GetComponent<CanvasGroup>();
         navigator = TilemapNavigator.Instance;
         ResetTint(movementAreaTilemap);
         ResetTint(attackAreaTilemap);
@@ -115,6 +119,44 @@ public class GameplayUI : MonoBehaviour
         overlay.SetFloat("_Alpha", 1);
 
         InvokeRepeating("HandleMouseHover", 0f, .1f);
+    }
+
+    public IEnumerator SetInteractable(bool active)
+    {
+        float inactiveAlpha = 0.6f;
+        float activeAlpha = 1f;
+
+        float alphaTo = active ? activeAlpha : inactiveAlpha;
+
+        bool shouldAnimate = active != isActive;
+
+        if (shouldAnimate)
+        {
+            float alphaFrom = active ? inactiveAlpha : activeAlpha;
+
+            isActive = active;
+            float elapsedTime = 0f;
+            float duration = 0.3f;
+
+            while (elapsedTime <= duration)
+            {
+                float progress = Mathf.Clamp(elapsedTime / duration, 0f, 1f);
+
+                canvasGroup.alpha = Mathf.Lerp(
+                    alphaFrom,
+                    alphaTo,
+                    progress
+                );
+
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+        }
+
+        canvasGroup.alpha = alphaTo;
+        canvasGroup.interactable = active;
+        canvasGroup.blocksRaycasts = active;
     }
 
     private void HandleMouseHover()

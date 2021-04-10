@@ -24,16 +24,22 @@ public class TurnsCounter : MonoBehaviour
 
     public void TriggerNewTurn()
     {
-        if (_turnsLeft == -1)
+        if (IsFirstTurn())
         {
             _turnsLeft = turnsLimit;
-        }
-        else
+        } else
         {
             _turnsLeft = Mathf.Clamp(_turnsLeft - 1, 0, turnsLimit);
-            SetValue(_turnsLeft);
         }
+
+        SetValue(_turnsLeft);
     }
+
+    public bool IsFirstTurn()
+    {
+        return _turnsLeft == -1;
+    }
+
     private void SetValue(int value)
     {
         counterText.text = value.ToString();

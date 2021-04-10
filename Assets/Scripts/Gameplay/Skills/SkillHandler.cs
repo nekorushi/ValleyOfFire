@@ -53,7 +53,7 @@ public class SkillHandler : MonoBehaviour
             yield return StartCoroutine(
                 config.effect.Execute(
                     attackerUnit,
-                    targetUnit,
+                    targetUnit != null && targetUnit.Health > 0 ? targetUnit : null,
                     targetPos,
                     TilemapNavigator.Instance.GetTile(targetPos)
                 )

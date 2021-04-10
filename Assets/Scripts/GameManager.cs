@@ -58,16 +58,24 @@ public class GameManager : MonoBehaviour
         StartCoroutine(gameplayUI.PlayIntro());
 
         int currentPlayerIdx = 0;
-        while (!CheckWinningConditions())
+        do
         {
             bool isNewTurn = currentPlayerIdx == 0;
             if (isNewTurn)
             {
-                turnsCounter.TriggerNewTurn();
-                announcer.PlayAnnouncement(AnnouncementTypes.NewTurn);
-                yield return new WaitForSeconds(1.7f);
+                bool firstTurn = turnsCounter.IsFirstTurn();
+                if (firstTurn)
+                {
+                    turnsCounter.TriggerNewTurn();
+                    yield return new WaitForSeconds(1f);
+                }
+                else
+                {
+                    yield return StartCoroutine(announcer.PlayAnnouncement(AnnouncementTypes.NewTurn));
+                }
 
-                foreach (LevelTile tile in tickingTiles) { 
+                foreach (LevelTile tile in tickingTiles)
+                {
                     tile.OnTick();
                 }
 
@@ -76,9 +84,10 @@ public class GameManager : MonoBehaviour
             PlayerController currentPlayer = players[currentPlayerIdx];
             yield return PerformPlayerTurn(currentPlayer);
             currentPlayerIdx = GetNextPlayer(currentPlayerIdx);
-            yield return null;
-        }
+            turnsCounter.TriggerNewTurn();
+        } while (!CheckWinningConditions());
 
+        StartCoroutine(gameplayUI.SetInteractable(false));
         summaryWinner.text = GetStrongestPlayer().PlayerName;
         summaryPanel.gameObject.SetActive(true);
     }
@@ -91,8 +100,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator PerformPlayerTurn(PlayerController player)
     {
-        announcer.PlayAnnouncement(AnnouncementTypes.PlayerTurn, player);
         gameplayUI.ActivePlayer = player;
+        yield return StartCoroutine(announcer.PlayAnnouncement(AnnouncementTypes.PlayerTurn, player));
         yield return StartCoroutine(player.PerformTurn());
     }
 

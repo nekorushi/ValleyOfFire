@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -10,6 +11,7 @@ public enum AnnouncementTypes
 
 public class AnnouncementsPlayer : MonoBehaviour
 {
+    [SerializeField] private GameplayUI gameplayUI;
     [SerializeField] private Animator animator;
     [SerializeField] private AudioSource audioPlayer;
     [SerializeField] private AudioClip newTurnSound;
@@ -17,7 +19,7 @@ public class AnnouncementsPlayer : MonoBehaviour
     [SerializeField] private Material panelBackground;
     [SerializeField] private TMP_Text panelText;
 
-    public void PlayAnnouncement(AnnouncementTypes type, PlayerController player = null)
+    public IEnumerator PlayAnnouncement(AnnouncementTypes type, PlayerController player = null)
     {
         Dictionary<AnnouncementTypes, string> animations = new Dictionary<AnnouncementTypes, string>()
         {
@@ -37,6 +39,16 @@ public class AnnouncementsPlayer : MonoBehaviour
             audioPlayer.PlayOneShot(newTurnSound);
         }
 
+        StartCoroutine(gameplayUI.SetInteractable(false));
         animator.SetTrigger(animations[type]);
+        yield return StartCoroutine(WaitForAnimationEnd());
+        StartCoroutine(gameplayUI.SetInteractable(true));
+        yield return new WaitForSeconds(0.2f);
+    }
+
+    private IEnumerator WaitForAnimationEnd()
+    {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
     }
 }
