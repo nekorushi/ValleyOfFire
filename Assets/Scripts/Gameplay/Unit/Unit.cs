@@ -234,7 +234,7 @@ public class Unit : MonoBehaviour
 
     public void ModifyHealth(DamageValue damageData)
     {
-        float damageDealt = damageData.DamageDealt(this);
+        float damageDealt = damageData.DamageDealt(this).value;
 
         if (damageDealt < 0) PlaySound(unitClass.damageTakenSound[Player.faction]);
 

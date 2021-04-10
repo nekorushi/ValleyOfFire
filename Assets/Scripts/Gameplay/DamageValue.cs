@@ -57,12 +57,12 @@ public struct DamageValue
 
     public float DamageAfterShield(Unit unit)
     {
-        return ShouldIgnoreShield  ? totalFlatDmg : totalFlatDmg * (1 + (100 - unit.Shield) / 100);
+        return ShouldIgnoreShield ? totalFlatDmg : totalFlatDmg * (1 + (100 - unit.Shield) / 100);
     }
 
-    public float DamageDealt(Unit unit)
+    public DealtDamage DamageDealt(Unit unit, bool triggerResistance = true)
     {
-        return unit.resistancesManager.CheckAgainstDamage(unit, this)
-            * (type == DamageType.Heal ? 1f : -1f);
+        DealtDamage dealtDamage = unit.resistancesManager.CheckAgainstDamage(unit, this, triggerResistance);
+        return type == DamageType.Heal ? dealtDamage : new DealtDamage(-dealtDamage.value, dealtDamage.resistanceEffect);
     }
 }

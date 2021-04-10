@@ -322,9 +322,9 @@ public class GameplayUI : MonoBehaviour
                                 skillConfig.baseDamage,
                                 UnitsConfig.Instance.GetExtraDamage(attacker.unitClass.Type, defender.unitClass.Type),
                                 DamageType.Normal,
-                                DamageTrajectory.SelfInflicted
+                                skillConfig.trajectory
                             ),
-                            defender.unitClass.Type
+                            defender
                         );
                         dmgFormulas.Add(formula);
                     }
@@ -373,25 +373,21 @@ public class GameplayUI : MonoBehaviour
         }
     }
 
-    private GameObject CreateDmgFormula(Vector3Int position, DamageValue damage, UnitType defenderClass)
+    private GameObject CreateDmgFormula(Vector3Int position, DamageValue damage, Unit defenderUnit)
     {
         Vector3 worldPos = TilemapNavigator.Instance.CellToWorldPos(position);
         Vector2 canvasPos = WorldToCanvasPos(worldPos);
 
-        GameObject formula = Instantiate(dmgFormulaPrefab);
-        TMP_Text value = formula.GetComponentInChildren<TMP_Text>();
+        GameObject formulaContainer = Instantiate(dmgFormulaPrefab);
+        DmgFormula formula = formulaContainer.GetComponent<DmgFormula>();
 
-        string messageFormat = damage.extraFlatDamage == 0f
-            ? "{0}"
-            : damage.extraFlatDamage > 0 ? "{0}\n(+{1})" : "{0}\n({1})";
-
-        value.text = string.Format(messageFormat,  damage.baseFlatDmg, damage.extraFlatDamage, defenderClass);
+        formula.SetValue(damage, defenderUnit);
 
         RectTransform markerRect = formula.GetComponent<RectTransform>();
         markerRect.SetParent(canvasRect);
         markerRect.anchoredPosition = canvasPos;
 
-        return formula;
+        return formulaContainer;
     }
 
     private Vector2 WorldToCanvasPos(Vector3 worldPos)

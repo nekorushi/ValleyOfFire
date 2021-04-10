@@ -1,5 +1,17 @@
 ﻿using System.Collections.Generic;
 
+public struct DealtDamage
+{
+    public float value;
+    public DamageResistanceEffect? resistanceEffect;
+
+    public DealtDamage(float damage, DamageResistanceEffect? effect)
+    {
+        value = damage;
+        resistanceEffect = effect;
+    }
+}
+
 public class ResistancesManager
 {
     private Unit owner;
@@ -45,18 +57,21 @@ public class ResistancesManager
         return false;
     }
 
-    public float CheckAgainstDamage(Unit unit, DamageValue damage)
+    public DealtDamage CheckAgainstDamage(Unit unit, DamageValue damage, bool triggerResistance = true)
     {
         DamageResistance resistance = GetResistance(damage);
 
         if (resistance != null)
         {
-            bool shouldRemove = resistance.OnTick(unit);
-            if (shouldRemove) RemoveResistance(resistance);
-            return resistance.ProcessDamage(damage);
+            if (triggerResistance)
+            {
+                bool shouldRemove = resistance.OnTick(unit);
+                if (shouldRemove) RemoveResistance(resistance);
+            } 
+            return resistance.ProcessDamage(damage.DamageAfterShield(unit));
         }
 
-        return damage.DamageAfterShield(unit);
+        return new DealtDamage(damage.DamageAfterShield(unit), null);
     }
 
     private StatusResistance GetResistance(UnitStatus status)

@@ -40,15 +40,15 @@ public class DamageResistance : Resistance
         return false;
     }
 
-    public float ProcessDamage(DamageValue damage)
+    public DealtDamage ProcessDamage(float damageAfterShield)
     {
         if (resistanceEffect == DamageResistanceEffect.CancelDamage)
-            return 0;
+            return new DealtDamage(0, resistanceEffect);
         if (resistanceEffect == DamageResistanceEffect.ReduceDamage)
-            return damage.totalFlatDmg - effectAmount;
+            return new DealtDamage(damageAfterShield - effectAmount, resistanceEffect);
         if (resistanceEffect == DamageResistanceEffect.SetDamageToFixedAmount)
-            return effectAmount;
+            return new DealtDamage(effectAmount, resistanceEffect);
 
-        return damage.totalFlatDmg;
+        return new DealtDamage(damageAfterShield, null);
     }
 }
