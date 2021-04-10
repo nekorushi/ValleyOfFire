@@ -69,7 +69,7 @@ public class GameplayUI : MonoBehaviour
         {
             unitTooltip.SetUnit(value);
 
-            if (ActivePlayer.AttackMode == AttackModes.None)
+            if (ActivePlayer != null && ActivePlayer.AttackMode == AttackModes.None)
             {
                 _hoveredUnit = value;
                 UpdateAvailableActions();

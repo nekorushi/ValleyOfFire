@@ -38,6 +38,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TurnsCounter turnsCounter;
 
+    [SerializeField]
+    private AnnouncementsPlayer announcer;
+
     private void Start()
     {
         summaryPanel.gameObject.SetActive(false);
@@ -60,11 +63,14 @@ public class GameManager : MonoBehaviour
             bool isNewTurn = currentPlayerIdx == 0;
             if (isNewTurn)
             {
-                foreach(LevelTile tile in tickingTiles) { 
+                turnsCounter.TriggerNewTurn();
+                announcer.PlayAnnouncement(AnnouncementTypes.NewTurn);
+                yield return new WaitForSeconds(1.7f);
+
+                foreach (LevelTile tile in tickingTiles) { 
                     tile.OnTick();
                 }
 
-                turnsCounter.TriggerNewTurn();
             }
 
             PlayerController currentPlayer = players[currentPlayerIdx];
@@ -85,6 +91,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator PerformPlayerTurn(PlayerController player)
     {
+        announcer.PlayAnnouncement(AnnouncementTypes.PlayerTurn, player);
         gameplayUI.ActivePlayer = player;
         yield return StartCoroutine(player.PerformTurn());
     }

@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     private Color _playerColor;
     public Color PlayerColor { get { return _playerColor; } }
 
+    public AudioClip newTurnSound;
+
     private AttackModes _attackMode = AttackModes.None;
     public AttackModes AttackMode
     {
