@@ -12,6 +12,8 @@ public class UnitAction : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField] private SelectedUnitPanel owner;
     [SerializeField] private Image trajectoryImage;
     [SerializeField] private Image effectImage;
+    [SerializeField] private HelpTooltipUserUI trajectoryTooltip;
+    [SerializeField] private HelpTooltipUserUI effectTooltip;
 
     private SkillConfig currentConfig;
 
@@ -48,6 +50,19 @@ public class UnitAction : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             : null;
     }
 
+    public string GetTrajectoryDescription(DamageTrajectory trajectory)
+    {
+        Dictionary<DamageTrajectory, string> descriptions = new Dictionary<DamageTrajectory, string>()
+        {
+            { DamageTrajectory.Curve, "Curve trajectory – projectile is being sent above the ground and can reach any target in range, including targets hidden behind obstacles." },
+            { DamageTrajectory.Straight, "Straight trajectory – projectile is being sent in a straight line and can reach only the first target in that line." }
+        };
+
+        return descriptions.ContainsKey(trajectory)
+            ? descriptions[trajectory]
+            : null;
+    }
+
     private void RenderTrajectoryIcon(DamageTrajectory trajectory)
     {
         Sprite trajectoryIcon = GetTrajectoryIcon(trajectory);
@@ -55,6 +70,7 @@ public class UnitAction : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             trajectoryImage.sprite = trajectoryIcon;
             trajectoryImage.gameObject.SetActive(true);
+            trajectoryTooltip.tooltipText = GetTrajectoryDescription(trajectory);
         }
     }
 
@@ -64,6 +80,7 @@ public class UnitAction : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             effectImage.sprite = effect.icon;
             effectImage.gameObject.SetActive(true);
+            effectTooltip.tooltipText = string.Format("{0} - {1}", effect.label, effect.description);
         }
     }
 

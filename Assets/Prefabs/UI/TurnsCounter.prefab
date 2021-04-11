@@ -432,6 +432,7 @@ GameObject:
   - component: {fileID: 8920647846715683742}
   - component: {fileID: 8920647846715683712}
   - component: {fileID: 8920647846715683743}
+  - component: {fileID: 4546920939844847735}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -497,6 +498,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4546920939844847735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8920647846715683741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20d21b25e6a1aef46ae803ec3766a0ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: 'Remaining turns counter - decreases every turn. After it reaches
+    0, the team with more Health Points will win. In case of a tie, '
 --- !u!1 &8920647846732902172
 GameObject:
   m_ObjectHideFlags: 0

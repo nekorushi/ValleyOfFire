@@ -6,7 +6,8 @@ using UnityEngine;
 public enum AnnouncementTypes
 {
     NewTurn,
-    PlayerTurn
+    PlayerTurn,
+    SuddenDeath
 }
 
 public class AnnouncementsPlayer : MonoBehaviour
@@ -24,7 +25,8 @@ public class AnnouncementsPlayer : MonoBehaviour
         Dictionary<AnnouncementTypes, string> animations = new Dictionary<AnnouncementTypes, string>()
         {
             { AnnouncementTypes.NewTurn, "NewTurn" },
-            { AnnouncementTypes.PlayerTurn, "PlayerTurn" }
+            { AnnouncementTypes.PlayerTurn, "PlayerTurn" },
+            { AnnouncementTypes.SuddenDeath, "PlayerTurn" }
         };
 
         if (player != null)
@@ -34,8 +36,8 @@ public class AnnouncementsPlayer : MonoBehaviour
             audioPlayer.PlayOneShot(player.newTurnSound);
         } else
         {
-            panelBackground.SetColor("_Color", Color.white);
-            panelText.text = "New Turn";
+            panelBackground.SetColor("_Color", type == AnnouncementTypes.SuddenDeath ? new Color(1f, 0.5f, 0f) : Color.white);
+            panelText.text = type == AnnouncementTypes.SuddenDeath ? "Sudden Death" : "New Turn";
             audioPlayer.PlayOneShot(newTurnSound);
         }
 

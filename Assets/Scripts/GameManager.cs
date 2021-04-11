@@ -58,6 +58,8 @@ public class GameManager : MonoBehaviour
         StartCoroutine(gameplayUI.PlayIntro());
 
         int currentPlayerIdx = 0;
+        bool wasLastTurn = false;
+        bool hasNoMoreTurns = false;
         do
         {
             bool isNewTurn = currentPlayerIdx == 0;
@@ -72,6 +74,10 @@ public class GameManager : MonoBehaviour
                 else
                 {
                     yield return StartCoroutine(announcer.PlayAnnouncement(AnnouncementTypes.NewTurn));
+                    if (wasLastTurn && hasNoMoreTurns)
+                    {
+                        yield return StartCoroutine(announcer.PlayAnnouncement(AnnouncementTypes.SuddenDeath));
+                    }
                 }
 
                 foreach (LevelTile tile in tickingTiles)
@@ -84,8 +90,14 @@ public class GameManager : MonoBehaviour
             PlayerController currentPlayer = players[currentPlayerIdx];
             yield return PerformPlayerTurn(currentPlayer);
             currentPlayerIdx = GetNextPlayer(currentPlayerIdx);
-            turnsCounter.TriggerNewTurn();
-        } while (!CheckWinningConditions());
+
+            if (currentPlayerIdx == 0)
+            {
+                wasLastTurn = turnsCounter.IsLastTurn();
+                turnsCounter.TriggerNewTurn();
+                hasNoMoreTurns = turnsCounter.HasNoMoreTurns();
+            }
+        } while (!CheckWinningConditions(currentPlayerIdx == 0));
 
         StartCoroutine(gameplayUI.SetInteractable(false));
         summaryWinner.text = GetStrongestPlayer().PlayerName;
@@ -105,7 +117,7 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(player.PerformTurn());
     }
 
-    public bool CheckWinningConditions()
+    public bool CheckWinningConditions(bool isEndOfTurn = false)
     {
         int alivePlayers = players.Where(player => player.HasAliveGuardianUnits).ToList().Count;
         if (alivePlayers <= 1) return true;
@@ -113,7 +125,7 @@ public class GameManager : MonoBehaviour
         bool turnsLimitReached = turnsCounter.TurnsLeft <= 0;
         if (turnsLimitReached)
         {
-            return GetStrongestPlayer() != null;
+            return isEndOfTurn && GetStrongestPlayer() != null;
         }
 
         return false;

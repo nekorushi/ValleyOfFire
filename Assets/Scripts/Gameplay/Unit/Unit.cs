@@ -57,6 +57,8 @@ public class Unit : MonoBehaviour
     public Vector3Int CellPosition { get { return TilemapNavigator.Instance.WorldToCellPos(transform.position); } }
     public List<Vector3Int> AvailableMoves { get; private set; }
 
+    private HelpTooltipUser helpTooltip;
+
     [HideInInspector] public ResistancesManager resistancesManager;
     [HideInInspector] public StatusManager statusManager;
 
@@ -91,6 +93,7 @@ public class Unit : MonoBehaviour
         // Assign references
         skillHandler = GetComponent<SkillHandler>();
         audioPlayer = GetComponent<AudioSource>();
+        helpTooltip = GetComponent<HelpTooltipUser>();
 
         healthBar.gameObject.SetActive(false);
 
@@ -217,6 +220,7 @@ public class Unit : MonoBehaviour
 
     private void OnStatusChange()
     {
+        helpTooltip.tooltipText = statusManager.InflictedStatus != null ? statusManager.InflictedStatus.description : null;
         shieldBar.SetValue(Shield, baseShield);
     }
 

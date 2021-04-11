@@ -7,6 +7,7 @@ public abstract class UnitStatus : ScriptableObject
 {
     public Sprite icon;
     public Color iconColor;
+    public string description;
     public AudioClip inflictSound;
     public AudioClip deflectSound;
     public AudioClip tickSound;

@@ -40,6 +40,16 @@ public class TurnsCounter : MonoBehaviour
         return _turnsLeft == -1;
     }
 
+    public bool IsLastTurn()
+    {
+        return _turnsLeft == 1;
+    }
+
+    public bool HasNoMoreTurns()
+    {
+        return _turnsLeft == 0;
+    }
+
     private void SetValue(int value)
     {
         counterText.text = value.ToString();

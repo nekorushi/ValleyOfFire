@@ -64,8 +64,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curveTrajectoryIcon: {fileID: 21300000, guid: 5816a13c0a9224ab792a17ca13ef8f60, type: 3}
   straightTrajectoryIcon: {fileID: 21300000, guid: 45d71491be068415aabefaecfa985098, type: 3}
+  owner: {fileID: 0}
   trajectoryImage: {fileID: 3612964937112740660}
   effectImage: {fileID: 2732623484453269419}
+  trajectoryTooltip: {fileID: 2456671968510809654}
+  effectTooltip: {fileID: 7128088135644870981}
 --- !u!114 &1675401590751059327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,6 +180,7 @@ GameObject:
   - component: {fileID: 5137043456999898169}
   - component: {fileID: 581755032196498977}
   - component: {fileID: 3612964937112740660}
+  - component: {fileID: 2456671968510809654}
   m_Layer: 5
   m_Name: TrajectoryIcon
   m_TagString: Untagged
@@ -225,7 +229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -241,6 +245,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2456671968510809654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5322603805684618546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20d21b25e6a1aef46ae803ec3766a0ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: 
 --- !u!1 &7144522448013515812
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,6 +269,7 @@ GameObject:
   - component: {fileID: 796443157723231695}
   - component: {fileID: 6601829633069435193}
   - component: {fileID: 2732623484453269419}
+  - component: {fileID: 7128088135644870981}
   m_Layer: 5
   m_Name: EffectIcon
   m_TagString: Untagged
@@ -300,7 +318,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -316,3 +334,16 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7128088135644870981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7144522448013515812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20d21b25e6a1aef46ae803ec3766a0ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: 
