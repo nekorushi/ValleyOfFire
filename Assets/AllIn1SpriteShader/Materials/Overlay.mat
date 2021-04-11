@@ -60,7 +60,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Alpha: 0.0023630261
+    - _Alpha: 0.001840651
     - _AlphaCutoffValue: 0.25
     - _AlphaRoundThreshold: 0.5
     - _BillboardY: 0
